@@ -5,7 +5,7 @@ Subject: [PATCH] Papercut POM Changes
 
 
 diff --git a/pom.xml b/pom.xml
-index 55679af926485eca6bb0b9ed368a4c91c8a7e37e..b8433ddabeaa0c779ee80b8da4c917e1b7f1422d 100644
+index fd417a9eeb7a3371ceabc07b49a7406b38b419a3..1716f9b1a147749b223aebb0d438481e0a4efb29 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,12 +1,11 @@
@@ -25,7 +25,7 @@ index 55679af926485eca6bb0b9ed368a4c91c8a7e37e..b8433ddabeaa0c779ee80b8da4c917e1
      <properties>
          <!-- <skipTests>true</skipTests> Paper - This [was] not going to end well -->
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-@@ -21,16 +20,16 @@
+@@ -18,16 +17,16 @@
      </properties>
  
      <parent>
@@ -46,7 +46,7 @@ index 55679af926485eca6bb0b9ed368a4c91c8a7e37e..b8433ddabeaa0c779ee80b8da4c917e1
              <version>${project.version}</version>
              <scope>compile</scope>
          </dependency>
-@@ -143,15 +142,15 @@
+@@ -146,15 +145,15 @@
  
      <!-- This builds a completely 'ready to start' jar with all dependencies inside -->
      <build>
@@ -66,7 +66,7 @@ index 55679af926485eca6bb0b9ed368a4c91c8a7e37e..b8433ddabeaa0c779ee80b8da4c917e1
                  </configuration>
                  <executions>
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 674096cab190d62622f9947853b056f57d43a2a5..001b1e5197eaa51bfff9031aa6c69876c9a47960 100644
+index 674096cab190d62622f9947853b056f57d43a2a5..a02327dda2727382b221ec7464e7544e41239ae1 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
