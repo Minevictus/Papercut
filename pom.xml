@@ -1,0 +1,18 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>us.minevict.papercut</groupId>
+    <artifactId>papercut-parent</artifactId>
+    <version>dev-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Papercut (Parent)</name>
+
+    <build>
+        <defaultGoal>install</defaultGoal>
+        <finalName>${project.artifactId}</finalName>
+    </build>
+    <modules>
+        <module>Papercut-API</module>
+        <module>Papercut-Server</module>
+    </modules>
+</project>

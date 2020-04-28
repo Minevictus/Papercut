@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 28 April 2020 16:47:32 +0200
+Subject: [PATCH] Papercut POM Changes
+
+
+diff --git a/pom.xml b/pom.xml
+index 2cb9714084c8a7aa1b20d445edd5be4cc206672f..e06538fa4f8034808872422c3776e04f36c8421e 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -3,18 +3,18 @@
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+     <parent>
+-        <groupId>com.destroystokyo.paper</groupId>
+-        <artifactId>paper-parent</artifactId>
++        <groupId>us.minevict.papercut</groupId>
++        <artifactId>papercut-parent</artifactId>
+         <version>dev-SNAPSHOT</version>
++        <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>com.destroystokyo.paper</groupId>
+-    <artifactId>paper-api</artifactId>
++    <artifactId>papercut-api</artifactId>
+     <version>1.15.2-R0.1-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Paper-API</name>
+-    <url>https://github.com/PaperMC/Paper</url>
++    <name>Papercut-API</name>
++    <url>https://github.com/Minevictus/Papercut</url>
+     <description>An enhanced plugin API for Minecraft servers.</description>
+ 
+     <properties>
