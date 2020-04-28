@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 28 Apr 2020 20:00:10 +0200
+Subject: [PATCH] MC-Dev fixes
+
+
+diff --git a/src/main/java/net/minecraft/server/HeightMap.java b/src/main/java/net/minecraft/server/HeightMap.java
+index 29cb545a864dea09ba52b6071f5280cdddd33808..c25543bd15ecfedda4e8b521cd6a1c9efe523536 100644
+--- a/src/main/java/net/minecraft/server/HeightMap.java
++++ b/src/main/java/net/minecraft/server/HeightMap.java
+@@ -154,7 +154,7 @@ public class HeightMap {
+         private final String g;
+         private final HeightMap.Use h;
+         private final Predicate<IBlockData> i;
+-        private static final Map<String, HeightMap.Type> j = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
++        private static final Map<String, HeightMap.Type> j = SystemUtils.a(Maps.newHashMap(), (hashmap) -> { // Papercut - decompile fix
+             HeightMap.Type[] aheightmap_type = values();
+             int i = aheightmap_type.length;
+ 
+@@ -166,7 +166,7 @@ public class HeightMap {
+ 
+         });
+ 
+-        private Type(String s, HeightMap.Use heightmap_use, Predicate predicate) {
++        private Type(String s, HeightMap.Use heightmap_use, Predicate<IBlockData> predicate) { // Papercut - decompile fix
+             this.g = s;
+             this.h = heightmap_use;
+             this.i = predicate;

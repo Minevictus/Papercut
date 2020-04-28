@@ -1,0 +1,147 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 28 Apr 2020 19:59:02 +0200
+Subject: [PATCH] Add EntityTeleportHinderedEvent
+
+
+diff --git a/src/main/java/net/minecraft/server/BlockEnderPortal.java b/src/main/java/net/minecraft/server/BlockEnderPortal.java
+index 213388c74545063cec2de51e6b80cec88d85479a..4dde23c4040b0d66ca130fd0358eff82b7ad2598 100644
+--- a/src/main/java/net/minecraft/server/BlockEnderPortal.java
++++ b/src/main/java/net/minecraft/server/BlockEnderPortal.java
+@@ -3,6 +3,8 @@ package net.minecraft.server;
+ // CraftBukkit start
+ import org.bukkit.event.entity.EntityPortalEnterEvent;
+ import org.bukkit.event.player.PlayerTeleportEvent;
++import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause; // Papercut
++import us.minevict.papercut.event.entity.EntityTeleportHinderedEvent; // Papercut
+ // CraftBukkit end
+ 
+ public class BlockEnderPortal extends BlockTileEntity {
+@@ -25,7 +27,23 @@ public class BlockEnderPortal extends BlockTileEntity {
+ 
+     @Override
+     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
+-        if (!world.isClientSide && !entity.isPassenger() && !entity.isVehicle() && entity.canPortal() && VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), iblockdata.getShape(world, blockposition), OperatorBoolean.AND)) {
++        if (!world.isClientSide && entity.canPortal() && VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), iblockdata.getShape(world, blockposition), OperatorBoolean.AND)) { // Papercut
++            // Papercut start
++            if (entity.isPassenger()) { // Moved down from wrapping statement
++                if (new EntityTeleportHinderedEvent(entity.getBukkitEntity(), EntityTeleportHinderedEvent.Reason.IS_PASSENGER, TeleportCause.END_PORTAL).callEvent()) {
++                    a(iblockdata, world, blockposition, entity);
++                }
++                return;
++            }
++
++            if (entity.isVehicle()) {
++                if (new EntityTeleportHinderedEvent(entity.getBukkitEntity(), EntityTeleportHinderedEvent.Reason.IS_VEHICLE, TeleportCause.END_PORTAL).callEvent()) {
++                    a(iblockdata, world, blockposition, entity);
++                }
++                return;
++            }
++            // Papercut end
++
+             // CraftBukkit start - Entity in portal
+             EntityPortalEnterEvent event = new EntityPortalEnterEvent(entity.getBukkitEntity(), new org.bukkit.Location(world.getWorld(), blockposition.getX(), blockposition.getY(), blockposition.getZ()));
+             world.getServer().getPluginManager().callEvent(event);
+diff --git a/src/main/java/net/minecraft/server/BlockPortal.java b/src/main/java/net/minecraft/server/BlockPortal.java
+index 09c7c131833ded951e49a7a1a2eb2e1f6f8cb989..e03a107c67959c6141ca21b7417bfb4328b34907 100644
+--- a/src/main/java/net/minecraft/server/BlockPortal.java
++++ b/src/main/java/net/minecraft/server/BlockPortal.java
+@@ -11,6 +11,9 @@ import org.bukkit.event.entity.EntityPortalEnterEvent;
+ import org.bukkit.event.world.PortalCreateEvent;
+ // CraftBukkit end
+ 
++import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause; // Papercut
++import us.minevict.papercut.event.entity.EntityTeleportHinderedEvent; // Papercut
++
+ public class BlockPortal extends Block {
+ 
+     public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.D;
+@@ -91,7 +94,22 @@ public class BlockPortal extends Block {
+ 
+     @Override
+     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
+-        if (!entity.isPassenger() && !entity.isVehicle() && entity.canPortal()) {
++        if (entity.canPortal()) { // Papercut
++            // Papercut start
++            if (entity.isPassenger()) { // Moved down from wrapping statement
++                if (new EntityTeleportHinderedEvent(entity.getBukkitEntity(), EntityTeleportHinderedEvent.Reason.IS_PASSENGER, TeleportCause.NETHER_PORTAL).callEvent()) {
++                    a(iblockdata, world, blockposition, entity);
++                }
++                return;
++            }
++
++            if (entity.isVehicle()) {
++                if (new EntityTeleportHinderedEvent(entity.getBukkitEntity(), EntityTeleportHinderedEvent.Reason.IS_VEHICLE, TeleportCause.NETHER_PORTAL).callEvent()) {
++                    a(iblockdata, world, blockposition, entity);
++                }
++                return;
++            }
++            // Papercut end
+             // CraftBukkit start - Entity in portal
+             EntityPortalEnterEvent event = new EntityPortalEnterEvent(entity.getBukkitEntity(), new org.bukkit.Location(world.getWorld(), blockposition.getX(), blockposition.getY(), blockposition.getZ()));
+             world.getServer().getPluginManager().callEvent(event);
+diff --git a/src/main/java/net/minecraft/server/TileEntityEndGateway.java b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
+index a6fffc6576ed35ffbf5eb38454f76c9d644f6a13..5f67c2f4cc22055cba48bade634cbc828169895a 100644
+--- a/src/main/java/net/minecraft/server/TileEntityEndGateway.java
++++ b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
+@@ -13,6 +13,9 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
+ import org.bukkit.event.player.PlayerTeleportEvent;
+ // CraftBukkit end
+ 
++import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause; // Papercut
++import us.minevict.papercut.event.entity.EntityTeleportHinderedEvent; // Papercut
++
+ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITickable {
+ 
+     private static final Logger LOGGER = LogManager.getLogger();
+@@ -117,7 +120,25 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
+     }
+ 
+     public void a(Entity entity) {
+-        if (!entity.canPortal() || entity.isVehicle() || entity.isPassenger()) return; // Papercut
++        // Papercut start
++        if (!entity.canPortal()) {
++            return;
++        }
++
++        if (entity.isVehicle()) {
++            if (new EntityTeleportHinderedEvent(entity.getBukkitEntity(), EntityTeleportHinderedEvent.Reason.IS_VEHICLE, TeleportCause.END_GATEWAY).callEvent()) {
++                a(entity);
++            }
++            return;
++        }
++
++        if (entity.isPassenger()) {
++            if (new EntityTeleportHinderedEvent(entity.getBukkitEntity(), EntityTeleportHinderedEvent.Reason.IS_PASSENGER, TeleportCause.END_GATEWAY).callEvent()) {
++                a(entity);
++            }
++            return;
++        }
++        // Papercut end
+         if (this.world instanceof WorldServer && !this.f()) {
+             this.c = 100;
+             if (this.exitPortal == null && this.world.worldProvider instanceof WorldProviderTheEnd) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 449d8439fa16e2b2797a73cc9486f4370ed54c15..276136e80e434a5bfba54fa4dd68295a8d03a468 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -126,6 +126,7 @@ import org.bukkit.plugin.messaging.StandardMessenger;
+ import org.bukkit.scoreboard.Scoreboard;
+ 
+ import net.md_5.bungee.api.chat.BaseComponent; // Spigot
++import us.minevict.papercut.event.entity.EntityTeleportHinderedEvent; // Papercut
+ 
+ @DelegateDeserialization(CraftOfflinePlayer.class)
+ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -757,6 +758,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         }
+ 
+         if (entity.isVehicle()) {
++            // Papercut start
++            if (new EntityTeleportHinderedEvent(this, EntityTeleportHinderedEvent.Reason.IS_VEHICLE, cause).callEvent()) {
++                return teleport(location, cause);
++            }
++            // Papercut end
+             return false;
+         }
+ 

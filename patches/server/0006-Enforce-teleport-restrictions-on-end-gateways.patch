@@ -1,0 +1,18 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 28 Apr 2020 19:54:10 +0200
+Subject: [PATCH] Enforce teleport restrictions on end gateways
+
+
+diff --git a/src/main/java/net/minecraft/server/TileEntityEndGateway.java b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
+index c71f76004ed934e9e921efc4cb637f2e77af92d2..a6fffc6576ed35ffbf5eb38454f76c9d644f6a13 100644
+--- a/src/main/java/net/minecraft/server/TileEntityEndGateway.java
++++ b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
+@@ -117,6 +117,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
+     }
+ 
+     public void a(Entity entity) {
++        if (!entity.canPortal() || entity.isVehicle() || entity.isPassenger()) return; // Papercut
+         if (this.world instanceof WorldServer && !this.f()) {
+             this.c = 100;
+             if (this.exitPortal == null && this.world.worldProvider instanceof WorldProviderTheEnd) {

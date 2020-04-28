@@ -698,7 +698,7 @@ index 8977c3516b2ee9b970b6274a5c71982b019ac2a6..39f01bc1c105616e5168726f52cd949f
                      double deltaX = this.locX() - player.locX();
                      double deltaZ = this.locZ() - player.locZ();
 diff --git a/src/main/java/net/minecraft/server/HeightMap.java b/src/main/java/net/minecraft/server/HeightMap.java
-index 29cb545a864dea09ba52b6071f5280cdddd33808..de7d197cc3be3b8b7e860ec6427d3eca5f1e4110 100644
+index c25543bd15ecfedda4e8b521cd6a1c9efe523536..1508c20723b8d8c189bf4ec5b34af41f87d53d68 100644
 --- a/src/main/java/net/minecraft/server/HeightMap.java
 +++ b/src/main/java/net/minecraft/server/HeightMap.java
 @@ -119,6 +119,7 @@ public class HeightMap {
