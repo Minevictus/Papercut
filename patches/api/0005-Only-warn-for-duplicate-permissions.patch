@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 28 Apr 2020 18:12:44 +0200
+Subject: [PATCH] Only warn for duplicate permissions
+
+
+diff --git a/src/main/java/org/bukkit/plugin/SimplePluginManager.java b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
+index 4931bc86d44cd697d458d6e365c3b8030ea8285d..25b1bec8a6f855ec1607bcb4d9b1cfe8fafc4c35 100644
+--- a/src/main/java/org/bukkit/plugin/SimplePluginManager.java
++++ b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
+@@ -721,7 +721,11 @@ public final class SimplePluginManager implements PluginManager {
+         String name = perm.getName().toLowerCase(java.util.Locale.ENGLISH);
+ 
+         if (permissions.containsKey(name)) {
+-            throw new IllegalArgumentException("The permission " + name + " is already defined!");
++            // Papercut start - Have a warning, not exception upon duplicate permissions
++            // throw new IllegalArgumentException("The permission " + name + " is already defined!");
++            server.getLogger().warning("The permission " + name + " is already defined!");
++            return;
++            // Papercut end
+         }
+ 
+         permissions.put(name, perm);
