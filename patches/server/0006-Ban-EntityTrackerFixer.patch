@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 26 May 2020 21:23:51 +0200
+Subject: [PATCH] Ban EntityTrackerFixer
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 176327fb336367ef6f00a23541cf202a3aa77e93..c75a525ebb4ad6eb3797acd7ca5b96fc0485eb04 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -383,6 +383,12 @@ public final class CraftServer implements Server {
+ 
+         for (Plugin plugin : plugins) {
+             if ((!plugin.isEnabled()) && (plugin.getDescription().getLoad() == type)) {
++                // Papercut start
++                if ("net.minemora.entitytrackerfixer.EntityTrackerFixer".equals(plugin.getDescription().getMain())) {
++                    plugin.getLogger().warning("EntityTrackerFixer is unsupported on Papercut.");
++                    return;
++                }
++                // Papercut end
+                 enablePlugin(plugin);
+             }
+         }

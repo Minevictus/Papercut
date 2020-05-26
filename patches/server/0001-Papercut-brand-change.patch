@@ -5,7 +5,7 @@ Subject: [PATCH] Papercut brand change
 
 
 diff --git a/pom.xml b/pom.xml
-index 84c54a32af54f8460da3257f4423dfcee558e171..0ce9f7339fc4c4c9aa1b61baf0faea329febc3db 100644
+index e4c63bb76cb598545f9d215a8859724d6e7f8b81..7a57d5011c05b2b8438a7067b94d19cdff098775 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,10 +1,10 @@
@@ -137,10 +137,10 @@ index 894917c8891a951edb251f019529d0f7bec7037d..4ea73d06c2704094f3600f8430aa8407
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 93340e9470b23f2d8c91338e63e95c6465e69c3c..4bbdbe1508b04aa4134c1d165adc88028c6f9c95 100644
+index ffee0c5ddfe09b061fee4a31cdf208f6876fba58..039189c501f93bd10feb0588406bde93ca8621f3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
-@@ -221,7 +221,7 @@ public class Main {
+@@ -252,7 +252,7 @@ public class Main {
                      if (buildDate.before(deadline.getTime())) {
                          // Paper start - This is some stupid bullshit
                          System.err.println("*** Warning, you've not updated in a while! ***");
