@@ -1,0 +1,200 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 26 May 2020 22:20:23 +0200
+Subject: [PATCH] Apply advancements async
+
+
+diff --git a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
+index c41e1384724ab150f43dc43fe2a453c9b1262e48..3d7db96b9a25dcc184850a09eeb9e3064c40b9c7 100644
+--- a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
++++ b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
+@@ -56,6 +56,7 @@ public class AdvancementDataPlayer {
+         this.g();
+     }
+ 
++    public void setPlayer(EntityPlayer entityplayer) { a(entityplayer); } // Paper - OBFHELPER
+     public void a(EntityPlayer entityplayer) {
+         this.player = entityplayer;
+     }
+diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
+index d60f659b368500e3a8c3305f99e60ffc643e2fbd..b54c7bad28cbe9408a4e261eccbb5a8417214203 100644
+--- a/src/main/java/net/minecraft/server/EntityPlayer.java
++++ b/src/main/java/net/minecraft/server/EntityPlayer.java
+@@ -47,7 +47,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+     public final MinecraftServer server;
+     public final PlayerInteractManager playerInteractManager;
+     public final Deque<Integer> removeQueue = new ArrayDeque<>(); // Paper
+-    private final AdvancementDataPlayer advancementDataPlayer;
+     private final ServerStatisticManager serverStatisticManager;
+     private float lastHealthScored = Float.MIN_VALUE;
+     private int lastFoodScored = Integer.MIN_VALUE;
+@@ -120,7 +119,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+         this.server = minecraftserver;
+         this.recipeBook = new RecipeBookServer(minecraftserver.getCraftingManager());
+         this.serverStatisticManager = minecraftserver.getPlayerList().getStatisticManager(this);
+-        this.advancementDataPlayer = minecraftserver.getPlayerList().f(this);
+         this.H = 1.0F;
+         //this.a(worldserver); // Paper - don't move to spawn on login, only first join
+ 
+@@ -433,7 +431,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+             CriterionTriggers.u.a(this, this.co, this.ticksLived - this.cp);
+         }
+ 
+-        this.advancementDataPlayer.b(this);
++        if (isAdvancementDataLoaded()) // Paper - async advancement loading
++            getAdvancementData().b(this); // Paper - async advancement loading
+     }
+ 
+     public void playerTick() {
+@@ -1758,8 +1757,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+     }
+ 
+     public AdvancementDataPlayer getAdvancementData() {
+-        return this.advancementDataPlayer;
++        return this.playerConnection.advancementDataPlayer.join();
+     }
++    public boolean isAdvancementDataLoaded() { return this.playerConnection != null && this.playerConnection.advancementDataPlayer != null && this.playerConnection.advancementDataPlayer.isDone(); } // Paper - async advancements loading
+ 
+     // CraftBukkit start
+     public void a(WorldServer worldserver, double d0, double d1, double d2, float f, float f1) {
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index b25b3b48165e5fef4db99c2838de21d4eca502f4..433efa13ab758080967ee325e2b7df65d27cd95d 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -106,6 +106,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
+     private int processedMovePackets;
+     private static final int MAX_SIGN_LINE_LENGTH = Integer.getInteger("Paper.maxSignLength", 80);
+     private static final long KEEPALIVE_LIMIT = Long.getLong("paper.playerconnection.keepalive", 30) * 1000; // Paper - provide property to set keepalive limit
++    java.util.concurrent.CompletableFuture<AdvancementDataPlayer> advancementDataPlayer = null; // Paper - async player advancements loading
+ 
+     public PlayerConnection(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayer entityplayer) {
+         this.minecraftServer = minecraftserver;
+@@ -537,8 +538,8 @@ public class PlayerConnection implements PacketListenerPlayIn {
+             MinecraftKey minecraftkey = packetplayinadvancements.d();
+             Advancement advancement = this.minecraftServer.getAdvancementData().a(minecraftkey);
+ 
+-            if (advancement != null) {
+-                this.player.getAdvancementData().a(advancement);
++            if (advancement != null && this.player.isAdvancementDataLoaded()) { // Paper - async advancements
++                player.getAdvancementData().a(advancement); // Paper
+             }
+         }
+ 
+diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
+index 269580ae2a6edca979ccc1e46df144468ea70a18..743396e402198c8d96cdf077d1642a34e403687f 100644
+--- a/src/main/java/net/minecraft/server/PlayerList.java
++++ b/src/main/java/net/minecraft/server/PlayerList.java
+@@ -144,6 +144,7 @@ public abstract class PlayerList {
+ 
+         this.a(entityplayer, (EntityPlayer) null, worldserver);
+         PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
++        playerconnection.advancementDataPlayer = applyPlayerAdvancementsAsync(entityplayer); // Paper - async advancements loading
+         GameRules gamerules = worldserver.getGameRules();
+         boolean flag = gamerules.getBoolean(GameRules.DO_IMMEDIATE_RESPAWN);
+         boolean flag1 = gamerules.getBoolean(GameRules.REDUCED_DEBUG_INFO);
+@@ -448,10 +449,8 @@ public abstract class PlayerList {
+             serverstatisticmanager.a();
+         }
+ 
+-        AdvancementDataPlayer advancementdataplayer = (AdvancementDataPlayer) entityplayer.getAdvancementData(); // CraftBukkit
+-
+-        if (advancementdataplayer != null) {
+-            advancementdataplayer.c();
++        if (entityplayer.isAdvancementDataLoaded()) { // Paper
++            entityplayer.getAdvancementData().c(); // Paper
+         }
+ 
+     }
+@@ -503,7 +502,7 @@ public abstract class PlayerList {
+ 
+         entityplayer.decouple();
+         worldserver.removePlayer(entityplayer);
+-        entityplayer.getAdvancementData().a();
++        if (entityplayer.isAdvancementDataLoaded()) entityplayer.getAdvancementData().a(); // Paper
+         this.players.remove(entityplayer);
+         this.playersByName.remove(entityplayer.getName().toLowerCase(java.util.Locale.ROOT)); // Spigot
+         this.server.getBossBattleCustomData().b(entityplayer);
+@@ -1257,9 +1256,36 @@ public abstract class PlayerList {
+         return serverstatisticmanager;
+     }
+ 
++    // Paper start - Apply advancements async
++    public java.util.concurrent.CompletableFuture<AdvancementDataPlayer> applyPlayerAdvancementsAsync(EntityPlayer entityplayer) {
++        if (entityplayer.isAdvancementDataLoaded()) {
++            // We have nothing to load, so no reason to drag on the future for long.
++            AdvancementDataPlayer advancementdataplayer = entityplayer.getAdvancementData();
++            java.util.concurrent.CompletableFuture<AdvancementDataPlayer> future = java.util.concurrent.CompletableFuture.completedFuture(advancementdataplayer);
++            advancementdataplayer.setPlayer(entityplayer);
++            return future;
++        }
++
++        // This time we were not so lucky, and advancements have to be read from file.
++        // That is slow...
++        UUID uuid = entityplayer.getUniqueID();
++        File file = new File(this.server.getWorldServer(DimensionManager.OVERWORLD).getDataManager().getDirectory(), "advancements");
++        File file1 = new File(file, uuid + ".json");
++        java.util.concurrent.CompletableFuture<AdvancementDataPlayer> future = new java.util.concurrent.CompletableFuture<AdvancementDataPlayer>();
++        this.server.execute(() -> {
++            AdvancementDataPlayer data = new AdvancementDataPlayer(this.server, file1, entityplayer);
++            data.setPlayer(entityplayer);
++            // this.p.put(uuid, advancementdataplayer); // CraftBukkit
++            future.complete(data);
++        });
++
++        return future;
++    }
++    // Paper end
++
+     public AdvancementDataPlayer f(EntityPlayer entityplayer) {
+         UUID uuid = entityplayer.getUniqueID();
+-        AdvancementDataPlayer advancementdataplayer = (AdvancementDataPlayer) entityplayer.getAdvancementData(); // CraftBukkit
++        AdvancementDataPlayer advancementdataplayer = entityplayer.isAdvancementDataLoaded() ? entityplayer.getAdvancementData() : null; // CraftBukkit // Paper
+ 
+         if (advancementdataplayer == null) {
+             File file = new File(this.server.getWorldServer(DimensionManager.OVERWORLD).getDataManager().getDirectory(), "advancements");
+@@ -1312,8 +1338,13 @@ public abstract class PlayerList {
+         }*/
+ 
+         for (EntityPlayer player : players) {
+-            player.getAdvancementData().b();
+-            player.getAdvancementData().b(player); // CraftBukkit - trigger immediate flush of advancements
++            // Paper start - null check on AdvancementDataPlayer
++            AdvancementDataPlayer advancementDataPlayer = player.getAdvancementData();
++            if (advancementDataPlayer != null) {
++                advancementDataPlayer.b();
++                advancementDataPlayer.b(player); // CraftBukkit - trigger immediate flush of advancements // Paper
++            }
++            // Paper end
+         }
+         // CraftBukkit end
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/advancement/CraftAdvancementProgress.java b/src/main/java/org/bukkit/craftbukkit/advancement/CraftAdvancementProgress.java
+index 60fc5aff80697cb4c85080350542c0f46056f74a..304362b4c3f2edc87478201cc73cb857e43f567b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/advancement/CraftAdvancementProgress.java
++++ b/src/main/java/org/bukkit/craftbukkit/advancement/CraftAdvancementProgress.java
+@@ -33,11 +33,13 @@ public class CraftAdvancementProgress implements AdvancementProgress {
+ 
+     @Override
+     public boolean awardCriteria(String criteria) {
++        if (playerData == null) return false; // Paper - null check
+         return playerData.grantCriteria(advancement.getHandle(), criteria);
+     }
+ 
+     @Override
+     public boolean revokeCriteria(String criteria) {
++        if (playerData == null) return false; // Paper - null check
+         return playerData.revokeCritera(advancement.getHandle(), criteria);
+     }
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index dcbda5b35ab4d44e6b1d6c34bb8763a7dd08e629..af21c589c9c04d3df2506652a625f6f9761fdb85 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -1870,7 +1870,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         CraftAdvancement craft = (CraftAdvancement) advancement;
+         AdvancementDataPlayer data = getHandle().getAdvancementData();
+         AdvancementProgress progress = data.getProgress(craft.getHandle());
+-
+         return new CraftAdvancementProgress(craft, data, progress);
+     }
+ 
