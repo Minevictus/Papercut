@@ -1,0 +1,74 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nahuel <nahueldolores@hotmail.com>
+Date: Tue, 28 Apr 2020 13:52:06 -0300
+Subject: [PATCH] Add StructureGenerateEvent
+
+
+diff --git a/src/main/java/net/minecraft/server/ChunkGenerator.java b/src/main/java/net/minecraft/server/ChunkGenerator.java
+index a87f4532545a51cfd5cd593ac1e0bf6975426aa8..bcc02502c589644983badd45b068bb1624f2f495 100644
+--- a/src/main/java/net/minecraft/server/ChunkGenerator.java
++++ b/src/main/java/net/minecraft/server/ChunkGenerator.java
+@@ -1,5 +1,10 @@
+ package net.minecraft.server;
+ 
++// Papercut start
++import com.destroystokyo.paper.event.world.StructureGenerateEvent;
++import org.bukkit.StructureType;
++// Papercut end
++
+ import java.util.BitSet;
+ import java.util.Iterator;
+ import java.util.List;
+@@ -150,20 +155,16 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
+                 // CraftBukkit start
+                 if (structuregenerator == WorldGenerator.STRONGHOLD) {
+                     synchronized (structuregenerator) {
+-                        if (structuregenerator.a(biomemanager, chunkgenerator, seededrandom, chunkcoordintpair.x, chunkcoordintpair.z, biomebase)) {
+-                            StructureStart structurestart2 = structuregenerator.a().create(structuregenerator, chunkcoordintpair.x, chunkcoordintpair.z, StructureBoundingBox.a(), i, chunkgenerator.getSeed());
+-
+-                            structurestart2.a(this, definedstructuremanager, chunkcoordintpair.x, chunkcoordintpair.z, biomebase);
+-                            structurestart1 = structurestart2.e() ? structurestart2 : StructureStart.a;
+-                        }
++                        // Papercut start
++                        structurestart1 = getStructureStart(biomemanager, chunkgenerator, definedstructuremanager, structuregenerator, i, seededrandom, chunkcoordintpair, structurestart1, biomebase);
++                        // Papercut end
+                     }
+                 } else
+                 // CraftBukkit end
+-                if (structuregenerator.a(biomemanager, chunkgenerator, seededrandom, chunkcoordintpair.x, chunkcoordintpair.z, biomebase)) {
+-                    StructureStart structurestart2 = structuregenerator.a().create(structuregenerator, chunkcoordintpair.x, chunkcoordintpair.z, StructureBoundingBox.a(), i, chunkgenerator.getSeed());
+-
+-                    structurestart2.a(this, definedstructuremanager, chunkcoordintpair.x, chunkcoordintpair.z, biomebase);
+-                    structurestart1 = structurestart2.e() ? structurestart2 : StructureStart.a;
++                {
++                    // Papercut start
++                    structurestart1 = getStructureStart(biomemanager, chunkgenerator, definedstructuremanager, structuregenerator, i, seededrandom, chunkcoordintpair, structurestart1, biomebase);
++                    // Papercut end
+                 }
+ 
+                 ichunkaccess.a(structuregenerator.b(), structurestart1);
+@@ -172,6 +173,24 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
+ 
+     }
+ 
++    // Papercut start
++    private StructureStart getStructureStart(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, StructureGenerator<?> structuregenerator, int i, SeededRandom seededrandom, ChunkCoordIntPair chunkcoordintpair, StructureStart structurestart1, BiomeBase biomebase) {
++        StructureGenerateEvent event = new StructureGenerateEvent(
++                getWorld().getWorld(),
++                StructureType.getStructureTypes().get(structuregenerator.b().toLowerCase()),
++                chunkcoordintpair.x,
++                chunkcoordintpair.z
++        );
++        if (structuregenerator.a(biomemanager, chunkgenerator, seededrandom, chunkcoordintpair.x, chunkcoordintpair.z, biomebase) && event.callEvent()) {
++            StructureStart structurestart2 = structuregenerator.a().create(structuregenerator, chunkcoordintpair.x, chunkcoordintpair.z, StructureBoundingBox.a(), i, chunkgenerator.getSeed());
++
++            structurestart2.a(this, definedstructuremanager, chunkcoordintpair.x, chunkcoordintpair.z, biomebase);
++            structurestart1 = structurestart2.e() ? structurestart2 : StructureStart.a;
++        }
++        return structurestart1;
++    }
++    // Papercut end
++
+     public void storeStructures(GeneratorAccess generatoraccess, IChunkAccess ichunkaccess) {
+         boolean flag = true;
+         int i = ichunkaccess.getPos().x;
