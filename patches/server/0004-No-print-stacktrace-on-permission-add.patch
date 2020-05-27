@@ -5,10 +5,10 @@ Subject: [PATCH] No print stacktrace on permission add
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 4ea73d06c2704094f3600f8430aa84072272b40a..176327fb336367ef6f00a23541cf202a3aa77e93 100644
+index f324ec3629470885cda19a449e4a77738b9e5cb4..34775206287ca1221b1dc58793d49e8c5da47f91 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2198,7 +2198,7 @@ public final class CraftServer implements Server {
+@@ -2203,7 +2203,7 @@ public final class CraftServer implements Server {
                  try {
                      pluginManager.addPermission(perm);
                  } catch (IllegalArgumentException ex) {

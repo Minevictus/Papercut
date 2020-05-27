@@ -1,0 +1,308 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Wed, 27 May 2020 18:40:27 +0200
+Subject: [PATCH] Add Papercut config
+
+
+diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
+index b07c49f1b48cc6dedd7c2057da0ec4f6f6d446e6..cc0b350e18c6e05488ee5a14d93d74aa0ddae17a 100644
+--- a/src/main/java/net/minecraft/server/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/DedicatedServer.java
+@@ -194,6 +194,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+         com.destroystokyo.paper.PaperConfig.registerCommands();
+         com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // load version history now
+         // Paper end
++        us.minevict.papercut.PapercutConfig.init((File) options.valueOf("papercut-settings")); // Papercut
+ 
+         this.setSpawnAnimals(dedicatedserverproperties.spawnAnimals);
+         this.setSpawnNPCs(dedicatedserverproperties.spawnNpcs);
+diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
+index 561b42472261a973fea6344d76ca7ea1993aee27..f883bf0aa1f56fd86f0bf0352cb44d197d665f7e 100644
+--- a/src/main/java/net/minecraft/server/World.java
++++ b/src/main/java/net/minecraft/server/World.java
+@@ -88,6 +88,8 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
+     public final com.destroystokyo.paper.PaperWorldConfig paperConfig; // Paper
+     public final ChunkPacketBlockController chunkPacketBlockController; // Paper - Anti-Xray
+ 
++    public final us.minevict.papercut.PapercutConfig.WorldConfig papercutConfig; // Papercut
++
+     public final co.aikar.timings.WorldTimingsHandler timings; // Paper
+     public static BlockPosition lastPhysicsProblem; // Spigot
+     private org.spigotmc.TickLimiter entityLimiter;
+@@ -137,6 +139,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
+         this.spigotConfig = new org.spigotmc.SpigotWorldConfig( worlddata.getName() ); // Spigot
+         this.paperConfig = new com.destroystokyo.paper.PaperWorldConfig(worlddata.getName(), this.spigotConfig); // Paper
+         this.chunkPacketBlockController = this.paperConfig.antiXray ? new ChunkPacketBlockControllerAntiXray(this.paperConfig) : ChunkPacketBlockController.NO_OPERATION_INSTANCE; // Paper - Anti-Xray
++        this.papercutConfig = new us.minevict.papercut.PapercutConfig.WorldConfig(worlddata.getName()); // Papercut
+         this.generator = gen;
+         dimensionmanager.world = (WorldServer) this; // Paper
+         this.world = new CraftWorld((WorldServer) this, gen, env);
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 4ea73d06c2704094f3600f8430aa84072272b40a..f324ec3629470885cda19a449e4a77738b9e5cb4 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -815,6 +815,7 @@ public final class CraftServer implements Server {
+ 
+         org.spigotmc.SpigotConfig.init((File) console.options.valueOf("spigot-settings")); // Spigot
+         com.destroystokyo.paper.PaperConfig.init((File) console.options.valueOf("paper-settings")); // Paper
++        us.minevict.papercut.PapercutConfig.init((File) console.options.valueOf("papercut-settings")); // Papercut
+         for (WorldServer world : console.getWorlds()) {
+             world.worldData.setDifficulty(config.difficulty);
+             world.setSpawnFlags(config.spawnMonsters, config.spawnAnimals);
+@@ -843,6 +844,7 @@ public final class CraftServer implements Server {
+             }
+             world.spigotConfig.init(); // Spigot
+             world.paperConfig.init(); // Paper
++            world.papercutConfig.init(); // Papercut
+         }
+ 
+         Plugin[] pluginClone = pluginManager.getPlugins().clone(); // Paper
+@@ -2134,6 +2136,9 @@ public final class CraftServer implements Server {
+             return com.destroystokyo.paper.PaperConfig.config;
+         }
+ 
++        @Override
++        public YamlConfiguration getPapercutConfig() { return us.minevict.papercut.PapercutConfig.config; }
++
+         @Override
+         public void restart() {
+             org.spigotmc.RestartCommand.restart();
+diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
+index c9250401c1f01d6e82aba06bb0109a19dc39c855..6ed9ff069dd9b9c371a15d585a350568add29490 100644
+--- a/src/main/java/org/bukkit/craftbukkit/Main.java
++++ b/src/main/java/org/bukkit/craftbukkit/Main.java
+@@ -139,6 +139,14 @@ public class Main {
+                         .describedAs("Yml file");
+                 // Paper end
+ 
++                // Papercut start
++                acceptsAll(asList("papercut", "papercut-settings"), "File for papercut settings")
++                        .withRequiredArg()
++                        .ofType(File.class)
++                        .defaultsTo(new File("papercut.yml"))
++                        .describedAs("Yml file");
++                // Paper end
++
+                 // Paper start
+                 acceptsAll(asList("server-name"), "Name of the server")
+                         .withRequiredArg()
+diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..878d1b6c7d3382203e200bb152c290df40e6725d
+--- /dev/null
++++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
+@@ -0,0 +1,214 @@
++package us.minevict.papercut;
++
++import com.destroystokyo.paper.util.SneakyThrow;
++import java.io.File;
++import java.lang.reflect.Method;
++import java.lang.reflect.Modifier;
++import java.util.logging.Level;
++import org.bukkit.Bukkit;
++import org.bukkit.configuration.ConfigurationSection;
++import org.bukkit.configuration.file.YamlConfiguration;
++
++public final class PapercutConfig {
++  public static final String CONFIG_HEADER = "Configuration file for Papercut.";
++  public static final int CURRENT_CONFIG_VERSION = 2;
++
++  private static final Object[] EMPTY = new Object[0];
++
++  private static File configFile;
++  public static YamlConfiguration config;
++  private static int configVersion;
++
++  public static void init(final File file) {
++    final File papercutConfig = new File(file.getParent(), "papercut.yml");
++    if (!papercutConfig.exists()) {
++      final File oldConfig = new File(file.getParent(), "papercut.yml");
++      oldConfig.renameTo(papercutConfig);
++    }
++    PapercutConfig.configFile = file;
++    final YamlConfiguration config = new YamlConfiguration();
++    config.options().header(CONFIG_HEADER);
++    config.options().copyDefaults(true);
++
++    if (!file.exists()) {
++      try {
++        file.createNewFile();
++      } catch (final Exception ex) {
++        Bukkit.getLogger().log(Level.SEVERE, "Failure to create papercut config", ex);
++      }
++    } else {
++      try {
++        config.load(file);
++      } catch (final Exception ex) {
++        Bukkit.getLogger().log(Level.SEVERE, "Failure to load papercut config", ex);
++        SneakyThrow.sneaky(ex); /* Rethrow, this is critical */
++        throw new RuntimeException(ex); // unreachable
++      }
++    }
++
++    PapercutConfig.load(config);
++  }
++
++  public static void load(final YamlConfiguration config) {
++    PapercutConfig.config = config;
++    PapercutConfig.configVersion = PapercutConfig
++        .getInt("config-version-please-do-not-modify-me", CURRENT_CONFIG_VERSION);
++    PapercutConfig.set("config-version-please-do-not-modify-me", CURRENT_CONFIG_VERSION);
++
++    for (final Method method : PapercutConfig.class.getDeclaredMethods()) {
++      if (method.getReturnType() != void.class || method.getParameterCount() != 0 ||
++          !Modifier.isPrivate(method.getModifiers()) || !Modifier.isStatic(method.getModifiers())) {
++        continue;
++      }
++
++      try {
++        method.setAccessible(true);
++        method.invoke(null, EMPTY);
++      } catch (final Exception ex) {
++        SneakyThrow.sneaky(ex); /* Rethrow, this is critical */
++        throw new RuntimeException(ex); // unreachable
++      }
++    }
++
++    /* We re-save to add new options */
++    try {
++      config.save(PapercutConfig.configFile);
++    } catch (final Exception ex) {
++      Bukkit.getLogger().log(Level.SEVERE, "Unable to save papercut config", ex);
++    }
++  }
++
++  static void set(final String path, final Object value) {
++    PapercutConfig.config.set(path, value);
++  }
++
++  static boolean getBoolean(final String path, final boolean dfl) {
++    PapercutConfig.config.addDefault(path, dfl);
++    return PapercutConfig.config.getBoolean(path, dfl);
++  }
++
++  static int getInt(final String path, final int dfl) {
++    PapercutConfig.config.addDefault(path, dfl);
++    return PapercutConfig.config.getInt(path, dfl);
++  }
++
++  static long getLong(final String path, final long dfl) {
++    PapercutConfig.config.addDefault(path, dfl);
++    return PapercutConfig.config.getLong(path, dfl);
++  }
++
++  static double getDouble(final String path, final double dfl) {
++    PapercutConfig.config.addDefault(path, dfl);
++    return PapercutConfig.config.getDouble(path, dfl);
++  }
++
++  public static final class WorldConfig {
++    public final String worldName;
++    public ConfigurationSection config;
++    ConfigurationSection worldDefaults;
++
++    public WorldConfig(final String worldName) {
++      this.worldName = worldName;
++      this.init();
++    }
++
++    public void init() {
++      this.worldDefaults = PapercutConfig.config.getConfigurationSection("world-settings.default");
++      if (this.worldDefaults == null) {
++        this.worldDefaults = PapercutConfig.config.createSection("world-settings.default");
++      }
++
++      String worldSectionPath =
++          PapercutConfig.configVersion < 1 ? this.worldName : "world-settings.".concat(this.worldName);
++      ConfigurationSection section = PapercutConfig.config.getConfigurationSection(worldSectionPath);
++      if (section == null) {
++        section = PapercutConfig.config.createSection(worldSectionPath);
++      }
++      PapercutConfig.config.set(worldSectionPath, section);
++
++      this.load(section);
++    }
++
++    public void load(final ConfigurationSection config) {
++      this.config = config;
++
++      for (final Method method : PapercutConfig.WorldConfig.class.getDeclaredMethods()) {
++        if (method.getReturnType() != void.class || method.getParameterCount() != 0 ||
++            !Modifier.isPrivate(method.getModifiers()) || Modifier.isStatic(method.getModifiers())) {
++          continue;
++        }
++
++        try {
++          method.setAccessible(true);
++          method.invoke(this, EMPTY);
++        } catch (final Exception ex) {
++          SneakyThrow.sneaky(ex); /* Rethrow, this is critical */
++          throw new RuntimeException(ex); // unreachable
++        }
++      }
++
++      if (PapercutConfig.configVersion < 1) {
++        ConfigurationSection oldSection = PapercutConfig.config.getConfigurationSection(this.worldName);
++        PapercutConfig.config.set("world-settings.".concat(this.worldName), oldSection);
++        PapercutConfig.config.set(this.worldName, null);
++      }
++
++      /* We re-save to add new options */
++      try {
++        PapercutConfig.config.save(PapercutConfig.configFile);
++      } catch (final Exception ex) {
++        Bukkit.getLogger().log(Level.SEVERE, "Unable to save papercut config", ex);
++      }
++    }
++
++    /**
++     * update world defaults for the specified path, but also sets this world's config value for the path if it exists
++     */
++    void set(final String path, final Object val) {
++      this.worldDefaults.set(path, val);
++      if (this.config.get(path) != null) {
++        this.config.set(path, val);
++      }
++    }
++
++    boolean getBoolean(final String path, final boolean dfl) {
++      this.worldDefaults.addDefault(path, dfl);
++      if (PapercutConfig.configVersion < 1) {
++        if (this.config.getBoolean(path) == dfl) {
++          this.config.set(path, null);
++        }
++      }
++      return this.config.getBoolean(path, this.worldDefaults.getBoolean(path));
++    }
++
++    int getInt(final String path, final int dfl) {
++      this.worldDefaults.addDefault(path, dfl);
++      if (PapercutConfig.configVersion < 1) {
++        if (this.config.getInt(path) == dfl) {
++          this.config.set(path, null);
++        }
++      }
++      return this.config.getInt(path, this.worldDefaults.getInt(path));
++    }
++
++    long getLong(final String path, final long dfl) {
++      this.worldDefaults.addDefault(path, dfl);
++      if (PapercutConfig.configVersion < 1) {
++        if (this.config.getLong(path) == dfl) {
++          this.config.set(path, null);
++        }
++      }
++      return this.config.getLong(path, this.worldDefaults.getLong(path));
++    }
++
++    double getDouble(final String path, final double dfl) {
++      this.worldDefaults.addDefault(path, dfl);
++      if (PapercutConfig.configVersion < 1) {
++        if (this.config.getDouble(path) == dfl) {
++          this.config.set(path, null);
++        }
++      }
++      return this.config.getDouble(path, this.worldDefaults.getDouble(path));
++    }
++  }
++}

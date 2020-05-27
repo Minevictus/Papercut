@@ -81,17 +81,17 @@ index b25b3b48165e5fef4db99c2838de21d4eca502f4..433efa13ab758080967ee325e2b7df65
          }
  
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index 269580ae2a6edca979ccc1e46df144468ea70a18..743396e402198c8d96cdf077d1642a34e403687f 100644
+index ada082e67ac8a3e79bab5b360f09c9402f683b86..a78e50c3114aaef9ac43efd0a5de31c88bde5721 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
-@@ -144,6 +144,7 @@ public abstract class PlayerList {
- 
-         this.a(entityplayer, (EntityPlayer) null, worldserver);
-         PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
-+        playerconnection.advancementDataPlayer = applyPlayerAdvancementsAsync(entityplayer); // Paper - async advancements loading
-         GameRules gamerules = worldserver.getGameRules();
-         boolean flag = gamerules.getBoolean(GameRules.DO_IMMEDIATE_RESPAWN);
-         boolean flag1 = gamerules.getBoolean(GameRules.REDUCED_DEBUG_INFO);
+@@ -16,6 +16,7 @@ import java.util.Map;
+ import java.util.Optional;
+ import java.util.Set;
+ import java.util.UUID;
++import java.util.concurrent.CompletableFuture;
+ import javax.annotation.Nullable;
+ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
 @@ -448,10 +449,8 @@ public abstract class PlayerList {
              serverstatisticmanager.a();
          }
@@ -114,12 +114,30 @@ index 269580ae2a6edca979ccc1e46df144468ea70a18..743396e402198c8d96cdf077d1642a34
          this.players.remove(entityplayer);
          this.playersByName.remove(entityplayer.getName().toLowerCase(java.util.Locale.ROOT)); // Spigot
          this.server.getBossBattleCustomData().b(entityplayer);
-@@ -1257,9 +1256,36 @@ public abstract class PlayerList {
+@@ -622,6 +621,14 @@ public abstract class PlayerList {
+             loginlistener.disconnect(event.getKickMessage());
+             return null;
+         }
++        // Paper start - async advancements loading
++        // At this point, the player should be allowed in.
++        // In almost all cases, loading advancements is QUICK, so doing this async should have little impact.
++        // Due to that same reason, starting it this late should also be okay.
++        server.execute(() ->
++            entity.playerConnection.advancementDataPlayer = server.getPlayerList().applyPlayerAdvancementsAsync(entity)
++        );
++        // Paper end
+         return entity;
+     }
+ 
+@@ -1260,9 +1267,40 @@ public abstract class PlayerList {
          return serverstatisticmanager;
      }
  
 +    // Paper start - Apply advancements async
 +    public java.util.concurrent.CompletableFuture<AdvancementDataPlayer> applyPlayerAdvancementsAsync(EntityPlayer entityplayer) {
++        if (!us.minevict.papercut.PapercutConfig.applyAdvancementsAsync) {
++            return CompletableFuture.completedFuture(applyPlayerAdvancementsSync(entityplayer));
++        }
 +        if (entityplayer.isAdvancementDataLoaded()) {
 +            // We have nothing to load, so no reason to drag on the future for long.
 +            AdvancementDataPlayer advancementdataplayer = entityplayer.getAdvancementData();
@@ -145,6 +163,7 @@ index 269580ae2a6edca979ccc1e46df144468ea70a18..743396e402198c8d96cdf077d1642a34
 +    }
 +    // Paper end
 +
++    public AdvancementDataPlayer applyPlayerAdvancementsSync(EntityPlayer entityplayer) { return f(entityplayer); } // Papercut - OBFHELPER
      public AdvancementDataPlayer f(EntityPlayer entityplayer) {
          UUID uuid = entityplayer.getUniqueID();
 -        AdvancementDataPlayer advancementdataplayer = (AdvancementDataPlayer) entityplayer.getAdvancementData(); // CraftBukkit
@@ -152,7 +171,7 @@ index 269580ae2a6edca979ccc1e46df144468ea70a18..743396e402198c8d96cdf077d1642a34
  
          if (advancementdataplayer == null) {
              File file = new File(this.server.getWorldServer(DimensionManager.OVERWORLD).getDataManager().getDirectory(), "advancements");
-@@ -1312,8 +1338,13 @@ public abstract class PlayerList {
+@@ -1315,8 +1353,13 @@ public abstract class PlayerList {
          }*/
  
          for (EntityPlayer player : players) {
@@ -187,10 +206,10 @@ index 60fc5aff80697cb4c85080350542c0f46056f74a..304362b4c3f2edc87478201cc73cb857
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index dcbda5b35ab4d44e6b1d6c34bb8763a7dd08e629..af21c589c9c04d3df2506652a625f6f9761fdb85 100644
+index 787995e81388edcde786fa5da719552092d8fad1..25c1eda3a9cef2c8d1c485d903667abd5436f040 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1870,7 +1870,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1876,7 +1876,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          CraftAdvancement craft = (CraftAdvancement) advancement;
          AdvancementDataPlayer data = getHandle().getAdvancementData();
          AdvancementProgress progress = data.getProgress(craft.getHandle());
@@ -198,3 +217,19 @@ index dcbda5b35ab4d44e6b1d6c34bb8763a7dd08e629..af21c589c9c04d3df2506652a625f6f9
          return new CraftAdvancementProgress(craft, data, progress);
      }
  
+diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
+index 878d1b6c7d3382203e200bb152c290df40e6725d..473063016bf4b30e40e2c0bd26a8c4555834df85 100644
+--- a/src/main/java/us/minevict/papercut/PapercutConfig.java
++++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
+@@ -102,6 +102,11 @@ public final class PapercutConfig {
+     return PapercutConfig.config.getDouble(path, dfl);
+   }
+ 
++  public static boolean applyAdvancementsAsync = true;
++  private static void applyAdvancementsAsync() {
++    applyAdvancementsAsync = getBoolean("apply-async-advancements", applyAdvancementsAsync);
++  }
++
+   public static final class WorldConfig {
+     public final String worldName;
+     public ConfigurationSection config;
