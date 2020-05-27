@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Wed, 27 May 2020 19:02:13 +0200
+Subject: [PATCH] Config for advancements
+
+
+diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
+index ad7eea5c4dae69b9b91aecccd7c6ccd111ae70d7..60efd34d1450c96ed6aab70d32ef83a2795940ce 100644
+--- a/src/main/java/net/minecraft/server/PlayerList.java
++++ b/src/main/java/net/minecraft/server/PlayerList.java
+@@ -1261,6 +1261,11 @@ public abstract class PlayerList {
+ 
+     // Paper start - Apply advancements async
+     public java.util.concurrent.CompletableFuture<AdvancementDataPlayer> applyPlayerAdvancementsAsync(EntityPlayer entityplayer) {
++        // Papercut start
++        if (!us.minevict.papercut.PapercutConfig.applyAdvancementsAsync) {
++            return java.util.concurrent.CompletableFuture.completedFuture(f(entityplayer));
++        }
++        // Papercut end
+         if (entityplayer.isAdvancementDataLoaded()) {
+             // We have nothing to load, so no reason to drag on the future for long.
+             AdvancementDataPlayer advancementdataplayer = entityplayer.getAdvancementData();
+diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
+index 878d1b6c7d3382203e200bb152c290df40e6725d..473063016bf4b30e40e2c0bd26a8c4555834df85 100644
+--- a/src/main/java/us/minevict/papercut/PapercutConfig.java
++++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
+@@ -102,6 +102,11 @@ public final class PapercutConfig {
+     return PapercutConfig.config.getDouble(path, dfl);
+   }
+ 
++  public static boolean applyAdvancementsAsync = true;
++  private static void applyAdvancementsAsync() {
++    applyAdvancementsAsync = getBoolean("apply-async-advancements", applyAdvancementsAsync);
++  }
++
+   public static final class WorldConfig {
+     public final String worldName;
+     public ConfigurationSection config;
