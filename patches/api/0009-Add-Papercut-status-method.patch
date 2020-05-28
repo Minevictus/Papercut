@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Thu, 28 May 2020 10:46:49 +0200
+Subject: [PATCH] Add Papercut status method
+
+
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index e765f9e9f0adf3e1d2a8d7cca2cce300f3373716..d330d9545a40013210d5460c0c1c8a27c18ecb58 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -1504,4 +1504,18 @@ public interface Server extends PluginMessageRecipient {
+     @NotNull
+     com.destroystokyo.paper.entity.ai.MobGoals getMobGoals();
+     // Paper end
++
++    // Papercut start
++    /**
++     * Returns `true`.
++     * <p>
++     * This must be wrapped in a try block catching `NoSuchMethodError`.
++     * </p>
++     *
++     * @return `true`
++     */
++    default boolean isPapercut() {
++        return true;
++    }
++    // Papercut end
+ }

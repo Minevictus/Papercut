@@ -1,0 +1,82 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Thu, 28 May 2020 10:42:48 +0200
+Subject: [PATCH] Raw methods
+
+
+diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
+index 3f0f38031000a4eda25584d069939f40fbfb026b..7b736a1ecafb2f29f4522724cd2735c517548294 100644
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -659,4 +659,48 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+     @NotNull
+     org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason getEntitySpawnReason();
+     // Paper end
++
++    // Papercut start
++    /**
++     * Rotate without teleporting.
++     *
++     * @param yaw Their new yaw.
++     * @param pitch Their new pitch.
++     */
++    void rawRotate(float yaw, float pitch);
++
++    /**
++     * This should only be needed on <i>some</i> living entities like the {@link
++     * org.bukkit.entity.EnderDragon Ender Dragon}.
++     *
++     * @param yaw Their new yaw.
++     * @param pitch Their new pitch.
++     * @see #rawRotate
++     */
++    default void rawRotateClamped(float yaw, float pitch) {
++        while (yaw < -180f) {
++            yaw += 360f;
++        }
++
++        while (yaw >= 180f) {
++            yaw -= 360.0F;
++        }
++
++        rawRotate(yaw, pitch);
++    }
++
++    /**
++     * Set the visibility.
++     *
++     * @param visibility Their new visibility.
++     */
++    void setRawInvisible(boolean visibility);
++
++    /**
++     * Set the invulnerability.
++     *
++     * @param invulnerability Their new state of invulnerability.
++     */
++    void setRawInvulnerable(boolean invulnerability);
++    // Papercut end
+ }
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index 787bb144b5918ef1e46d69cb72b84128d2b678f3..de50d3a1a56ba201f41d2203b7f42667dacd6cd1 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -1830,4 +1830,18 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+     @Override
+     Spigot spigot();
+     // Spigot end
++
++    // Papercut start
++    /**
++     * Update passengers to player's client. The client sometimes doesn't update entities riding them.
++     */
++    void rawUpdateClientPassengers();
++
++    /**
++     * Destroy entity for player client.
++     *
++     * @param entity Entity to destroy.
++     */
++    void rawDestroyEntity(@NotNull Entity entity);
++    // Papercut end
+ }
