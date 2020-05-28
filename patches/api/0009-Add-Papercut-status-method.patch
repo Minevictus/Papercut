@@ -4,6 +4,29 @@ Date: Thu, 28 May 2020 10:46:49 +0200
 Subject: [PATCH] Add Papercut status method
 
 
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index a9c10228eeeaac89361c695a5ab90161b6358ca1..7b5bc24b00a2c116d61fe4defaa68d1bf2d5904e 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -1717,4 +1717,18 @@ public final class Bukkit {
+     public static Server.Spigot spigot() {
+         return server.spigot();
+     }
++
++    // Papercut start
++    /**
++     * Returns `true`.
++     * <p>
++     * This must be wrapped in a try block catching `NoSuchMethodError`.
++     * </p>
++     *
++     * @return `true`
++     */
++    public static boolean isPapercut() {
++        return server.isPapercut();
++    }
++    // Papercut end
+ }
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
 index e765f9e9f0adf3e1d2a8d7cca2cce300f3373716..d330d9545a40013210d5460c0c1c8a27c18ecb58 100644
 --- a/src/main/java/org/bukkit/Server.java
