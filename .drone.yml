@@ -1,0 +1,24 @@
+---
+kind: pipeline
+type: docker
+name: build
+
+steps:
+  - name: build
+    image: maven:3-openjdk-8
+    user: root
+    commands:
+      - apt-get update
+      - apt-get install -qy patch
+      - ./papercut jar
+  - name: release
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: mvbot_token
+      files: papercut-paperclip.jar
+      checksum:
+        - md5
+        - sha1
+        - sha256
+      title: ${DRONE_COMMIT}
