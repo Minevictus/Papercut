@@ -11,6 +11,9 @@ steps:
       - apt-get update
       - apt-get install -qy patch
       - ./papercut jar
+    when:
+      event:
+        - tag
   - name: release
     image: plugins/github-release
     settings:
@@ -22,3 +25,6 @@ steps:
         - sha1
         - sha256
       title: ${DRONE_COMMIT}
+    when:
+      event:
+        - tag
