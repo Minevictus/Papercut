@@ -15,7 +15,7 @@ steps:
     image: curlimages/curl:latest
     user: root
     commands:
-      - curl https://github.com/c4milo/github-release/releases/download/v1.1.0/github-release_v1.1.0_linux_amd64.tar.gz > release.tar.gz
+      - curl -L https://github.com/c4milo/github-release/releases/download/v1.1.0/github-release_v1.1.0_linux_amd64.tar.gz > release.tar.gz
       - apk update
       - apk add tar
       - tar xzf release.tar.gz
