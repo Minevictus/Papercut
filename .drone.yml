@@ -11,20 +11,20 @@ steps:
       - apt-get update
       - apt-get install -qy patch
       - ./papercut jar
-    when:
-      event:
-        - tag
   - name: release
-    image: plugins/github-release
-    settings:
-      api_key:
+    image: curlimages/curl:latest
+    user: root
+    commands:
+      - curl https://github.com/c4milo/github-release/releases/download/v1.1.0/github-release_v1.1.0_linux_amd64.tar.gz > release.tar.gz
+      - apk update
+      - apk add tar
+      - tar xzf release.tar.gz
+      - './github-release "$DRONE_REPO" "$DRONE_COMMIT" "$DRONE_BRANCH" "Automated release, do not use this in production." "papercut-paperclip.jar"'
+    environment:
+      GITHUB_TOKEN:
         from_secret: mvbot_token
-      files: papercut-paperclip.jar
-      checksum:
-        - md5
-        - sha1
-        - sha256
-      title: ${DRONE_COMMIT}
     when:
+      branch:
+        - master
       event:
-        - tag
+        - push
