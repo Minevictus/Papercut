@@ -17,7 +17,7 @@ steps:
     commands:
       - curl -L https://github.com/c4milo/github-release/releases/download/v1.1.0/github-release_v1.1.0_linux_amd64.tar.gz > release.tar.gz
       - apk update
-      - apk add tar
+      - apk add tar ca-certificates
       - tar xzf release.tar.gz
       - './github-release "$DRONE_REPO" "$DRONE_COMMIT" "$DRONE_BRANCH" "Automated release, do not use this in production." "papercut-paperclip.jar"'
     environment:
