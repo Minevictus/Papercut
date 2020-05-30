@@ -19,7 +19,7 @@ steps:
       - apk update
       - apk add tar ca-certificates
       - tar xzf release.tar.gz
-      - './github-release "$DRONE_REPO" "$DRONE_COMMIT" "$DRONE_BRANCH" "Automated release, do not use this in production." "papercut-paperclip.jar"'
+      - './github-release "$DRONE_REPO" "Drone build $DRONE_BUILD_NUMBER" "$DRONE_COMMIT" "Automated release, do not use this in production." "papercut-paperclip.jar"'
     environment:
       GITHUB_TOKEN:
         from_secret: mvbot_token
