@@ -5,13 +5,14 @@ Subject: [PATCH] Add StructureGenerateEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/ChunkGenerator.java b/src/main/java/net/minecraft/server/ChunkGenerator.java
-index a87f4532545a51cfd5cd593ac1e0bf6975426aa8..bcc02502c589644983badd45b068bb1624f2f495 100644
+index a87f4532545a51cfd5cd593ac1e0bf6975426aa8..5f07359cfe39d92d473b9267102a64e4d1f63f41 100644
 --- a/src/main/java/net/minecraft/server/ChunkGenerator.java
 +++ b/src/main/java/net/minecraft/server/ChunkGenerator.java
-@@ -1,5 +1,10 @@
+@@ -1,5 +1,11 @@
  package net.minecraft.server;
  
 +// Papercut start
++import com.destroystokyo.paper.PaperConfig;
 +import com.destroystokyo.paper.event.world.StructureGenerateEvent;
 +import org.bukkit.StructureType;
 +// Papercut end
@@ -19,7 +20,7 @@ index a87f4532545a51cfd5cd593ac1e0bf6975426aa8..bcc02502c589644983badd45b068bb16
  import java.util.BitSet;
  import java.util.Iterator;
  import java.util.List;
-@@ -150,20 +155,16 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
+@@ -150,20 +156,16 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
                  // CraftBukkit start
                  if (structuregenerator == WorldGenerator.STRONGHOLD) {
                      synchronized (structuregenerator) {
@@ -47,13 +48,14 @@ index a87f4532545a51cfd5cd593ac1e0bf6975426aa8..bcc02502c589644983badd45b068bb16
                  }
  
                  ichunkaccess.a(structuregenerator.b(), structurestart1);
-@@ -172,6 +173,24 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
+@@ -172,6 +174,25 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
  
      }
  
 +    // Papercut start
 +    private StructureStart getStructureStart(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, StructureGenerator<?> structuregenerator, int i, SeededRandom seededrandom, ChunkCoordIntPair chunkcoordintpair, StructureStart structurestart1, BiomeBase biomebase) {
 +        StructureGenerateEvent event = new StructureGenerateEvent(
++                PaperConfig.asyncChunks && !getWorld().getServer().isPrimaryThread(),
 +                getWorld().getWorld(),
 +                StructureType.getStructureTypes().get(structuregenerator.b().toLowerCase()),
 +                chunkcoordintpair.x,

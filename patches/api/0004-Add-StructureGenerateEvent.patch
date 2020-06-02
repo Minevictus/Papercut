@@ -6,7 +6,7 @@ Subject: [PATCH] Add StructureGenerateEvent
 
 diff --git a/src/main/java/com/destroystokyo/paper/event/world/StructureGenerateEvent.java b/src/main/java/com/destroystokyo/paper/event/world/StructureGenerateEvent.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..e00d5a598ca2eb1fb14a41712f155fb506546498
+index 0000000000000000000000000000000000000000..3f3d9416e4a335045c71eecca2298892dc146b6d
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/event/world/StructureGenerateEvent.java
 @@ -0,0 +1,66 @@
@@ -30,8 +30,8 @@ index 0000000000000000000000000000000000000000..e00d5a598ca2eb1fb14a41712f155fb5
 +
 +    private boolean cancel = false;
 +
-+    public StructureGenerateEvent(@NotNull World world, @NotNull StructureType structureType, int chunkX, int chunkZ) {
-+        super(true);
++    public StructureGenerateEvent(boolean async, @NotNull World world, @NotNull StructureType structureType, int chunkX, int chunkZ) {
++        super(async);
 +        this.world = Preconditions.checkNotNull(world, "world");
 +        this.structureType = Preconditions.checkNotNull(structureType, "structureType");
 +        this.chunkX = chunkX;
