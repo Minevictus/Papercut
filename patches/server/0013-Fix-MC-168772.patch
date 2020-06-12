@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Fri, 12 Jun 2020 11:13:26 +0200
+Subject: [PATCH] Fix MC-168772
+
+
+diff --git a/src/main/java/net/minecraft/server/BlockTurtleEgg.java b/src/main/java/net/minecraft/server/BlockTurtleEgg.java
+index cb36334e419bcf0c20f3d17df8f8a9811b73f213..2344c3b92e528acb5832bedc334db7ca0e16a5ae 100644
+--- a/src/main/java/net/minecraft/server/BlockTurtleEgg.java
++++ b/src/main/java/net/minecraft/server/BlockTurtleEgg.java
+@@ -157,6 +157,16 @@ public class BlockTurtleEgg extends Block {
+     }
+ 
+     private boolean a(World world, Entity entity) {
+-        return entity instanceof EntityTurtle ? false : (entity instanceof EntityLiving && !(entity instanceof EntityHuman) ? world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) : true);
++        // Papercut start - fix MC-168772
++        if (entity instanceof EntityTurtle
++            || entity instanceof EntityExperienceOrb
++            || entity instanceof EntityItem
++            || entity instanceof EntityMinecartAbstract) {
++            return false;
++        }
++        if (entity instanceof EntityLiving && !(entity instanceof EntityHuman))
++            return world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
++        return true;
++        // Papercut end
+     }
+ }
