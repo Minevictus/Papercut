@@ -5,7 +5,7 @@ Subject: [PATCH] Add Papercut config
 
 
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index b07c49f1b48cc6dedd7c2057da0ec4f6f6d446e6..cc0b350e18c6e05488ee5a14d93d74aa0ddae17a 100644
+index 32cd645abb236b355f4f4f0f810e56342ee6cc06..c33b8a0dfe41effd77267a47fb9f11fa8b4e444c 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
 @@ -194,6 +194,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
@@ -17,7 +17,7 @@ index b07c49f1b48cc6dedd7c2057da0ec4f6f6d446e6..cc0b350e18c6e05488ee5a14d93d74aa
          this.setSpawnAnimals(dedicatedserverproperties.spawnAnimals);
          this.setSpawnNPCs(dedicatedserverproperties.spawnNpcs);
 diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
-index 561b42472261a973fea6344d76ca7ea1993aee27..f883bf0aa1f56fd86f0bf0352cb44d197d665f7e 100644
+index 032b7acee8c8af70c0283f5551ce2875607f6c98..8294b8c708dc9812fe9d09e728d5ae0b791b4085 100644
 --- a/src/main/java/net/minecraft/server/World.java
 +++ b/src/main/java/net/minecraft/server/World.java
 @@ -88,6 +88,8 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
@@ -32,13 +32,13 @@ index 561b42472261a973fea6344d76ca7ea1993aee27..f883bf0aa1f56fd86f0bf0352cb44d19
 @@ -137,6 +139,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig( worlddata.getName() ); // Spigot
          this.paperConfig = new com.destroystokyo.paper.PaperWorldConfig(worlddata.getName(), this.spigotConfig); // Paper
-         this.chunkPacketBlockController = this.paperConfig.antiXray ? new ChunkPacketBlockControllerAntiXray(this.paperConfig) : ChunkPacketBlockController.NO_OPERATION_INSTANCE; // Paper - Anti-Xray
+         this.chunkPacketBlockController = this.paperConfig.antiXray ? new ChunkPacketBlockControllerAntiXray(this.paperConfig, executor) : ChunkPacketBlockController.NO_OPERATION_INSTANCE; // Paper - Anti-Xray
 +        this.papercutConfig = new us.minevict.papercut.PapercutConfig.WorldConfig(worlddata.getName()); // Papercut
          this.generator = gen;
-         dimensionmanager.world = (WorldServer) this; // Paper
+         if (dimensionmanager.world == null) dimensionmanager.world = (WorldServer) this; // Paper
          this.world = new CraftWorld((WorldServer) this, gen, env);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 4ea73d06c2704094f3600f8430aa84072272b40a..f324ec3629470885cda19a449e4a77738b9e5cb4 100644
+index ace6ad29b8205606f287648232994fa6e935b7bb..8e79a9d52d35b7754b43dfa079e0b34b2e651908 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -815,6 +815,7 @@ public final class CraftServer implements Server {

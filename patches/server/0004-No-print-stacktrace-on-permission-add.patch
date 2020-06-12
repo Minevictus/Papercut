@@ -5,7 +5,7 @@ Subject: [PATCH] No print stacktrace on permission add
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index f324ec3629470885cda19a449e4a77738b9e5cb4..34775206287ca1221b1dc58793d49e8c5da47f91 100644
+index 8e79a9d52d35b7754b43dfa079e0b34b2e651908..01dff0306bf7a69fe6027d9b77e9ebee4a358620 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -2203,7 +2203,7 @@ public final class CraftServer implements Server {

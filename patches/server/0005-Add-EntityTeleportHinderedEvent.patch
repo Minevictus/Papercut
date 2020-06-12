@@ -123,10 +123,10 @@ index 87aef515c65c8bd815667b1a77f453fee76b192d..eea373c44cfe81263500d5957cbe1bc7
              this.c = 100;
              if (this.exitPortal == null && this.world.worldProvider instanceof WorldProviderTheEnd) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index ff60568ce4320e6ebfa50489a564538b0f57da82..6bd0984881fdd35e32aceeab884d5076bbc83ee5 100644
+index d16d3fe58e6a45e3023946174d2e137a0670e455..9381c95e76150aaa9da3889676db877e34e3f156 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -165,6 +165,7 @@ import org.bukkit.plugin.Plugin;
+@@ -164,6 +164,7 @@ import org.bukkit.plugin.Plugin;
  import org.bukkit.util.BoundingBox;
  import org.bukkit.util.NumberConversions;
  import org.bukkit.util.Vector;
@@ -134,7 +134,7 @@ index ff60568ce4320e6ebfa50489a564538b0f57da82..6bd0984881fdd35e32aceeab884d5076
  
  public abstract class CraftEntity implements org.bukkit.entity.Entity {
      private static PermissibleBase perm;
-@@ -498,7 +499,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -497,7 +498,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          Preconditions.checkArgument(location != null, "location");
          location.checkFinite();
  
@@ -153,10 +153,10 @@ index ff60568ce4320e6ebfa50489a564538b0f57da82..6bd0984881fdd35e32aceeab884d5076
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index dcbda5b35ab4d44e6b1d6c34bb8763a7dd08e629..787995e81388edcde786fa5da719552092d8fad1 100644
+index 141003ca718cc6ba113de8e4855b18252b293ef6..707eeba386fdea8e51a3b9525174a5ebbd3456b5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -125,6 +125,7 @@ import org.bukkit.plugin.messaging.StandardMessenger;
+@@ -124,6 +124,7 @@ import org.bukkit.plugin.messaging.StandardMessenger;
  import org.bukkit.scoreboard.Scoreboard;
  
  import net.md_5.bungee.api.chat.BaseComponent; // Spigot
@@ -164,7 +164,7 @@ index dcbda5b35ab4d44e6b1d6c34bb8763a7dd08e629..787995e81388edcde786fa5da7195520
  
  @DelegateDeserialization(CraftOfflinePlayer.class)
  public class CraftPlayer extends CraftHumanEntity implements Player {
-@@ -756,6 +757,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -763,6 +764,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          }
  
          if (entity.isVehicle()) {
