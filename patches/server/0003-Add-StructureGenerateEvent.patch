@@ -3,6 +3,9 @@ From: Nahuel <nahueldolores@hotmail.com>
 Date: Tue, 28 Apr 2020 13:52:06 -0300
 Subject: [PATCH] Add StructureGenerateEvent
 
+---
+ .../net/minecraft/server/ChunkGenerator.java  | 43 ++++++++++++++-----
+ 1 file changed, 32 insertions(+), 11 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/ChunkGenerator.java b/src/main/java/net/minecraft/server/ChunkGenerator.java
 index a87f4532545a51cfd5cd593ac1e0bf6975426aa8..5f07359cfe39d92d473b9267102a64e4d1f63f41 100644

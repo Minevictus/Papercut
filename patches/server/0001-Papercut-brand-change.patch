@@ -3,6 +3,15 @@ From: Mariell Hoversholm <proximyst@proximyst.com>
 Date: Tue, 26 May 2020 20:16:27 +0200
 Subject: [PATCH] Papercut brand change
 
+---
+ pom.xml                                        | 18 +++++++++---------
+ .../paper/PaperVersionFetcher.java             | 16 +++++++++-------
+ src/main/java/net/minecraft/server/EULA.java   |  2 +-
+ .../net/minecraft/server/MinecraftServer.java  |  2 +-
+ .../org/bukkit/craftbukkit/CraftServer.java    |  2 +-
+ src/main/java/org/bukkit/craftbukkit/Main.java |  2 +-
+ .../bukkit/craftbukkit/util/Versioning.java    |  2 +-
+ 7 files changed, 23 insertions(+), 21 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
 index e4c63bb76cb598545f9d215a8859724d6e7f8b81..7a57d5011c05b2b8438a7067b94d19cdff098775 100644

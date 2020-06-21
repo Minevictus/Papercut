@@ -3,6 +3,10 @@ From: Mariell Hoversholm <proximyst@proximyst.com>
 Date: Thu, 30 Apr 2020 17:09:16 +0200
 Subject: [PATCH] Add hover event joiner for items
 
+---
+ .../paper/ItemStackHoverJoiner.java           | 69 +++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+ create mode 100644 src/main/java/com/destroystokyo/paper/ItemStackHoverJoiner.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/ItemStackHoverJoiner.java b/src/main/java/com/destroystokyo/paper/ItemStackHoverJoiner.java
 new file mode 100644

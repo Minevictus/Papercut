@@ -3,6 +3,14 @@ From: Mariell Hoversholm <proximyst@proximyst.com>
 Date: Tue, 26 May 2020 22:20:23 +0200
 Subject: [PATCH] Apply advancements async
 
+---
+ .../server/AdvancementDataPlayer.java         |  1 +
+ .../net/minecraft/server/EntityPlayer.java    |  8 ++--
+ .../minecraft/server/PlayerConnection.java    |  5 +-
+ .../java/net/minecraft/server/PlayerList.java | 47 +++++++++++++++----
+ .../advancement/CraftAdvancementProgress.java |  2 +
+ .../craftbukkit/entity/CraftPlayer.java       |  1 -
+ 6 files changed, 49 insertions(+), 15 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 index c41e1384724ab150f43dc43fe2a453c9b1262e48..3d7db96b9a25dcc184850a09eeb9e3064c40b9c7 100644

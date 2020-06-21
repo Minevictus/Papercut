@@ -3,6 +3,9 @@ From: Mariell Hoversholm <proximyst@proximyst.com>
 Date: Fri, 12 Jun 2020 11:13:26 +0200
 Subject: [PATCH] Fix MC-168772
 
+---
+ .../java/net/minecraft/server/BlockTurtleEgg.java    | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/src/main/java/net/minecraft/server/BlockTurtleEgg.java b/src/main/java/net/minecraft/server/BlockTurtleEgg.java
 index cb36334e419bcf0c20f3d17df8f8a9811b73f213..2344c3b92e528acb5832bedc334db7ca0e16a5ae 100644

@@ -3,6 +3,10 @@ From: Mariell Hoversholm <proximyst@proximyst.com>
 Date: Thu, 28 May 2020 10:46:49 +0200
 Subject: [PATCH] Add Papercut status method
 
+---
+ src/main/java/org/bukkit/Bukkit.java | 14 ++++++++++++++
+ src/main/java/org/bukkit/Server.java | 14 ++++++++++++++
+ 2 files changed, 28 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
 index a9c10228eeeaac89361c695a5ab90161b6358ca1..7b5bc24b00a2c116d61fe4defaa68d1bf2d5904e 100644

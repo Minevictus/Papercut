@@ -3,6 +3,9 @@ From: Mariell Hoversholm <proximyst@proximyst.com>
 Date: Tue, 26 May 2020 20:17:02 +0200
 Subject: [PATCH] No print stacktrace on permission add
 
+---
+ src/main/java/org/bukkit/craftbukkit/CraftServer.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 index 8e79a9d52d35b7754b43dfa079e0b34b2e651908..01dff0306bf7a69fe6027d9b77e9ebee4a358620 100644

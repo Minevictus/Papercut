@@ -3,6 +3,13 @@ From: Mariell Hoversholm <proximyst@proximyst.com>
 Date: Sun, 3 May 2020 13:31:01 -0300
 Subject: [PATCH] Add EntityTeleportHinderedEvent
 
+---
+ .../minecraft/server/BlockEnderPortal.java    | 20 +++++++++++++++-
+ .../net/minecraft/server/BlockPortal.java     | 21 ++++++++++++++++-
+ .../server/TileEntityEndGateway.java          | 23 +++++++++++++++++++
+ .../craftbukkit/entity/CraftEntity.java       | 12 +++++++++-
+ .../craftbukkit/entity/CraftPlayer.java       |  6 +++++
+ 5 files changed, 79 insertions(+), 3 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/BlockEnderPortal.java b/src/main/java/net/minecraft/server/BlockEnderPortal.java
 index 213388c74545063cec2de51e6b80cec88d85479a..68497f46535cbf7e1a18e3235a1b097bb72705a4 100644

@@ -3,6 +3,9 @@ From: Mariell Hoversholm <proximyst@proximyst.com>
 Date: Tue, 26 May 2020 20:16:21 +0200
 Subject: [PATCH] Papercut brand change
 
+---
+ pom.xml | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
 index 20c473f521e50df57065d3644398f9db777c1a24..a874e5cf9852e31885bb792e631002b652a50f21 100644

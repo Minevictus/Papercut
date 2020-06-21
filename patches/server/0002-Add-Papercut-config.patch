@@ -3,6 +3,14 @@ From: Mariell Hoversholm <proximyst@proximyst.com>
 Date: Wed, 27 May 2020 18:40:27 +0200
 Subject: [PATCH] Add Papercut config
 
+---
+ .../net/minecraft/server/DedicatedServer.java |   1 +
+ src/main/java/net/minecraft/server/World.java |   3 +
+ .../org/bukkit/craftbukkit/CraftServer.java   |   5 +
+ .../java/org/bukkit/craftbukkit/Main.java     |   8 +
+ .../us/minevict/papercut/PapercutConfig.java  | 214 ++++++++++++++++++
+ 5 files changed, 231 insertions(+)
+ create mode 100644 src/main/java/us/minevict/papercut/PapercutConfig.java
 
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
 index 32cd645abb236b355f4f4f0f810e56342ee6cc06..c33b8a0dfe41effd77267a47fb9f11fa8b4e444c 100644

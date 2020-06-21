@@ -3,6 +3,11 @@ From: Mariell Hoversholm <proximyst@proximyst.com>
 Date: Thu, 28 May 2020 10:43:25 +0200
 Subject: [PATCH] Raw methods
 
+---
+ .../bukkit/craftbukkit/entity/CraftEntity.java | 18 ++++++++++++++++++
+ .../craftbukkit/entity/CraftLivingEntity.java  |  9 +++++++++
+ .../bukkit/craftbukkit/entity/CraftPlayer.java | 14 ++++++++++++++
+ 3 files changed, 41 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 index 9381c95e76150aaa9da3889676db877e34e3f156..86b6687ca207086d3a3548108c8a0ab97dc0ae7d 100644

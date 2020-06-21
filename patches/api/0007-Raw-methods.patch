@@ -3,6 +3,10 @@ From: Mariell Hoversholm <proximyst@proximyst.com>
 Date: Thu, 28 May 2020 10:42:48 +0200
 Subject: [PATCH] Raw methods
 
+---
+ src/main/java/org/bukkit/entity/Entity.java | 44 +++++++++++++++++++++
+ src/main/java/org/bukkit/entity/Player.java | 14 +++++++
+ 2 files changed, 58 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
 index 3f0f38031000a4eda25584d069939f40fbfb026b..7b736a1ecafb2f29f4522724cd2735c517548294 100644
