@@ -12,9 +12,13 @@ PS1="$"
 echo "Rebuilding patch files from current fork state..."
 function savePatches {
     what=$1
-    cd $basedir/$what/
+    if [ ! -d "$basedir/$what" ]; then
+        echo " No source in $basedir/$what - nothing to rebuild."
+        return
+    fi
+    cd "$basedir/$what"
 
-    mkdir -p $basedir/patches/$2
+    mkdir -p "$basedir/patches/$2"
     if [ -d ".git/rebase-apply" ]; then
         # in middle of a rebase, be smarter
         echo "REBASE DETECTED - PARTIAL SAVE"
@@ -27,17 +31,18 @@ function savePatches {
                 rm "${files[`expr $i - 1`]}"
             fi
         done
-    else
-        rm $basedir/patches/$2/*.patch
+    elif [ "$(ls -A "$basedir/patches/$2")" ]; then
+        rm "$basedir/patches/$2/"*.patch
     fi
 
-    git format-patch --no-signature --zero-commit --full-index -N -o $basedir/patches/$2 upstream/upstream
+    git format-patch --no-signature --zero-commit --full-index -N -o "$basedir/patches/$2" upstream/upstream
     cd $basedir
-    git add -A $basedir/patches/$2
+    git add -A "$basedir/patches/$2"
     echo "  Patches saved for $what to patches/$2"
 }
 
 savePatches ${FORK_NAME}-API api
+savePatches ${FORK_NAME}-MojangAPI mojangapi
 savePatches ${FORK_NAME}-Server server
 
 $basedir/scripts/push.sh

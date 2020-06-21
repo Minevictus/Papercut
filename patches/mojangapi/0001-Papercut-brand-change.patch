@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Sun, 21 Jun 2020 13:26:39 +0200
+Subject: [PATCH] Papercut brand change
+
+---
+ pom.xml | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index d0da7daf4e9e1d414770301edd2d780a69fa28ab..f2d75b7a07a6a58f9c85d5f52c5d4660514d2111 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -3,18 +3,17 @@
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+     <parent>
+-        <groupId>com.destroystokyo.paper</groupId>
+-        <artifactId>paper-parent</artifactId>
++        <groupId>us.minevict.papercut</groupId> <!-- Papercut -->
++        <artifactId>papercut-parent</artifactId> <!-- Papercut -->
+         <version>dev-SNAPSHOT</version>
+     </parent>
+ 
+-    <groupId>com.destroystokyo.paper</groupId>
+-    <artifactId>paper-mojangapi</artifactId>
++    <artifactId>papercut-mojangapi</artifactId> <!-- Papercut -->
+     <version>1.15.2-R0.1-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Paper-MojangAPI</name>
+-    <url>https://github.com/PaperMC/Paper</url>
++    <name>Papercut-MojangAPI</name> <!-- Papercut -->
++    <url>https://github.com/Minevictus/Papercut</url> <!-- Papercut -->
+     <description>API additions that utilize Mojang Specific API's</description>
+ 
+     <properties>
+@@ -49,8 +48,8 @@
+ 
+     <dependencies>
+         <dependency>
+-            <groupId>com.destroystokyo.paper</groupId>
+-            <artifactId>paper-api</artifactId>
++            <groupId>us.minevict.papercut</groupId> <!-- Papercut -->
++            <artifactId>papercut-api</artifactId> <!-- Papercut -->
+             <version>${project.version}</version>
+             <scope>provided</scope>
+         </dependency>

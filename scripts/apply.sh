@@ -60,9 +60,13 @@ function applyPatch {
     git checkout master 2>/dev/null || git checkout -b master
     git fetch upstream >/dev/null 2>&1
     git reset --hard upstream/upstream
-    echo "  Applying patches to $target..."
-    git am --abort >/dev/null 2>&1
-    git am --3way --ignore-whitespace "$basedir/patches/$patch_folder/"*.patch
+    if [ "$(ls -A "$basedir/patches/$patch_folder/")" ]; then
+        echo "  Applying patches to $target..."
+        git am --abort >/dev/null 2>&1
+        git am --3way --ignore-whitespace "$basedir/patches/$patch_folder/"*.patch
+    else
+        echo "  No patches to apply to $target..."
+    fi
     if [ "$?" != "0" ]; then
         echo "  Something did not apply cleanly to $target."
         echo "  Please review above details and finish the apply then"
@@ -83,6 +87,7 @@ function enableCommitSigningIfNeeded {
     ./scripts/importmcdev.sh "$basedir" || exit 1
 (
     (applyPatch Paper/Paper-API ${FORK_NAME}-API HEAD api $API_REPO &&
+    applyPatch Paper/Paper-MojangAPI ${FORK_NAME}-MojangAPI HEAD mojangapi $MOJANGAPI_REPO &&
     applyPatch Paper/Paper-Server ${FORK_NAME}-Server HEAD server $SERVER_REPO) || exit 1
     enableCommitSigningIfNeeded
 ) || (
