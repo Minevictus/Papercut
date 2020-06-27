@@ -4,19 +4,20 @@ Date: Tue, 28 Apr 2020 13:52:06 -0300
 Subject: [PATCH] Add StructureGenerateEvent
 
 ---
- .../event/world/StructureGenerateEvent.java   | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
+ .../event/world/StructureGenerateEvent.java   | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
  create mode 100644 src/main/java/com/destroystokyo/paper/event/world/StructureGenerateEvent.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/event/world/StructureGenerateEvent.java b/src/main/java/com/destroystokyo/paper/event/world/StructureGenerateEvent.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..3f3d9416e4a335045c71eecca2298892dc146b6d
+index 0000000000000000000000000000000000000000..f32986eade209a120e8423b1ecda413ac6f37156
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/event/world/StructureGenerateEvent.java
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,67 @@
 +package com.destroystokyo.paper.event.world;
 +
 +import com.google.common.base.Preconditions;
++import org.bukkit.Bukkit;
 +import org.bukkit.StructureType;
 +import org.bukkit.World;
 +import org.bukkit.event.Cancellable;
@@ -34,8 +35,8 @@ index 0000000000000000000000000000000000000000..3f3d9416e4a335045c71eecca2298892
 +
 +    private boolean cancel = false;
 +
-+    public StructureGenerateEvent(boolean async, @NotNull World world, @NotNull StructureType structureType, int chunkX, int chunkZ) {
-+        super(async);
++    public StructureGenerateEvent(@NotNull World world, @NotNull StructureType structureType, int chunkX, int chunkZ) {
++        super(Bukkit.isPrimaryThread()); // Structure generation is not necessarily on the main thread as of 1.16.
 +        this.world = Preconditions.checkNotNull(world, "world");
 +        this.structureType = Preconditions.checkNotNull(structureType, "structureType");
 +        this.chunkX = chunkX;
