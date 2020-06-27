@@ -4,32 +4,34 @@ Date: Tue, 26 May 2020 20:16:27 +0200
 Subject: [PATCH] Papercut brand change
 
 ---
- pom.xml                                       | 22 +++++++++----------
- .../paper/PaperVersionFetcher.java            | 16 ++++++++------
+ pom.xml                                       | 24 +++++++++----------
+ .../paper/PaperVersionFetcher.java            | 16 +++++++------
  src/main/java/net/minecraft/server/EULA.java  |  2 +-
  .../net/minecraft/server/MinecraftServer.java |  2 +-
  .../org/bukkit/craftbukkit/CraftServer.java   |  2 +-
  .../java/org/bukkit/craftbukkit/Main.java     |  2 +-
  .../bukkit/craftbukkit/util/Versioning.java   |  2 +-
- 7 files changed, 25 insertions(+), 23 deletions(-)
+ 7 files changed, 26 insertions(+), 24 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index e4c63bb76cb598545f9d215a8859724d6e7f8b81..acd52fb354ed30166622bfc5ada08c56ae30db97 100644
+index 2b24688310f14b6a9e3fe04fe8b41cd1803b78c1..99a2072f1ae59a2cb01d831c808f4dbf7d0545a9 100644
 --- a/pom.xml
 +++ b/pom.xml
-@@ -1,10 +1,10 @@
+@@ -1,11 +1,11 @@
  <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
      <modelVersion>4.0.0</modelVersion>
 -    <artifactId>paper</artifactId>
 +    <artifactId>papercut</artifactId> <!-- Papercut -->
      <packaging>jar</packaging>
-     <version>1.15.2-R0.1-SNAPSHOT</version>
+     <version>1.16.1-R0.1-SNAPSHOT</version>
 -    <name>Paper</name>
+-    <url>https://papermc.io</url>
 +    <name>Papercut</name> <!-- Papercut -->
-     <url>https://papermc.io</url>
++    <url>https://github.com/Minevictus/Papercut</url> <!-- Papercut -->
  
      <properties>
+         <!-- <skipTests>true</skipTests> Paper - This [was] not going to end well -->
 @@ -18,22 +18,22 @@
      </properties>
  
@@ -115,7 +117,7 @@ index 49a38c6608b652ff48ef4eaca0dd3ccb1ba570e3..4f3e9735ebb0e0c69ff35294520301a6
          switch (distance) {
              case -1:
 diff --git a/src/main/java/net/minecraft/server/EULA.java b/src/main/java/net/minecraft/server/EULA.java
-index cf00f35a5b7c2d2f6b6989e0855de8b882dcef50..70574e7fbdac20d9500cab118148c12f059e4fa0 100644
+index 550232cb3819138b3bae0fa1c51429485e8bc593..d7716cbc90f96673a35fcaa825bf0c1d91e43432 100644
 --- a/src/main/java/net/minecraft/server/EULA.java
 +++ b/src/main/java/net/minecraft/server/EULA.java
 @@ -70,7 +70,7 @@ public class EULA {
@@ -128,10 +130,10 @@ index cf00f35a5b7c2d2f6b6989e0855de8b882dcef50..70574e7fbdac20d9500cab118148c12f
                      throwable = throwable1;
                      throw throwable1;
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 4ab6579032043f570c20befa7fef8931babd2355..04b5281825a1d35ee635df24b647e6db55c58b17 100644
+index b474f45b6d551e45f8894b3971baade33b6ccd0f..b83320d57a0c3b6632405036a66307fd9b0e4450 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1570,7 +1570,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
+@@ -1446,7 +1446,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
      }
  
      public String getServerModName() {
@@ -141,10 +143,10 @@ index 4ab6579032043f570c20befa7fef8931babd2355..04b5281825a1d35ee635df24b647e6db
  
      public CrashReport b(CrashReport crashreport) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 568aefdf698facfc36edacc9332e83196c0d80bc..ace6ad29b8205606f287648232994fa6e935b7bb 100644
+index 0c6bc282652840536695c019f9a2b9a7391a1168..f20011713298335a6d4e55960b4b98d4b659e021 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -205,7 +205,7 @@ import javax.annotation.Nullable; // Paper
+@@ -229,7 +229,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
@@ -154,7 +156,7 @@ index 568aefdf698facfc36edacc9332e83196c0d80bc..ace6ad29b8205606f287648232994fa6
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index d6e5d014c0d81f5f7cff6638ccfc2e983fea53d9..c9250401c1f01d6e82aba06bb0109a19dc39c855 100644
+index feb45475bb3c0785a8d8198615fbf4b3cd99acbe..0eec309505c935ef7a31cf0bde249a041dc2325e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -252,7 +252,7 @@ public class Main {

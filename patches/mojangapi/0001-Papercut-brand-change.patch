@@ -4,11 +4,51 @@ Date: Sun, 21 Jun 2020 13:26:39 +0200
 Subject: [PATCH] Papercut brand change
 
 ---
- pom.xml | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ .gitignore | 32 ++++++++++++++++++++++++++++++++
+ pom.xml    | 15 +++++++--------
+ 2 files changed, 39 insertions(+), 8 deletions(-)
+ create mode 100644 .gitignore
 
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000000000000000000000000000000000000..e431e3435737e28394d81b56568a08b3c3148b9b
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,32 @@
++# Eclipse stuff
++/.classpath
++/.project
++/.settings
++
++# netbeans
++/nbproject
++/nb-configuration.xml
++
++# we use maven!
++/build.xml
++
++# maven
++/target
++
++# vim
++.*.sw[a-p]
++
++# various other potential build files
++/build
++/bin
++/dist
++/manifest.mf
++
++# Mac filesystem dust
++.DS_Store
++
++# intellij
++*.iml
++*.ipr
++*.iws
++.idea/
 diff --git a/pom.xml b/pom.xml
-index d0da7daf4e9e1d414770301edd2d780a69fa28ab..f2d75b7a07a6a58f9c85d5f52c5d4660514d2111 100644
+index 4c7c62c787fede46edd96754cf0b97a27171fd92..2b14d7d6d7c21901f115dc9cd93b4041b8a95fee 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -3,18 +3,17 @@
@@ -25,7 +65,7 @@ index d0da7daf4e9e1d414770301edd2d780a69fa28ab..f2d75b7a07a6a58f9c85d5f52c5d4660
 -    <groupId>com.destroystokyo.paper</groupId>
 -    <artifactId>paper-mojangapi</artifactId>
 +    <artifactId>papercut-mojangapi</artifactId> <!-- Papercut -->
-     <version>1.15.2-R0.1-SNAPSHOT</version>
+     <version>1.16.1-R0.1-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Paper-MojangAPI</name>

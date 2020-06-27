@@ -5,23 +5,23 @@ Subject: [PATCH] Climbing should not bypass cramming gamerule
 
 Original patch: https://raw.githubusercontent.com/pl3xgaming/Purpur/master/patches/server/0053-Climbing-should-not-bypass-cramming-gamerule.patch
 ---
- src/main/java/net/minecraft/server/Entity.java            | 5 ++++-
- src/main/java/net/minecraft/server/EntityArmorStand.java  | 2 +-
- src/main/java/net/minecraft/server/EntityBat.java         | 2 +-
- src/main/java/net/minecraft/server/EntityBoat.java        | 2 +-
- .../java/net/minecraft/server/EntityHorseAbstract.java    | 2 +-
- src/main/java/net/minecraft/server/EntityLiving.java      | 8 +++++---
- .../java/net/minecraft/server/EntityMinecartAbstract.java | 2 +-
- src/main/java/net/minecraft/server/EntityParrot.java      | 2 +-
- src/main/java/net/minecraft/server/IEntitySelector.java   | 8 +++++++-
- src/main/java/us/minevict/papercut/PapercutConfig.java    | 5 +++++
- 10 files changed, 27 insertions(+), 11 deletions(-)
+ src/main/java/net/minecraft/server/Entity.java         | 10 +++++++++-
+ .../java/net/minecraft/server/EntityArmorStand.java    |  2 +-
+ src/main/java/net/minecraft/server/EntityBat.java      |  2 +-
+ src/main/java/net/minecraft/server/EntityBoat.java     |  2 +-
+ .../java/net/minecraft/server/EntityHorseAbstract.java |  2 +-
+ src/main/java/net/minecraft/server/EntityLiving.java   |  8 +++++---
+ .../net/minecraft/server/EntityMinecartAbstract.java   |  2 +-
+ src/main/java/net/minecraft/server/EntityParrot.java   |  4 ++--
+ .../java/net/minecraft/server/IEntitySelector.java     |  8 +++++++-
+ src/main/java/us/minevict/papercut/PapercutConfig.java |  5 +++++
+ 10 files changed, 33 insertions(+), 12 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index e0ab058bf947ea10b37eadf6122292e708bd3809..700d22e1b4afd1eb918c9bbfbac2c83e97545a88 100644
+index b11383b35662b1e59b89e916e55340cee2726944..0471b04c2481ccfb61ab95fa4e36292d022d8a83 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
-@@ -1564,7 +1564,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -1513,7 +1513,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
          return false;
      }
  
@@ -33,8 +33,20 @@ index e0ab058bf947ea10b37eadf6122292e708bd3809..700d22e1b4afd1eb918c9bbfbac2c83e
          return false;
      }
  
+@@ -1521,6 +1524,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+     public boolean canCollideWith(Entity entity) {
+         return isCollidable();
+     }
++    // Papercut start
++    public boolean canCollideWith(Entity entity, boolean ignoreClimbing) {
++        return isCollidable(ignoreClimbing);
++    }
++    // Papercut end
+     // CraftBukkit end
+ 
+     public void runKillTrigger(Entity entity, int kills, DamageSource damageSource) { this.a(entity, kills, damageSource); } // Paper - OBFHELPER
 diff --git a/src/main/java/net/minecraft/server/EntityArmorStand.java b/src/main/java/net/minecraft/server/EntityArmorStand.java
-index d35a0b2d94e4f52c257375c35f55b5a41c9f2c12..d9edf9056b12c2d360694650b48842be09e2ad75 100644
+index 250bccee4a27801b41c50d59e93396c696ab6974..6fc0a85852bab65b8c92ce7c58f6525543ff7687 100644
 --- a/src/main/java/net/minecraft/server/EntityArmorStand.java
 +++ b/src/main/java/net/minecraft/server/EntityArmorStand.java
 @@ -318,7 +318,7 @@ public class EntityArmorStand extends EntityLiving {
@@ -47,7 +59,7 @@ index d35a0b2d94e4f52c257375c35f55b5a41c9f2c12..d9edf9056b12c2d360694650b48842be
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityBat.java b/src/main/java/net/minecraft/server/EntityBat.java
-index 34239160beac4ad4ec9b6daab2a546a6e8fccb8c..df2ebb036d32628e7195f0d6726990d8c96e59d0 100644
+index 3dd3b8913e345471f971c4ef55bb91200eb50a33..3b270cbd7de54275d9025d7fb927168135f861fa 100644
 --- a/src/main/java/net/minecraft/server/EntityBat.java
 +++ b/src/main/java/net/minecraft/server/EntityBat.java
 @@ -50,7 +50,7 @@ public class EntityBat extends EntityAmbient {
@@ -60,10 +72,10 @@ index 34239160beac4ad4ec9b6daab2a546a6e8fccb8c..df2ebb036d32628e7195f0d6726990d8
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityBoat.java b/src/main/java/net/minecraft/server/EntityBoat.java
-index fdf306e80a3f1c853cde3df7924fccaad797e823..1bf23fa7198831e2a46d332101bfbfcbeb73ee40 100644
+index 409e0ac0a2aaccda29f7cc146dbccdd45de80e9f..a44d8cd3f490dc83298e15c14a3f89199c9e09a5 100644
 --- a/src/main/java/net/minecraft/server/EntityBoat.java
 +++ b/src/main/java/net/minecraft/server/EntityBoat.java
-@@ -98,7 +98,7 @@ public class EntityBoat extends Entity {
+@@ -104,7 +104,7 @@ public class EntityBoat extends Entity {
      }
  
      @Override
@@ -73,23 +85,23 @@ index fdf306e80a3f1c853cde3df7924fccaad797e823..1bf23fa7198831e2a46d332101bfbfcb
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityHorseAbstract.java b/src/main/java/net/minecraft/server/EntityHorseAbstract.java
-index c56efe035ac87e5ef49ad39d82499c7348ee8d2f..b829bba5826ab26f47ffd753d6bf5e289be04778 100644
+index d45d025fa74a5ff53f0828f51639e19613e30186..d766c60c0925e0aea8755a56d7c7cd658b8168c5 100644
 --- a/src/main/java/net/minecraft/server/EntityHorseAbstract.java
 +++ b/src/main/java/net/minecraft/server/EntityHorseAbstract.java
-@@ -161,7 +161,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
+@@ -172,7 +172,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
      }
  
      @Override
 -    public boolean isCollidable() {
-+    public boolean isCollidable(boolean ignoreClimbable) { // Papercut
++    public boolean isCollidable(boolean ignoreClimbing) {
          return !this.isVehicle();
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index 3fc2360a103a5399f2878eccb0c13eb6e41e824d..bb8b958091a1c960408e34ffba5b5a317d06e809 100644
+index 7a2140e4b901027997b2884275b35b43fe2175bc..3861d168c3895af2e0a7f8a2e4df13bda036a6ff 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
-@@ -2682,7 +2682,7 @@ public abstract class EntityLiving extends Entity {
+@@ -2835,7 +2835,7 @@ public abstract class EntityLiving extends Entity {
              return;
          }
          // Paper - end don't run getEntities if we're not going to use its result
@@ -98,7 +110,7 @@ index 3fc2360a103a5399f2878eccb0c13eb6e41e824d..bb8b958091a1c960408e34ffba5b5a31
  
          if (!list.isEmpty()) {
              // Paper - move up
-@@ -2811,8 +2811,10 @@ public abstract class EntityLiving extends Entity {
+@@ -2974,8 +2974,10 @@ public abstract class EntityLiving extends Entity {
      }
  
      @Override
@@ -110,12 +122,12 @@ index 3fc2360a103a5399f2878eccb0c13eb6e41e824d..bb8b958091a1c960408e34ffba5b5a31
 +        // Papercut end
      }
  
-     @Override
+     // CraftBukkit start - collidable API
 diff --git a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
-index 665bbe07fa5f5c048758156b92f7b002e851c132..6bb52ac97841d1489d545103b7432bab8765562b 100644
+index 6e038905ea6e5245190e5970481195ba668f3247..4a7572b3cd85be5cca744e7ab7170ef488f3a9c1 100644
 --- a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
 +++ b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
-@@ -105,7 +105,7 @@ public abstract class EntityMinecartAbstract extends Entity {
+@@ -108,7 +108,7 @@ public abstract class EntityMinecartAbstract extends Entity {
      }
  
      @Override
@@ -125,23 +137,25 @@ index 665bbe07fa5f5c048758156b92f7b002e851c132..6bb52ac97841d1489d545103b7432bab
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityParrot.java b/src/main/java/net/minecraft/server/EntityParrot.java
-index 1402087612e04a92165d50721f776b855d89bfe1..dde8227b77f966866c3b6d844e189e18d559bcf4 100644
+index 2172fcefbc0d1c41cf2715a63015659a706e57ec..dd094d5f1f0280d213caaedf92eac49b046850f6 100644
 --- a/src/main/java/net/minecraft/server/EntityParrot.java
 +++ b/src/main/java/net/minecraft/server/EntityParrot.java
-@@ -319,7 +319,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
+@@ -314,8 +314,8 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
      }
  
      @Override
 -    public boolean isCollidable() {
+-        return super.isCollidable(); // CraftBukkit - collidable API
 +    public boolean isCollidable(boolean ignoreClimbing) {
-         return true;
++        return super.isCollidable(ignoreClimbing); // CraftBukkit - collidable API
      }
  
+     @Override
 diff --git a/src/main/java/net/minecraft/server/IEntitySelector.java b/src/main/java/net/minecraft/server/IEntitySelector.java
-index 1398c47a2f8b183b65f1553c735c3b183a8bfc9c..d5dc598bbc0649fcf49334bd43892bdfa4fb072e 100644
+index a52dd0c021e264a57a62bde27ea9d2a6a97e2335..2c766b09ff39540950546ad0b63d74ba4dad7ac7 100644
 --- a/src/main/java/net/minecraft/server/IEntitySelector.java
 +++ b/src/main/java/net/minecraft/server/IEntitySelector.java
-@@ -34,11 +34,17 @@ public final class IEntitySelector {
+@@ -43,11 +43,17 @@ public final class IEntitySelector {
      }
  
      public static Predicate<Entity> a(Entity entity) {
@@ -154,11 +168,11 @@ index 1398c47a2f8b183b65f1553c735c3b183a8bfc9c..d5dc598bbc0649fcf49334bd43892bdf
          ScoreboardTeamBase scoreboardteambase = entity.getScoreboardTeam();
          ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
  
-         return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.f.and((entity1) -> {
--            if (!entity1.isCollidable()) {
-+            if (!entity1.isCollidable(ignoreClimbing)) { // Papercut
+         return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.g.and((entity1) -> {
+-            if (!entity1.canCollideWith(entity) || !entity.canCollideWith(entity1)) { // CraftBukkit - collidable API
++            if (!entity1.canCollideWith(entity, ignoreClimbing) || !entity.canCollideWith(entity1, ignoreClimbing)) { // CraftBukkit - collidable API // Papercut - ignore climbing
                  return false;
-             } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).ec())) {
+             } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).ey())) {
                  return false;
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
 index 473063016bf4b30e40e2c0bd26a8c4555834df85..a76f1620ac92d3f09a4bcf00846ea94d79787cb6 100644

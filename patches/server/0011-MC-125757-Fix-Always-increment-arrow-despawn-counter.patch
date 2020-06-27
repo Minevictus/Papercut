@@ -4,36 +4,56 @@ Date: Fri, 21 Feb 2020 17:04:51 -0600
 Subject: [PATCH] MC-125757 Fix - Always increment arrow despawn counter
 
 ---
- src/main/java/net/minecraft/server/EntityArrow.java | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../java/net/minecraft/server/BlockTurtleEgg.java    | 12 +++++++++++-
+ src/main/java/net/minecraft/server/EntityArrow.java  |  5 ++++-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
+diff --git a/src/main/java/net/minecraft/server/BlockTurtleEgg.java b/src/main/java/net/minecraft/server/BlockTurtleEgg.java
+index 553c8affab6228cb187549deb5b34f79ba8f912c..d9feaf7cf90143bfd40a6b5e9b2f539d9c7751d9 100644
+--- a/src/main/java/net/minecraft/server/BlockTurtleEgg.java
++++ b/src/main/java/net/minecraft/server/BlockTurtleEgg.java
+@@ -163,6 +163,16 @@ public class BlockTurtleEgg extends Block {
+     }
+ 
+     private boolean a(World world, Entity entity) {
+-        return !(entity instanceof EntityTurtle) && !(entity instanceof EntityBat) ? (!(entity instanceof EntityLiving) ? false : entity instanceof EntityHuman || world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) : false;
++        // Papercut start - fix MC-168772
++        if (entity instanceof EntityTurtle
++            || entity instanceof EntityExperienceOrb
++            || entity instanceof EntityItem
++            || entity instanceof EntityMinecartAbstract) {
++            return false;
++        }
++        if (entity instanceof EntityLiving && !(entity instanceof EntityHuman))
++            return world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
++        return true;
++        // Papercut end
+     }
+ }
 diff --git a/src/main/java/net/minecraft/server/EntityArrow.java b/src/main/java/net/minecraft/server/EntityArrow.java
-index e66f6b30069af5b9031c7c78a2bb3d3a645034c0..c8247883f4698e590d9c1c7493bf1fcc26a44bf6 100644
+index 6195a45e30d9a9d76e24fbc2493020917a8b87b9..ad09bf5aa25990a47871b9a2370a4b77c43159be 100644
 --- a/src/main/java/net/minecraft/server/EntityArrow.java
 +++ b/src/main/java/net/minecraft/server/EntityArrow.java
-@@ -147,6 +147,8 @@ public abstract class EntityArrow extends Entity implements IProjectile {
+@@ -124,11 +124,13 @@ public abstract class EntityArrow extends IProjectile {
              this.extinguish();
          }
  
 +        this.checkDespawnCounter(); // Purpur - moved from below - MC-125757
 +
          if (this.inGround && !flag) {
-             if (this.aq != iblockdata && this.world.a(this.getBoundingBox().g(0.06D))) {
-                 this.inGround = false;
-@@ -154,7 +156,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
-                 this.despawnCounter = 0;
-                 this.as = 0;
+             if (this.an != iblockdata && this.u()) {
+                 this.z();
              } else if (!this.world.isClientSide) {
--                this.i();
-+                // this.i(); // Purpur moved up - MC-125757
+-                this.h();
++                // this.h(); // Purpur moved up - MC-125757
              }
  
-             ++this.d;
-@@ -275,6 +277,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
-         }
+             ++this.c;
+@@ -254,6 +256,7 @@ public abstract class EntityArrow extends IProjectile {
+ 
      }
  
-+    protected void checkDespawnCounter() { i(); } // Purpur - OBFHELPER
-     protected void i() {
++    protected void checkDespawnCounter() { h(); } // Purpur - OBFHELPER
+     protected void h() {
          ++this.despawnCounter;
          if (this.despawnCounter >= (fromPlayer == PickupStatus.CREATIVE_ONLY ? world.paperConfig.creativeArrowDespawnRate : (fromPlayer == PickupStatus.DISALLOWED ? world.paperConfig.nonPlayerArrowDespawnRate : ((this instanceof EntityThrownTrident) ? world.spigotConfig.tridentDespawnRate : world.spigotConfig.arrowDespawnRate)))) { // Spigot // Paper - TODO: Extract this to init?
