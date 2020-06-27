@@ -31,7 +31,7 @@ index d3ec5084e33dff038d54cdd2aeb703a3eb25f7a7..8abaa1f9d8c5df99c2edba9737dc34a3
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 7b736a1ecafb2f29f4522724cd2735c517548294..10e3a1bb2743ce143df39c2de96afe60fc49df86 100644
+index 7b736a1ecafb2f29f4522724cd2735c517548294..9fa2bdd223a19cb3116e400d7f6cce14f3531466 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
 @@ -658,6 +658,25 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
@@ -45,7 +45,7 @@ index 7b736a1ecafb2f29f4522724cd2735c517548294..10e3a1bb2743ce143df39c2de96afe60
 +     * @param location The location at which to spawn the entity.
 +     * @return Whether the entity was successfully spawned.
 +     */
-+    default boolean spawnAt(Location location) {
++    default boolean spawnAt(@NotNull Location location) {
 +        return spawnAt(location, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.DEFAULT);
 +    }
 +
@@ -56,7 +56,7 @@ index 7b736a1ecafb2f29f4522724cd2735c517548294..10e3a1bb2743ce143df39c2de96afe60
 +     * @param spawnReason The reason for which the entity was spawned.
 +     * @return Whether the entity was successfully spawned.
 +     */
-+    boolean spawnAt(Location location, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason spawnReason);
++    boolean spawnAt(@NotNull Location location, @NotNull org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason spawnReason);
      // Paper end
  
      // Papercut start
