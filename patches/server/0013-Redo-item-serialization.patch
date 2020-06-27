@@ -1,0 +1,79 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Sat, 27 Jun 2020 16:32:13 +0200
+Subject: [PATCH] Redo item serialization
+
+---
+ .../craftbukkit/util/CraftMagicNumbers.java   | 40 ++++++++++++-------
+ 1 file changed, 26 insertions(+), 14 deletions(-)
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+index 257f46003fc3203c67c029f3ddc73516cf02674f..f2a8eb3d796b89b71d9969e1cf1d706341a058da 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+@@ -330,39 +330,51 @@ public final class CraftMagicNumbers implements UnsafeValues {
+         Preconditions.checkNotNull(item, "null cannot be serialized");
+         Preconditions.checkArgument(item.getType() != Material.AIR, "air cannot be serialized");
+ 
++        return serializeNbtToBytes(
++            (item instanceof CraftItemStack ? ((CraftItemStack) item).getHandle() : CraftItemStack.asNMSCopy(item)).save(new NBTTagCompound()),
++            true
++        );
++    }
++
++    @Override
++    public ItemStack deserializeItem(byte[] data) {
++        NBTTagCompound compound = deserializeNbtFromBytes(data, true);
++        Dynamic<NBTBase> converted = DataConverterRegistry.getDataFixer().update(DataConverterTypes.ITEM_STACK, new Dynamic<NBTBase>(DynamicOpsNBT.a, compound), compound.getInt("DataVersion"), getDataVersion());
++        return CraftItemStack.asCraftMirror(net.minecraft.server.ItemStack.fromCompound((NBTTagCompound) converted.getValue()));
++    }
++
++    private byte[] serializeNbtToBytes(NBTTagCompound compound, boolean addDataVersion) {
++        if (addDataVersion) compound.setInt("DataVersion", getDataVersion());
+         java.io.ByteArrayOutputStream outputStream = new java.io.ByteArrayOutputStream();
+-        NBTTagCompound compound = (item instanceof CraftItemStack ? ((CraftItemStack) item).getHandle() : CraftItemStack.asNMSCopy(item)).save(new NBTTagCompound());
+-        compound.setInt("DataVersion", getDataVersion());
+         try {
+             net.minecraft.server.NBTCompressedStreamTools.writeNBT(
+                 compound,
+                 outputStream
+             );
+         } catch (IOException ex) {
+-            throw new RuntimeException(ex);
++            com.destroystokyo.paper.util.SneakyThrow.sneaky(ex);
++            throw new RuntimeException();
+         }
+ 
+         return outputStream.toByteArray();
+     }
+ 
+-    @Override
+-    public ItemStack deserializeItem(byte[] data) {
+-        Preconditions.checkNotNull(data, "null cannot be deserialized");
+-        Preconditions.checkArgument(data.length > 0, "cannot deserialize nothing");
+-
++    private NBTTagCompound deserializeNbtFromBytes(byte[] data, boolean verifyDataVersion) {
++        NBTTagCompound compound;
+         try {
+-            NBTTagCompound compound = net.minecraft.server.NBTCompressedStreamTools.readNBT(
++            compound = net.minecraft.server.NBTCompressedStreamTools.readNBT(
+                 new java.io.ByteArrayInputStream(data)
+             );
+-            int dataVersion = compound.getInt("DataVersion");
+-
+-            Preconditions.checkArgument(dataVersion <= getDataVersion(), "Newer version! Server downgrades are not supported!");
+-            Dynamic<NBTBase> converted = DataConverterRegistry.getDataFixer().update(DataConverterTypes.ITEM_STACK, new Dynamic<NBTBase>(DynamicOpsNBT.a, compound), dataVersion, getDataVersion());
+-            return CraftItemStack.asCraftMirror(net.minecraft.server.ItemStack.fromCompound((NBTTagCompound) converted.getValue()));
+         } catch (IOException ex) {
+             com.destroystokyo.paper.util.SneakyThrow.sneaky(ex);
+             throw new RuntimeException();
+         }
++
++        if (!verifyDataVersion) return compound;
++
++        int dataVersion = compound.getInt("DataVersion");
++        Preconditions.checkArgument(dataVersion <= getDataVersion(), "Newer version! Server downgrades are not supported!");
++        return compound;
+     }
+     // Paper end
+ 
