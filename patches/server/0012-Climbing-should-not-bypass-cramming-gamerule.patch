@@ -13,9 +13,10 @@ Original patch: https://raw.githubusercontent.com/pl3xgaming/Purpur/master/patch
  src/main/java/net/minecraft/server/EntityLiving.java   |  8 +++++---
  .../net/minecraft/server/EntityMinecartAbstract.java   |  2 +-
  src/main/java/net/minecraft/server/EntityParrot.java   |  4 ++--
+ src/main/java/net/minecraft/server/EntityStrider.java  |  2 +-
  .../java/net/minecraft/server/IEntitySelector.java     |  8 +++++++-
  src/main/java/us/minevict/papercut/PapercutConfig.java |  5 +++++
- 10 files changed, 33 insertions(+), 12 deletions(-)
+ 11 files changed, 34 insertions(+), 13 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
 index b11383b35662b1e59b89e916e55340cee2726944..0471b04c2481ccfb61ab95fa4e36292d022d8a83 100644
@@ -151,6 +152,19 @@ index 2172fcefbc0d1c41cf2715a63015659a706e57ec..dd094d5f1f0280d213caaedf92eac49b
      }
  
      @Override
+diff --git a/src/main/java/net/minecraft/server/EntityStrider.java b/src/main/java/net/minecraft/server/EntityStrider.java
+index 28551f4a6d1e5a657c1dfa9476531e649a8cbffa..00d7dcbc36d77979e2c70e3884e095338f7c1cad 100644
+--- a/src/main/java/net/minecraft/server/EntityStrider.java
++++ b/src/main/java/net/minecraft/server/EntityStrider.java
+@@ -120,7 +120,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
+     }
+ 
+     @Override
+-    public boolean isCollidable() {
++    public boolean isCollidable(boolean ignoreClimbable) {
+         return true;
+     }
+ 
 diff --git a/src/main/java/net/minecraft/server/IEntitySelector.java b/src/main/java/net/minecraft/server/IEntitySelector.java
 index a52dd0c021e264a57a62bde27ea9d2a6a97e2335..2c766b09ff39540950546ad0b63d74ba4dad7ac7 100644
 --- a/src/main/java/net/minecraft/server/IEntitySelector.java
