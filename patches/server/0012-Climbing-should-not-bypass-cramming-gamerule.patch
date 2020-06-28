@@ -86,10 +86,10 @@ index 409e0ac0a2aaccda29f7cc146dbccdd45de80e9f..a44d8cd3f490dc83298e15c14a3f8919
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityHorseAbstract.java b/src/main/java/net/minecraft/server/EntityHorseAbstract.java
-index d45d025fa74a5ff53f0828f51639e19613e30186..d766c60c0925e0aea8755a56d7c7cd658b8168c5 100644
+index 364697e0155012c300219ad94a3995809e6c2f8f..53f3aff09cb0dc2fb18081b1fea2805d4ae181ec 100644
 --- a/src/main/java/net/minecraft/server/EntityHorseAbstract.java
 +++ b/src/main/java/net/minecraft/server/EntityHorseAbstract.java
-@@ -172,7 +172,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
+@@ -165,7 +165,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
      }
  
      @Override

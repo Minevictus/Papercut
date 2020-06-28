@@ -130,7 +130,7 @@ index 550232cb3819138b3bae0fa1c51429485e8bc593..d7716cbc90f96673a35fcaa825bf0c1d
                      throwable = throwable1;
                      throw throwable1;
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index b474f45b6d551e45f8894b3971baade33b6ccd0f..b83320d57a0c3b6632405036a66307fd9b0e4450 100644
+index 5c862de2f240a241153d90a01042664b4f05cb91..eeadfeb63cef3936eccdd31a8f6485999096b5ed 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1446,7 +1446,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
@@ -156,7 +156,7 @@ index 25e01267888762826ffaf93711bdc7952c36da18..faba414d4bc556c20b13306787489495
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 381b12c149efc01c3c493f7fb24681032e071c23..d402a9c817c19a1b9727f6c2bd71b6649e0306f8 100644
+index 83151f3d7e9703f99391d24c41e90fc5ce1a80e7..210c1ac62d10c547401338edcc87bdb6823b4bdb 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -252,7 +252,7 @@ public class Main {

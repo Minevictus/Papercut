@@ -9,7 +9,7 @@ Subject: [PATCH] Config for advancements
  2 files changed, 10 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index 82cbdd5c14a4082845b7139507414bdec4555e02..324a1177ebc863e2bc0d220fcdc21cc8dd7d2583 100644
+index 4c3e8cbcf8e9e610a66d546debaebaf2fb922780..f050b578d6ecdd2b85dc9dfc1d9f1957dc2d8914 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
 @@ -1296,6 +1296,11 @@ public abstract class PlayerList {

@@ -13,7 +13,7 @@ Subject: [PATCH] Add Papercut config
  create mode 100644 src/main/java/us/minevict/papercut/PapercutConfig.java
 
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index 4c561181a977fd0244325880bb6a8cd6a54dcacc..19f988b3c0a7ceb8bbabbc0dc4db85b9471a6992 100644
+index 8b2755a3b95e472e884976195d1d3551fc260e39..27596f96f9671648eaf3cc6e45879e714c4a8c82 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
 @@ -170,6 +170,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
@@ -76,7 +76,7 @@ index faba414d4bc556c20b13306787489495de1b078d..e7923992947f52606dbcf629ccaf49f8
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index d402a9c817c19a1b9727f6c2bd71b6649e0306f8..eb46d2ba322b63723df8f3dfd55f497cd5580af7 100644
+index 210c1ac62d10c547401338edcc87bdb6823b4bdb..316d5754f1bad20cec70ff58e22ab159290f07dc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -139,6 +139,14 @@ public class Main {
