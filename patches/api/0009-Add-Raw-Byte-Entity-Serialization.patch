@@ -31,10 +31,10 @@ index d3ec5084e33dff038d54cdd2aeb703a3eb25f7a7..8abaa1f9d8c5df99c2edba9737dc34a3
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 7b736a1ecafb2f29f4522724cd2735c517548294..9fa2bdd223a19cb3116e400d7f6cce14f3531466 100644
+index ae1ebc5f8a61165d95184e2a12a270825ed1fd2d..83eddbdabddcf4db726cb210de12c679f5f23f8f 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -658,6 +658,25 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -659,6 +659,25 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      @NotNull
      org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason getEntitySpawnReason();

@@ -67,7 +67,7 @@ index d5740a25bb487fc186333e908968c6a23a9b5005..f529b9fc50ec05007c5556f9f410def4
      // CraftBukkit start
      public void a(WorldServer worldserver, double d0, double d1, double d2, float f, float f1) {
 diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
-index 103bda41422f0db700b150116c1417736823e763..f7b9a1defb2fd40bc30b5146d2b8580b925e8162 100644
+index 3481991870c1237ed207654a41827791c8017717..b0a0ecb023bc9a0b32c4336d00357a0c702e8893 100644
 --- a/src/main/java/net/minecraft/server/PlayerConnection.java
 +++ b/src/main/java/net/minecraft/server/PlayerConnection.java
 @@ -106,6 +106,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
@@ -90,10 +90,10 @@ index 103bda41422f0db700b150116c1417736823e763..f7b9a1defb2fd40bc30b5146d2b8580b
          }
  
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index 35d7ac60f61ffb493fe4f32b63511b2b86805243..fbe39c04a0cecbbe895bed77b7e3ae3d84dfde52 100644
+index ea744e2fdf7a256d9f04786a670c44e8b517f281..82cbdd5c14a4082845b7139507414bdec4555e02 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
-@@ -171,6 +171,7 @@ public abstract class PlayerList {
+@@ -172,6 +172,7 @@ public abstract class PlayerList {
  
          this.a(entityplayer, (EntityPlayer) null, worldserver1);
          PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);

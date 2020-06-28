@@ -46,7 +46,7 @@ index b598c48692ff340a081995384aeecf9a2266d10f..b482ee4658f964d55bdc256033b57ccd
          this.generator = gen;
          this.world = new CraftWorld((WorldServer) this, gen, env);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index f20011713298335a6d4e55960b4b98d4b659e021..fe416730e052b64969c9dd723f05a32a5b65ef41 100644
+index faba414d4bc556c20b13306787489495de1b078d..e7923992947f52606dbcf629ccaf49f8da738e22 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -846,6 +846,7 @@ public final class CraftServer implements Server {
@@ -76,7 +76,7 @@ index f20011713298335a6d4e55960b4b98d4b659e021..fe416730e052b64969c9dd723f05a32a
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 0eec309505c935ef7a31cf0bde249a041dc2325e..394c646ea3abe367f3f849975346d7fe1fa42976 100644
+index d402a9c817c19a1b9727f6c2bd71b6649e0306f8..eb46d2ba322b63723df8f3dfd55f497cd5580af7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -139,6 +139,14 @@ public class Main {

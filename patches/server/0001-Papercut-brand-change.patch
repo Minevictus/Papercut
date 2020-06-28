@@ -14,7 +14,7 @@ Subject: [PATCH] Papercut brand change
  7 files changed, 26 insertions(+), 24 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 2b24688310f14b6a9e3fe04fe8b41cd1803b78c1..99a2072f1ae59a2cb01d831c808f4dbf7d0545a9 100644
+index ef8ee637a8a0e5e703922b2991c58f4f116b23fb..d816e5e746597bc5a990bd388db67b6a136f9bf4 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,11 +1,11 @@
@@ -143,7 +143,7 @@ index b474f45b6d551e45f8894b3971baade33b6ccd0f..b83320d57a0c3b6632405036a66307fd
  
      public CrashReport b(CrashReport crashreport) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 0c6bc282652840536695c019f9a2b9a7391a1168..f20011713298335a6d4e55960b4b98d4b659e021 100644
+index 25e01267888762826ffaf93711bdc7952c36da18..faba414d4bc556c20b13306787489495de1b078d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -229,7 +229,7 @@ import javax.annotation.Nullable; // Paper
@@ -156,7 +156,7 @@ index 0c6bc282652840536695c019f9a2b9a7391a1168..f20011713298335a6d4e55960b4b98d4
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index feb45475bb3c0785a8d8198615fbf4b3cd99acbe..0eec309505c935ef7a31cf0bde249a041dc2325e 100644
+index 381b12c149efc01c3c493f7fb24681032e071c23..d402a9c817c19a1b9727f6c2bd71b6649e0306f8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -252,7 +252,7 @@ public class Main {
