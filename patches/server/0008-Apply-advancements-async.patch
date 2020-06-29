@@ -25,7 +25,7 @@ index 57b9d13447a4f7804827c1bd41121c3069c696bd..511e704d63bd7f66d8c6119053d57d57
          this.player = entityplayer;
      }
 diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
-index 93e1fe6f37efe1bc84e2dfbb5d12af6f9dc7d762..d8ecce55319624fcd8b1e53465574e58d111a1ae 100644
+index c047d8ff1fc189ec8a13603743e83ab490969f60..7d2cc9975e1e4f45bba3b9e2c4020758f4be9331 100644
 --- a/src/main/java/net/minecraft/server/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/EntityPlayer.java
 @@ -47,7 +47,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
@@ -90,10 +90,10 @@ index 5765e0f040aa6d581342063ee2781e949d42f71f..5c35713aef5dd9ece65ead63c063a9ab
          }
  
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index de1d3ba5eb88ea09e26994e049befde9aa51b43d..4c3e8cbcf8e9e610a66d546debaebaf2fb922780 100644
+index 3c5ba8f2fd59d37639f87ac888cc950e7cd628f7..6bc9727d3cfb17f9bbe1e77f32023cd4923ce6e9 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
-@@ -172,6 +172,7 @@ public abstract class PlayerList {
+@@ -170,6 +170,7 @@ public abstract class PlayerList {
  
          this.a(entityplayer, (EntityPlayer) null, worldserver1);
          PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
@@ -101,7 +101,7 @@ index de1d3ba5eb88ea09e26994e049befde9aa51b43d..4c3e8cbcf8e9e610a66d546debaebaf2
          GameRules gamerules = worldserver1.getGameRules();
          boolean flag = gamerules.getBoolean(GameRules.DO_IMMEDIATE_RESPAWN);
          boolean flag1 = gamerules.getBoolean(GameRules.REDUCED_DEBUG_INFO);
-@@ -484,8 +485,8 @@ public abstract class PlayerList {
+@@ -480,8 +481,8 @@ public abstract class PlayerList {
  
          AdvancementDataPlayer advancementdataplayer = (AdvancementDataPlayer) entityplayer.getAdvancementData(); // CraftBukkit
  
@@ -112,7 +112,7 @@ index de1d3ba5eb88ea09e26994e049befde9aa51b43d..4c3e8cbcf8e9e610a66d546debaebaf2
          }
  
      }
-@@ -538,7 +539,7 @@ public abstract class PlayerList {
+@@ -534,7 +535,7 @@ public abstract class PlayerList {
  
          entityplayer.decouple();
          worldserver.removePlayer(entityplayer);
@@ -121,7 +121,7 @@ index de1d3ba5eb88ea09e26994e049befde9aa51b43d..4c3e8cbcf8e9e610a66d546debaebaf2
          this.players.remove(entityplayer);
          this.playersByName.remove(entityplayer.getName().toLowerCase(java.util.Locale.ROOT)); // Spigot
          this.server.getBossBattleCustomData().b(entityplayer);
-@@ -1293,9 +1294,36 @@ public abstract class PlayerList {
+@@ -1289,9 +1290,36 @@ public abstract class PlayerList {
          return serverstatisticmanager;
      }
  
@@ -159,7 +159,7 @@ index de1d3ba5eb88ea09e26994e049befde9aa51b43d..4c3e8cbcf8e9e610a66d546debaebaf2
  
          if (advancementdataplayer == null) {
              File file = this.server.a(SavedFile.ADVANCEMENTS).toFile();
-@@ -1348,8 +1376,13 @@ public abstract class PlayerList {
+@@ -1344,8 +1372,13 @@ public abstract class PlayerList {
          }*/
  
          for (EntityPlayer player : players) {
@@ -194,10 +194,10 @@ index 60fc5aff80697cb4c85080350542c0f46056f74a..304362b4c3f2edc87478201cc73cb857
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 97657637ab0d1cfb6801b8dd7f6ef21df3105fab..c7b99224e42f5ce5b05d02e7e5d8fc735c2d4f8c 100644
+index 1f1cac320b60a04d5137c769c6d5ec9977d71e8f..362642c2582e48cbabc8d4cda47e02c71234dcfd 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1927,7 +1927,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1928,7 +1928,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          CraftAdvancement craft = (CraftAdvancement) advancement;
          AdvancementDataPlayer data = getHandle().getAdvancementData();
          AdvancementProgress progress = data.getProgress(craft.getHandle());

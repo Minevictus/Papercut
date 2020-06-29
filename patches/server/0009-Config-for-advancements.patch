@@ -9,10 +9,10 @@ Subject: [PATCH] Config for advancements
  2 files changed, 10 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index 4c3e8cbcf8e9e610a66d546debaebaf2fb922780..f050b578d6ecdd2b85dc9dfc1d9f1957dc2d8914 100644
+index 6bc9727d3cfb17f9bbe1e77f32023cd4923ce6e9..5e850a1282b7bcf29bccd773de375900e691bb81 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
-@@ -1296,6 +1296,11 @@ public abstract class PlayerList {
+@@ -1292,6 +1292,11 @@ public abstract class PlayerList {
  
      // Paper start - Apply advancements async
      public java.util.concurrent.CompletableFuture<AdvancementDataPlayer> applyPlayerAdvancementsAsync(EntityPlayer entityplayer) {
