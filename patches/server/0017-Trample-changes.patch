@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Mon, 29 Jun 2020 14:38:03 +0200
+Subject: [PATCH] Trample changes
+
+---
+ src/main/java/net/minecraft/server/BlockSoil.java      | 8 ++++++++
+ src/main/java/us/minevict/papercut/PapercutConfig.java | 5 +++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/src/main/java/net/minecraft/server/BlockSoil.java b/src/main/java/net/minecraft/server/BlockSoil.java
+index a315e2628c35ee713b68741c6e52c4b140c05f27..6f30eb19c107ba3f8ea93d3b52bedf4fcbb7e98f 100644
+--- a/src/main/java/net/minecraft/server/BlockSoil.java
++++ b/src/main/java/net/minecraft/server/BlockSoil.java
+@@ -77,6 +77,14 @@ public class BlockSoil extends Block {
+     public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
+         super.fallOn(world, blockposition, entity, f); // CraftBukkit - moved here as game rules / events shouldn't affect fall damage.
+         if (!world.isClientSide && world.random.nextFloat() < f - 0.5F && entity instanceof EntityLiving && (entity instanceof EntityHuman || world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
++            // Papercut start
++            if (us.minevict.papercut.PapercutConfig.trampleChanges) {
++                if (!(entity instanceof EntityPlayer))
++                    return; // Only players can trample
++                if (EnchantmentManager.getEnchantmentLevel(Enchantments.PROTECTION_FALL, ((EntityPlayer) entity).inventory.armor.get(0)) >= (int) entity.fallDistance)
++                    return; // Only non-feather falling can trample
++            }
++            // Papercut end
+             // CraftBukkit start - Interact soil
+             org.bukkit.event.Cancellable cancellable;
+             if (entity instanceof EntityHuman) {
+diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
+index 69b1881b7a8326aff5609fae075b146a01da9b32..1ecafe17df803f40e9f01126c64c3bd2ab5cf98c 100644
+--- a/src/main/java/us/minevict/papercut/PapercutConfig.java
++++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
+@@ -112,6 +112,11 @@ public final class PapercutConfig {
+     seedCommandChange = getBoolean("seed-command-change", seedCommandChange);
+   }
+ 
++  public static boolean trampleChanges = true;
++  private static void trampleChanges() {
++    trampleChanges = getBoolean("trample-changes", trampleChanges);
++  }
++
+   public static final class WorldConfig {
+     public final String worldName;
+     public ConfigurationSection config;

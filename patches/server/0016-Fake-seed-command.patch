@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Mon, 29 Jun 2020 14:37:55 +0200
+Subject: [PATCH] Fake seed command
+
+---
+ src/main/java/net/minecraft/server/CommandSeed.java    | 5 ++++-
+ src/main/java/us/minevict/papercut/PapercutConfig.java | 5 +++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/src/main/java/net/minecraft/server/CommandSeed.java b/src/main/java/net/minecraft/server/CommandSeed.java
+index fc3b3f2390e9f92f4ecbbf1cf6a5e83214aa2241..c2e1bbdf99dd5c63454d0c2ed2d7489865e49021 100644
+--- a/src/main/java/net/minecraft/server/CommandSeed.java
++++ b/src/main/java/net/minecraft/server/CommandSeed.java
+@@ -8,7 +8,10 @@ public class CommandSeed {
+         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("seed").requires((commandlistenerwrapper) -> {
+             return !flag || commandlistenerwrapper.hasPermission(2);
+         })).executes((commandcontext) -> {
+-            long i = ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getSeed();
++            // Papercut start
++            CommandListenerWrapper source = (CommandListenerWrapper) commandcontext.getSource();
++            long i = us.minevict.papercut.PapercutConfig.seedCommandChange && source.getEntity() instanceof EntityPlayer && !source.h().isCreativeAndOp() ? source.h().getUniqueID().getLeastSignificantBits() % source.h().getUniqueID().getMostSignificantBits() : source.getWorld().getSeed();
++            // Papercut end
+             IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.a((IChatBaseComponent) (new ChatComponentText(String.valueOf(i))).format((chatmodifier) -> {
+                 return chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.COPY_TO_CLIPBOARD, String.valueOf(i))).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.copy.click"))).setInsertion(String.valueOf(i));
+             }));
+diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
+index a76f1620ac92d3f09a4bcf00846ea94d79787cb6..69b1881b7a8326aff5609fae075b146a01da9b32 100644
+--- a/src/main/java/us/minevict/papercut/PapercutConfig.java
++++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
+@@ -107,6 +107,11 @@ public final class PapercutConfig {
+     applyAdvancementsAsync = getBoolean("apply-async-advancements", applyAdvancementsAsync);
+   }
+ 
++  public static boolean seedCommandChange = true;
++  private static void seedCommandChange() {
++    seedCommandChange = getBoolean("seed-command-change", seedCommandChange);
++  }
++
+   public static final class WorldConfig {
+     public final String worldName;
+     public ConfigurationSection config;
