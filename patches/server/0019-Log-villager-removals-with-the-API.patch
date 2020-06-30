@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 30 Jun 2020 12:04:32 +0200
+Subject: [PATCH] Log villager removals with the API
+
+---
+ .../java/org/bukkit/craftbukkit/entity/CraftVillager.java | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java
+index d24a892c498d7ee58741c9358748a117f01d8a8d..5877180251ad46dcb2fc3795628adad0fedc70ed 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftVillager.java
+@@ -169,4 +169,12 @@ public class CraftVillager extends CraftAbstractVillager implements Villager {
+         getHandle().getReputation().getReputations().clear();
+     }
+     // Paper end
++
++    // Papercut start - log villager removals
++    @Override
++    public void remove() {
++        new Exception("Villager removal! is dead? " + isDead() + "; is persistent? " + isPersistent()).printStackTrace();
++        super.remove();
++    }
++    // Papercut end
+ }
