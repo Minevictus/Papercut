@@ -46,7 +46,7 @@ index b598c48692ff340a081995384aeecf9a2266d10f..b482ee4658f964d55bdc256033b57ccd
          this.generator = gen;
          this.world = new CraftWorld((WorldServer) this, gen, env);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index faba414d4bc556c20b13306787489495de1b078d..e7923992947f52606dbcf629ccaf49f8da738e22 100644
+index 5a782bbd3de83eef8bd11cbfc749c0ef997e2a1f..3e84da40333079e16b353f3f085e2fc1c395a07d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -846,6 +846,7 @@ public final class CraftServer implements Server {

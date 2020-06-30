@@ -25,7 +25,7 @@ index 57b9d13447a4f7804827c1bd41121c3069c696bd..511e704d63bd7f66d8c6119053d57d57
          this.player = entityplayer;
      }
 diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
-index c047d8ff1fc189ec8a13603743e83ab490969f60..7d2cc9975e1e4f45bba3b9e2c4020758f4be9331 100644
+index eeed8edfdfde47b5eec7a2f6c9871fcfa1930b63..1fb0a16823c03b130d089427640af968109dbe2c 100644
 --- a/src/main/java/net/minecraft/server/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/EntityPlayer.java
 @@ -47,7 +47,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
@@ -45,7 +45,7 @@ index c047d8ff1fc189ec8a13603743e83ab490969f60..7d2cc9975e1e4f45bba3b9e2c4020758
          this.G = 1.0F;
          //this.b(worldserver); // Paper - don't move to spawn on login, only first join
  
-@@ -497,7 +496,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -494,7 +493,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
              CriterionTriggers.u.a(this, this.cm, this.ticksLived - this.cn);
          }
  
@@ -55,7 +55,7 @@ index c047d8ff1fc189ec8a13603743e83ab490969f60..7d2cc9975e1e4f45bba3b9e2c4020758
      }
  
      public void playerTick() {
-@@ -1890,8 +1890,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -1887,8 +1887,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
      }
  
      public AdvancementDataPlayer getAdvancementData() {
@@ -67,7 +67,7 @@ index c047d8ff1fc189ec8a13603743e83ab490969f60..7d2cc9975e1e4f45bba3b9e2c4020758
      // CraftBukkit start
      public void a(WorldServer worldserver, double d0, double d1, double d2, float f, float f1) {
 diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
-index 5765e0f040aa6d581342063ee2781e949d42f71f..5c35713aef5dd9ece65ead63c063a9abfbc295c0 100644
+index cf83059fec9f11df992827f0c0249243caa9ac33..3db6693c4db77ba3b6b9b7b04eeba47dc9ccdac2 100644
 --- a/src/main/java/net/minecraft/server/PlayerConnection.java
 +++ b/src/main/java/net/minecraft/server/PlayerConnection.java
 @@ -106,6 +106,7 @@ public class PlayerConnection implements PacketListenerPlayIn {

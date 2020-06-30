@@ -19,7 +19,7 @@ Original patch: https://raw.githubusercontent.com/pl3xgaming/Purpur/master/patch
  11 files changed, 34 insertions(+), 13 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 2aa38528d78f2619317b96b1c944982b17f7160b..3806b9a44b904c2768285908a8326e69676ab489 100644
+index fcb3d3adae52fd70e856344a727a344cf78cfce3..0c75cbe6a8b07ea6ec1189242a9effc3b126c6f0 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
 @@ -1516,7 +1516,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
@@ -153,7 +153,7 @@ index 2172fcefbc0d1c41cf2715a63015659a706e57ec..dd094d5f1f0280d213caaedf92eac49b
  
      @Override
 diff --git a/src/main/java/net/minecraft/server/EntityStrider.java b/src/main/java/net/minecraft/server/EntityStrider.java
-index 28551f4a6d1e5a657c1dfa9476531e649a8cbffa..00d7dcbc36d77979e2c70e3884e095338f7c1cad 100644
+index c123e9fe97f1c0da0c6807e17df497a31749c1b3..a11cad72cb4aca27633784a9bf373bd1fc789b0d 100644
 --- a/src/main/java/net/minecraft/server/EntityStrider.java
 +++ b/src/main/java/net/minecraft/server/EntityStrider.java
 @@ -120,7 +120,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
