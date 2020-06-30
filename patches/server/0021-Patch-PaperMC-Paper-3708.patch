@@ -1,0 +1,21 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 30 Jun 2020 17:24:54 +0200
+Subject: [PATCH] Patch PaperMC/Paper#3708
+
+---
+ src/main/java/net/minecraft/server/MobSpawnerAbstract.java | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/main/java/net/minecraft/server/MobSpawnerAbstract.java b/src/main/java/net/minecraft/server/MobSpawnerAbstract.java
+index 2f1d168bd6daad1bbd41977b18263d1fe67a3da0..8ba0ec4f7f9f4429944648554d4368d44f477a21 100644
+--- a/src/main/java/net/minecraft/server/MobSpawnerAbstract.java
++++ b/src/main/java/net/minecraft/server/MobSpawnerAbstract.java
+@@ -129,6 +129,7 @@ public abstract class MobSpawnerAbstract {
+                         // Paper end
+                         Entity entity = EntityTypes.a(nbttagcompound, world, (entity1) -> {
+                             entity1.setPositionRotation(d3, d4, d5, entity1.yaw, entity1.pitch);
++                            entity1.spawnReason = org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.SPAWNER; // Papercut - paper issue 3708
+                             return entity1;
+                         });
+ 
