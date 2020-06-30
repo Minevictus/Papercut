@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 30 Jun 2020 12:40:10 +0200
+Subject: [PATCH] Prevent overflow in villager gossip
+
+---
+ src/main/java/net/minecraft/server/Reputation.java | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/main/java/net/minecraft/server/Reputation.java b/src/main/java/net/minecraft/server/Reputation.java
+index 28c9f9ed2d532a1eb14b74c2e9723a2cf1b3c6fa..3ffe729521fb0bd5f2915c20bcf3782e0dbcc350 100644
+--- a/src/main/java/net/minecraft/server/Reputation.java
++++ b/src/main/java/net/minecraft/server/Reputation.java
+@@ -61,7 +61,11 @@ public class Reputation {
+             for (int k = 0; k < list.size(); ++k) {
+                 Reputation.b reputation_b = (Reputation.b) list.get(k);
+ 
+-                j += Math.abs(reputation_b.a());
++                // Papercut start - prevent overflow
++                int gossipValue = Math.abs(reputation_b.a());
++                if (gossipValue + j >= 0)
++                    j += gossipValue;
++                // Papercut end
+                 aint[k] = j - 1;
+             }
+ 
