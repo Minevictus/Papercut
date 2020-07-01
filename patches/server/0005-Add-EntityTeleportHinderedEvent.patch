@@ -91,7 +91,7 @@ index 77f8d5e6662fa75e622f07b3e6efae04c38735fe..4864ad8c29a2cd714e321116473c2bba
              EntityPortalEnterEvent event = new EntityPortalEnterEvent(entity.getBukkitEntity(), new org.bukkit.Location(world.getWorld(), blockposition.getX(), blockposition.getY(), blockposition.getZ()));
              world.getServer().getPluginManager().callEvent(event);
 diff --git a/src/main/java/net/minecraft/server/TileEntityEndGateway.java b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
-index aebb6b6b2b869231310567b030fe32f34cc268f5..f832d2a3d4308707362aa97416fe0eb19c106d2f 100644
+index ce239d2b2fe942915aa093b86343c3740d10e273..391120ec35c465f5c0d459fd8468595bd0531225 100644
 --- a/src/main/java/net/minecraft/server/TileEntityEndGateway.java
 +++ b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
 @@ -13,6 +13,9 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -162,7 +162,7 @@ index 821417610fdb23791bd83e263977026b9d09e31a..3b6690eb63e3ebbb3ed051eb3e2e9c19
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 97a24b4dff4a2de06f224458969b9a728041260d..1f1cac320b60a04d5137c769c6d5ec9977d71e8f 100644
+index db617e04fe492fc7c1bbfe0afd56a4ddb46b5d65..e3afa3d96ee982eecf52f0801aa3777cfb44d3cc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -128,6 +128,7 @@ import org.bukkit.plugin.messaging.StandardMessenger;

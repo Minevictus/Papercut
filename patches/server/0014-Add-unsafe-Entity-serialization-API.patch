@@ -69,10 +69,10 @@ index e665c1b4cc1a7198e8feb58672e0832f5912ee54..0bc1e5db2facb290e2e99e488ed5c8b7
  
      // Papercut start
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index f2a8eb3d796b89b71d9969e1cf1d706341a058da..4a66f9a32bf543645eccc9b90ba5e2a1d30216f0 100644
+index c32f0e6694189424f321ec9bc73c28a30609f61b..6c7ff82b756b6ce45ec6455063df0737e425ee78 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -32,15 +32,20 @@ import net.minecraft.server.NBTBase;
+@@ -35,15 +35,20 @@ import net.minecraft.server.NBTBase;
  import net.minecraft.server.NBTTagCompound;
  import net.minecraft.server.SavedFile;
  import net.minecraft.server.SharedConstants;
@@ -93,7 +93,7 @@ index f2a8eb3d796b89b71d9969e1cf1d706341a058da..4a66f9a32bf543645eccc9b90ba5e2a1
  import org.bukkit.inventory.ItemStack;
  import org.bukkit.material.MaterialData;
  import org.bukkit.plugin.InvalidPluginException;
-@@ -376,6 +381,24 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -382,6 +387,24 @@ public final class CraftMagicNumbers implements UnsafeValues {
          Preconditions.checkArgument(dataVersion <= getDataVersion(), "Newer version! Server downgrades are not supported!");
          return compound;
      }
