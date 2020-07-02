@@ -4,14 +4,27 @@ Date: Wed, 27 May 2020 18:40:27 +0200
 Subject: [PATCH] Add Papercut config
 
 ---
+ .../java/co/aikar/timings/TimingsExport.java  |   1 +
  .../net/minecraft/server/DedicatedServer.java |   1 +
  src/main/java/net/minecraft/server/World.java |   3 +
  .../org/bukkit/craftbukkit/CraftServer.java   |   5 +
  .../java/org/bukkit/craftbukkit/Main.java     |   8 +
  .../us/minevict/papercut/PapercutConfig.java  | 214 ++++++++++++++++++
- 5 files changed, 231 insertions(+)
+ 6 files changed, 232 insertions(+)
  create mode 100644 src/main/java/us/minevict/papercut/PapercutConfig.java
 
+diff --git a/src/main/java/co/aikar/timings/TimingsExport.java b/src/main/java/co/aikar/timings/TimingsExport.java
+index e33e889c291d37a821a4fbd40d9aac7bb079de0d..37918ded95a3c9ef03da54a8bb58a82e2c827c5f 100644
+--- a/src/main/java/co/aikar/timings/TimingsExport.java
++++ b/src/main/java/co/aikar/timings/TimingsExport.java
+@@ -230,6 +230,7 @@ public class TimingsExport extends Thread {
+             pair("spigot", mapAsJSON(Bukkit.spigot().getSpigotConfig(), null)),
+             pair("bukkit", mapAsJSON(Bukkit.spigot().getBukkitConfig(), null)),
+             pair("paper", mapAsJSON(Bukkit.spigot().getPaperConfig(), null))
++            , pair("papercut", mapAsJSON(Bukkit.spigot().getPapercutConfig(), null)) // Papercut
+         ));
+ 
+         new TimingsExport(listeners, parent, history).start();
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
 index 8b2755a3b95e472e884976195d1d3551fc260e39..27596f96f9671648eaf3cc6e45879e714c4a8c82 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
