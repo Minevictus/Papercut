@@ -19,7 +19,7 @@ Original patch: https://raw.githubusercontent.com/pl3xgaming/Purpur/master/patch
  11 files changed, 34 insertions(+), 13 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index fcb3d3adae52fd70e856344a727a344cf78cfce3..0c75cbe6a8b07ea6ec1189242a9effc3b126c6f0 100644
+index fcb3d3adae52fd70e856344a727a344cf78cfce3..903e22b86ead1194ffe185cc408f6c8ac42f3dd2 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
 @@ -1516,7 +1516,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
@@ -28,7 +28,7 @@ index fcb3d3adae52fd70e856344a727a344cf78cfce3..0c75cbe6a8b07ea6ec1189242a9effc3
  
 -    public boolean isCollidable() {
 +    // Papercut start
-+    public final boolean isCollidable() { return isCollidable(false); }
++    @Deprecated public boolean isCollidable() { return isCollidable(false); }
 +    public boolean isCollidable(boolean ignoreClimbing) {
 +        // Papercut end
          return false;
