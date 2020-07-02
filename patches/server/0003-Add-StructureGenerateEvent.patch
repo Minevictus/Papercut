@@ -4,38 +4,29 @@ Date: Tue, 28 Apr 2020 13:52:06 -0300
 Subject: [PATCH] Add StructureGenerateEvent
 
 ---
- .../java/net/minecraft/server/ChunkGenerator.java   | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ .../java/net/minecraft/server/ChunkGenerator.java     | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/ChunkGenerator.java b/src/main/java/net/minecraft/server/ChunkGenerator.java
-index ee6726e5c664115417c6397aa153315c8eb835a9..d7d18f710ac8ae5e4151c2a5bb6c0a1865e937bd 100644
+index ee6726e5c664115417c6397aa153315c8eb835a9..311032ed9f668734c14fae20aece315116dd13ab 100644
 --- a/src/main/java/net/minecraft/server/ChunkGenerator.java
 +++ b/src/main/java/net/minecraft/server/ChunkGenerator.java
-@@ -1,5 +1,7 @@
+@@ -1,5 +1,6 @@
  package net.minecraft.server;
  
-+import com.destroystokyo.paper.PaperConfig;
-+import com.destroystokyo.paper.event.world.StructureGenerateEvent;
++import com.destroystokyo.paper.event.world.StructureGenerateEvent; // Papercut
  import com.google.common.collect.Lists;
  import com.mojang.serialization.Codec;
  import java.util.BitSet;
-@@ -9,6 +11,7 @@ import java.util.ListIterator;
+@@ -9,6 +10,7 @@ import java.util.ListIterator;
  import java.util.Random;
  import java.util.function.Function;
  import javax.annotation.Nullable;
-+import org.bukkit.StructureType;
++import org.bukkit.StructureType; // Papercut
  
  public abstract class ChunkGenerator {
  
-@@ -218,6 +221,7 @@ public abstract class ChunkGenerator {
-             // CraftBukkit start
-             if (structurefeature.b == StructureGenerator.STRONGHOLD) {
-                 synchronized (structurefeature) {
-+                    // TODO(Papercut): add StructureGenerateEvent
-                     this.a(structurefeature, structuremanager, ichunkaccess, definedstructuremanager, i, chunkcoordintpair, biomebase);
-                 }
-             } else
-@@ -233,6 +237,15 @@ public abstract class ChunkGenerator {
+@@ -233,6 +235,15 @@ public abstract class ChunkGenerator {
          updateStructureSettings(structuremanager.getWorld(), structureSettings); // Spigot
          StructureStart<?> structurestart1 = structurefeature.a(this, this.b, definedstructuremanager, i, chunkcoordintpair, biomebase, j, this.structureSettings.a(structurefeature.b));
  

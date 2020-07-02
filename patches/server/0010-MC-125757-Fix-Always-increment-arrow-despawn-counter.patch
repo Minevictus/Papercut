@@ -31,21 +31,21 @@ index 553c8affab6228cb187549deb5b34f79ba8f912c..d9feaf7cf90143bfd40a6b5e9b2f539d
      }
  }
 diff --git a/src/main/java/net/minecraft/server/EntityArrow.java b/src/main/java/net/minecraft/server/EntityArrow.java
-index 6195a45e30d9a9d76e24fbc2493020917a8b87b9..ad09bf5aa25990a47871b9a2370a4b77c43159be 100644
+index 6195a45e30d9a9d76e24fbc2493020917a8b87b9..efb511936ecb1366d478b0799ba4e634339fce84 100644
 --- a/src/main/java/net/minecraft/server/EntityArrow.java
 +++ b/src/main/java/net/minecraft/server/EntityArrow.java
 @@ -124,11 +124,13 @@ public abstract class EntityArrow extends IProjectile {
              this.extinguish();
          }
  
-+        this.checkDespawnCounter(); // Purpur - moved from below - MC-125757
++        this.checkDespawnCounter(); // Papercut - moved from below - MC-125757
 +
          if (this.inGround && !flag) {
              if (this.an != iblockdata && this.u()) {
                  this.z();
              } else if (!this.world.isClientSide) {
 -                this.h();
-+                // this.h(); // Purpur moved up - MC-125757
++                // this.h(); // Papercut - moved up - MC-125757
              }
  
              ++this.c;
@@ -53,7 +53,7 @@ index 6195a45e30d9a9d76e24fbc2493020917a8b87b9..ad09bf5aa25990a47871b9a2370a4b77
  
      }
  
-+    protected void checkDespawnCounter() { h(); } // Purpur - OBFHELPER
++    protected void checkDespawnCounter() { h(); } // Papercut - OBFHELPER
      protected void h() {
          ++this.despawnCounter;
          if (this.despawnCounter >= (fromPlayer == PickupStatus.CREATIVE_ONLY ? world.paperConfig.creativeArrowDespawnRate : (fromPlayer == PickupStatus.DISALLOWED ? world.paperConfig.nonPlayerArrowDespawnRate : ((this instanceof EntityThrownTrident) ? world.spigotConfig.tridentDespawnRate : world.spigotConfig.arrowDespawnRate)))) { // Spigot // Paper - TODO: Extract this to init?

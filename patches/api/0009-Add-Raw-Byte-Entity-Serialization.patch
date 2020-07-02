@@ -4,40 +4,42 @@ Date: Fri, 26 Jun 2020 17:07:40 +0200
 Subject: [PATCH] Add Raw Byte Entity Serialization
 
 ---
- src/main/java/org/bukkit/UnsafeValues.java  |  5 +++++
+ src/main/java/org/bukkit/UnsafeValues.java  |  7 +++++++
  src/main/java/org/bukkit/entity/Entity.java | 19 +++++++++++++++++++
- 2 files changed, 24 insertions(+)
+ 2 files changed, 26 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index d3ec5084e33dff038d54cdd2aeb703a3eb25f7a7..8abaa1f9d8c5df99c2edba9737dc34a316d9e6e5 100644
+index d3ec5084e33dff038d54cdd2aeb703a3eb25f7a7..003594198ef76fe46b9a23d9cde0fe230ff87cc3 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
 @@ -2,6 +2,7 @@ package org.bukkit;
  
  import org.bukkit.advancement.Advancement;
  import org.bukkit.block.data.BlockData;
-+import org.bukkit.entity.Entity; // Paper
++import org.bukkit.entity.Entity; // Papercut
  import org.bukkit.inventory.ItemStack;
  import org.bukkit.material.MaterialData;
  import org.bukkit.plugin.InvalidPluginException;
-@@ -94,5 +95,9 @@ public interface UnsafeValues {
+@@ -94,5 +95,11 @@ public interface UnsafeValues {
      byte[] serializeItem(ItemStack item);
  
      ItemStack deserializeItem(byte[] data);
 +
++    // Papercut start
 +    byte[] serializeEntity(Entity entity);
 +
 +    Entity deserializeEntity(byte[] data, World world);
++    // Papercut end
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index ae1ebc5f8a61165d95184e2a12a270825ed1fd2d..83eddbdabddcf4db726cb210de12c679f5f23f8f 100644
+index ae1ebc5f8a61165d95184e2a12a270825ed1fd2d..c35ae1a1129b6ee48bc93cbc08ed954a53de981f 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -659,6 +659,25 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -703,5 +703,24 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+      * @param invulnerability Their new state of invulnerability.
       */
-     @NotNull
-     org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason getEntitySpawnReason();
+     void setRawInvulnerable(boolean invulnerability);
 +
 +    /**
 +     * Spawn this entity in the world at the given {@link Location} with the default spawn reason.
@@ -57,6 +59,5 @@ index ae1ebc5f8a61165d95184e2a12a270825ed1fd2d..83eddbdabddcf4db726cb210de12c679
 +     * @return Whether the entity was successfully spawned.
 +     */
 +    boolean spawnAt(@NotNull Location location, @NotNull org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason spawnReason);
-     // Paper end
- 
-     // Papercut start
+     // Papercut end
+ }

@@ -4,17 +4,18 @@ Date: Sat, 27 Jun 2020 16:32:13 +0200
 Subject: [PATCH] Redo item serialization
 
 ---
- .../craftbukkit/util/CraftMagicNumbers.java   | 40 ++++++++++++-------
- 1 file changed, 26 insertions(+), 14 deletions(-)
+ .../craftbukkit/util/CraftMagicNumbers.java   | 47 +++++++++++++------
+ 1 file changed, 33 insertions(+), 14 deletions(-)
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index f1e60981abc46807f8004f0ac49127a2bb83fc42..c32f0e6694189424f321ec9bc73c28a30609f61b 100644
+index f1e60981abc46807f8004f0ac49127a2bb83fc42..461cfb96f496aaf5caa12d8ae9847c8756b711e7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -336,39 +336,51 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -336,39 +336,58 @@ public final class CraftMagicNumbers implements UnsafeValues {
          Preconditions.checkNotNull(item, "null cannot be serialized");
          Preconditions.checkArgument(item.getType() != Material.AIR, "air cannot be serialized");
  
++        // Papercut start
 +        return serializeNbtToBytes(
 +            (item instanceof CraftItemStack ? ((CraftItemStack) item).getHandle() : CraftItemStack.asNMSCopy(item)).save(new NBTTagCompound()),
 +            true
@@ -30,6 +31,7 @@ index f1e60981abc46807f8004f0ac49127a2bb83fc42..c32f0e6694189424f321ec9bc73c28a3
 +
 +    private byte[] serializeNbtToBytes(NBTTagCompound compound, boolean addDataVersion) {
 +        if (addDataVersion) compound.setInt("DataVersion", getDataVersion());
++        // Papercut end
          java.io.ByteArrayOutputStream outputStream = new java.io.ByteArrayOutputStream();
 -        NBTTagCompound compound = (item instanceof CraftItemStack ? ((CraftItemStack) item).getHandle() : CraftItemStack.asNMSCopy(item)).save(new NBTTagCompound());
 -        compound.setInt("DataVersion", getDataVersion());
@@ -52,11 +54,13 @@ index f1e60981abc46807f8004f0ac49127a2bb83fc42..c32f0e6694189424f321ec9bc73c28a3
 -        Preconditions.checkNotNull(data, "null cannot be deserialized");
 -        Preconditions.checkArgument(data.length > 0, "cannot deserialize nothing");
 -
++    // Papercut start
 +    private NBTTagCompound deserializeNbtFromBytes(byte[] data, boolean verifyDataVersion) {
 +        NBTTagCompound compound;
++        // Papercut end
          try {
 -            NBTTagCompound compound = net.minecraft.server.NBTCompressedStreamTools.readNBT(
-+            compound = net.minecraft.server.NBTCompressedStreamTools.readNBT(
++            compound = net.minecraft.server.NBTCompressedStreamTools.readNBT( // Papercut
                  new java.io.ByteArrayInputStream(data)
              );
 -            int dataVersion = compound.getInt("DataVersion");
@@ -64,16 +68,19 @@ index f1e60981abc46807f8004f0ac49127a2bb83fc42..c32f0e6694189424f321ec9bc73c28a3
 -            Preconditions.checkArgument(dataVersion <= getDataVersion(), "Newer version! Server downgrades are not supported!");
 -            Dynamic<NBTBase> converted = DataConverterRegistry.getDataFixer().update(DataConverterTypes.ITEM_STACK, new Dynamic<NBTBase>(DynamicOpsNBT.a, compound), dataVersion, getDataVersion());
 -            return CraftItemStack.asCraftMirror(net.minecraft.server.ItemStack.fromCompound((NBTTagCompound) converted.getValue()));
++            // Papercut - move down
          } catch (IOException ex) {
              com.destroystokyo.paper.util.SneakyThrow.sneaky(ex);
              throw new RuntimeException();
          }
 +
++        // Papercut start
 +        if (!verifyDataVersion) return compound;
 +
 +        int dataVersion = compound.getInt("DataVersion");
 +        Preconditions.checkArgument(dataVersion <= getDataVersion(), "Newer version! Server downgrades are not supported!");
 +        return compound;
++        // Papercut end
      }
      // Paper end
  

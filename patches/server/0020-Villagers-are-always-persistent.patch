@@ -10,7 +10,7 @@ Subject: [PATCH] Villagers are always persistent
  3 files changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/EntityInsentient.java b/src/main/java/net/minecraft/server/EntityInsentient.java
-index 605bbf0174e60f795e445193a0284739ea452946..5c47f2ecbee23b1c835f382601abf03a5d8b6f59 100644
+index 605bbf0174e60f795e445193a0284739ea452946..645916b4d31a98a8dd8f20af207472f2c5082eb9 100644
 --- a/src/main/java/net/minecraft/server/EntityInsentient.java
 +++ b/src/main/java/net/minecraft/server/EntityInsentient.java
 @@ -337,7 +337,7 @@ public abstract class EntityInsentient extends EntityLiving {
@@ -18,7 +18,7 @@ index 605bbf0174e60f795e445193a0284739ea452946..5c47f2ecbee23b1c835f382601abf03a
          super.saveData(nbttagcompound);
          nbttagcompound.setBoolean("CanPickUpLoot", this.canPickupLoot());
 -        nbttagcompound.setBoolean("PersistenceRequired", this.persistent);
-+        nbttagcompound.setBoolean("PersistenceRequired", this.isPersistent());
++        nbttagcompound.setBoolean("PersistenceRequired", this.isPersistent()); // Papercut
          NBTTagList nbttaglist = new NBTTagList();
  
          NBTTagCompound nbttagcompound1;

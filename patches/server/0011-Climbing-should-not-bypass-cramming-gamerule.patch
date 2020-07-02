@@ -86,7 +86,7 @@ index 409e0ac0a2aaccda29f7cc146dbccdd45de80e9f..a44d8cd3f490dc83298e15c14a3f8919
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityHorseAbstract.java b/src/main/java/net/minecraft/server/EntityHorseAbstract.java
-index 364697e0155012c300219ad94a3995809e6c2f8f..53f3aff09cb0dc2fb18081b1fea2805d4ae181ec 100644
+index 364697e0155012c300219ad94a3995809e6c2f8f..e933ee4b1737fb15e805195a64e25238ca975d9e 100644
 --- a/src/main/java/net/minecraft/server/EntityHorseAbstract.java
 +++ b/src/main/java/net/minecraft/server/EntityHorseAbstract.java
 @@ -165,7 +165,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
@@ -94,7 +94,7 @@ index 364697e0155012c300219ad94a3995809e6c2f8f..53f3aff09cb0dc2fb18081b1fea2805d
  
      @Override
 -    public boolean isCollidable() {
-+    public boolean isCollidable(boolean ignoreClimbing) {
++    public boolean isCollidable(boolean ignoreClimbing) { // Papercut
          return !this.isVehicle();
      }
  
@@ -125,7 +125,7 @@ index 7a2140e4b901027997b2884275b35b43fe2175bc..3861d168c3895af2e0a7f8a2e4df13bd
  
      // CraftBukkit start - collidable API
 diff --git a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
-index 6e038905ea6e5245190e5970481195ba668f3247..4a7572b3cd85be5cca744e7ab7170ef488f3a9c1 100644
+index 6e038905ea6e5245190e5970481195ba668f3247..9083abbb4048c58817350ce05bdce73f4cb1c1ee 100644
 --- a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
 +++ b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
 @@ -108,7 +108,7 @@ public abstract class EntityMinecartAbstract extends Entity {
@@ -133,12 +133,12 @@ index 6e038905ea6e5245190e5970481195ba668f3247..4a7572b3cd85be5cca744e7ab7170ef4
  
      @Override
 -    public boolean isCollidable() {
-+    public boolean isCollidable(boolean ignoreClimbing) {
++    public boolean isCollidable(boolean ignoreClimbing) { // Papercut
          return true;
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityParrot.java b/src/main/java/net/minecraft/server/EntityParrot.java
-index 2172fcefbc0d1c41cf2715a63015659a706e57ec..dd094d5f1f0280d213caaedf92eac49b046850f6 100644
+index 2172fcefbc0d1c41cf2715a63015659a706e57ec..6a5a98bc47137ce5ee58ad4a2fdd874cc37cdbd0 100644
 --- a/src/main/java/net/minecraft/server/EntityParrot.java
 +++ b/src/main/java/net/minecraft/server/EntityParrot.java
 @@ -314,8 +314,8 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
@@ -147,13 +147,13 @@ index 2172fcefbc0d1c41cf2715a63015659a706e57ec..dd094d5f1f0280d213caaedf92eac49b
      @Override
 -    public boolean isCollidable() {
 -        return super.isCollidable(); // CraftBukkit - collidable API
-+    public boolean isCollidable(boolean ignoreClimbing) {
-+        return super.isCollidable(ignoreClimbing); // CraftBukkit - collidable API
++    public boolean isCollidable(boolean ignoreClimbing) { // Papercut
++        return super.isCollidable(ignoreClimbing); // CraftBukkit - collidable API // Papercut
      }
  
      @Override
 diff --git a/src/main/java/net/minecraft/server/EntityStrider.java b/src/main/java/net/minecraft/server/EntityStrider.java
-index c123e9fe97f1c0da0c6807e17df497a31749c1b3..a11cad72cb4aca27633784a9bf373bd1fc789b0d 100644
+index c123e9fe97f1c0da0c6807e17df497a31749c1b3..afb0106f88a00f9306610d2cf582ffb36fd8b1bc 100644
 --- a/src/main/java/net/minecraft/server/EntityStrider.java
 +++ b/src/main/java/net/minecraft/server/EntityStrider.java
 @@ -120,7 +120,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
@@ -161,7 +161,7 @@ index c123e9fe97f1c0da0c6807e17df497a31749c1b3..a11cad72cb4aca27633784a9bf373bd1
  
      @Override
 -    public boolean isCollidable() {
-+    public boolean isCollidable(boolean ignoreClimbable) {
++    public boolean isCollidable(boolean ignoreClimbable) { // Papercut
          return true;
      }
  
