@@ -5,12 +5,12 @@ Subject: [PATCH] Apply advancements async
 
 ---
  .../server/AdvancementDataPlayer.java         |  1 +
- .../net/minecraft/server/EntityPlayer.java    |  9 ++--
- .../minecraft/server/PlayerConnection.java    |  5 ++-
- .../java/net/minecraft/server/PlayerList.java | 45 ++++++++++++++++---
+ .../net/minecraft/server/EntityPlayer.java    | 13 +++--
+ .../minecraft/server/PlayerConnection.java    |  5 +-
+ .../java/net/minecraft/server/PlayerList.java | 50 ++++++++++++++++---
  .../advancement/CraftAdvancementProgress.java |  2 +
  .../craftbukkit/entity/CraftPlayer.java       |  1 -
- 6 files changed, 50 insertions(+), 13 deletions(-)
+ 6 files changed, 59 insertions(+), 13 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 index 57b9d13447a4f7804827c1bd41121c3069c696bd..511e704d63bd7f66d8c6119053d57d57ea8d1cbc 100644
@@ -25,7 +25,7 @@ index 57b9d13447a4f7804827c1bd41121c3069c696bd..511e704d63bd7f66d8c6119053d57d57
          this.player = entityplayer;
      }
 diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
-index eeed8edfdfde47b5eec7a2f6c9871fcfa1930b63..1fb0a16823c03b130d089427640af968109dbe2c 100644
+index eeed8edfdfde47b5eec7a2f6c9871fcfa1930b63..1586e9cdb8151ec72fbeb3a11a82b52eaa6d9275 100644
 --- a/src/main/java/net/minecraft/server/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/EntityPlayer.java
 @@ -47,7 +47,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
@@ -55,12 +55,16 @@ index eeed8edfdfde47b5eec7a2f6c9871fcfa1930b63..1fb0a16823c03b130d089427640af968
      }
  
      public void playerTick() {
-@@ -1887,8 +1887,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -1887,8 +1887,13 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
      }
  
      public AdvancementDataPlayer getAdvancementData() {
 -        return this.advancementDataPlayer;
++        // Papercut start
++        if (this.playerConnection.advancementDataPlayer == null)
++            this.playerConnection.advancementDataPlayer = server.getPlayerList().applyPlayerAdvancementsAsync(this);
 +        return this.playerConnection.advancementDataPlayer.join();
++        // Papercut end
      }
 +    public boolean isAdvancementDataLoaded() { return this.playerConnection != null && this.playerConnection.advancementDataPlayer != null && this.playerConnection.advancementDataPlayer.isDone(); } // Paper - async advancements loading
  
@@ -90,14 +94,14 @@ index cf83059fec9f11df992827f0c0249243caa9ac33..3db6693c4db77ba3b6b9b7b04eeba47d
          }
  
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index 3c5ba8f2fd59d37639f87ac888cc950e7cd628f7..6bc9727d3cfb17f9bbe1e77f32023cd4923ce6e9 100644
+index 3c5ba8f2fd59d37639f87ac888cc950e7cd628f7..0b04859fd05ecf501b24aa19640a5f60c073590a 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
 @@ -170,6 +170,7 @@ public abstract class PlayerList {
  
          this.a(entityplayer, (EntityPlayer) null, worldserver1);
          PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
-+        playerconnection.advancementDataPlayer = applyPlayerAdvancementsAsync(entityplayer); // Paper - async advancements loading
++        if (playerconnection.advancementDataPlayer == null) playerconnection.advancementDataPlayer = applyPlayerAdvancementsAsync(entityplayer); // Paper - async advancements loading
          GameRules gamerules = worldserver1.getGameRules();
          boolean flag = gamerules.getBoolean(GameRules.DO_IMMEDIATE_RESPAWN);
          boolean flag1 = gamerules.getBoolean(GameRules.REDUCED_DEBUG_INFO);
@@ -121,7 +125,7 @@ index 3c5ba8f2fd59d37639f87ac888cc950e7cd628f7..6bc9727d3cfb17f9bbe1e77f32023cd4
          this.players.remove(entityplayer);
          this.playersByName.remove(entityplayer.getName().toLowerCase(java.util.Locale.ROOT)); // Spigot
          this.server.getBossBattleCustomData().b(entityplayer);
-@@ -1289,9 +1290,36 @@ public abstract class PlayerList {
+@@ -1289,9 +1290,41 @@ public abstract class PlayerList {
          return serverstatisticmanager;
      }
  
@@ -141,11 +145,16 @@ index 3c5ba8f2fd59d37639f87ac888cc950e7cd628f7..6bc9727d3cfb17f9bbe1e77f32023cd4
 +        File file = this.server.a(SavedFile.ADVANCEMENTS).toFile();
 +        File file1 = new File(file, uuid + ".json");
 +        java.util.concurrent.CompletableFuture<AdvancementDataPlayer> future = new java.util.concurrent.CompletableFuture<AdvancementDataPlayer>();
-+        this.server.execute(() -> {
-+            AdvancementDataPlayer data = new AdvancementDataPlayer(this.server.getDataFixer(), this, this.server.getAdvancementData(), file1, entityplayer);
-+            data.setPlayer(entityplayer);
-+            // this.p.put(uuid, advancementdataplayer); // CraftBukkit
-+            future.complete(data);
++        this.server.executorService.execute(() -> {
++            try {
++                AdvancementDataPlayer data = new AdvancementDataPlayer(this.server.getDataFixer(), this,
++                    this.server.getAdvancementData(), file1, entityplayer);
++                data.setPlayer(entityplayer);
++                // this.p.put(uuid, advancementdataplayer); // CraftBukkit
++                future.complete(data);
++            } catch (Throwable ex) {
++                future.completeExceptionally(ex);
++            }
 +        });
 +
 +        return future;
@@ -159,7 +168,7 @@ index 3c5ba8f2fd59d37639f87ac888cc950e7cd628f7..6bc9727d3cfb17f9bbe1e77f32023cd4
  
          if (advancementdataplayer == null) {
              File file = this.server.a(SavedFile.ADVANCEMENTS).toFile();
-@@ -1344,8 +1372,13 @@ public abstract class PlayerList {
+@@ -1344,8 +1377,13 @@ public abstract class PlayerList {
          }*/
  
          for (EntityPlayer player : players) {
