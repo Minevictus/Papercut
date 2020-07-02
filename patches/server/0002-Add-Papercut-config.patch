@@ -46,10 +46,10 @@ index b598c48692ff340a081995384aeecf9a2266d10f..b482ee4658f964d55bdc256033b57ccd
          this.generator = gen;
          this.world = new CraftWorld((WorldServer) this, gen, env);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 5a782bbd3de83eef8bd11cbfc749c0ef997e2a1f..3e84da40333079e16b353f3f085e2fc1c395a07d 100644
+index 2ea691216b9ea69c697dba74f4cfb2e44cf39351..7eeb6c674cf8e8618950e639de6fbe696ed78285 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -846,6 +846,7 @@ public final class CraftServer implements Server {
+@@ -848,6 +848,7 @@ public final class CraftServer implements Server {
  
          org.spigotmc.SpigotConfig.init((File) console.options.valueOf("spigot-settings")); // Spigot
          com.destroystokyo.paper.PaperConfig.init((File) console.options.valueOf("paper-settings")); // Paper
@@ -57,7 +57,7 @@ index 5a782bbd3de83eef8bd11cbfc749c0ef997e2a1f..3e84da40333079e16b353f3f085e2fc1
          for (WorldServer world : console.getWorlds()) {
              world.worldDataServer.setDifficulty(config.difficulty);
              world.setSpawnFlags(config.spawnMonsters, config.spawnAnimals);
-@@ -880,6 +881,7 @@ public final class CraftServer implements Server {
+@@ -882,6 +883,7 @@ public final class CraftServer implements Server {
              }
              world.spigotConfig.init(); // Spigot
              world.paperConfig.init(); // Paper
@@ -65,7 +65,7 @@ index 5a782bbd3de83eef8bd11cbfc749c0ef997e2a1f..3e84da40333079e16b353f3f085e2fc1
          }
  
          Plugin[] pluginClone = pluginManager.getPlugins().clone(); // Paper
-@@ -2204,6 +2206,9 @@ public final class CraftServer implements Server {
+@@ -2208,6 +2210,9 @@ public final class CraftServer implements Server {
              return com.destroystokyo.paper.PaperConfig.config;
          }
  
@@ -76,7 +76,7 @@ index 5a782bbd3de83eef8bd11cbfc749c0ef997e2a1f..3e84da40333079e16b353f3f085e2fc1
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 210c1ac62d10c547401338edcc87bdb6823b4bdb..316d5754f1bad20cec70ff58e22ab159290f07dc 100644
+index 57aa5d25529683e849d5b837da019277068c0e6b..21b6add2922062001cdb8691a3225ecde2a7ea75 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -139,6 +139,14 @@ public class Main {

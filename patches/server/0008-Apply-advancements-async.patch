@@ -194,10 +194,10 @@ index 60fc5aff80697cb4c85080350542c0f46056f74a..304362b4c3f2edc87478201cc73cb857
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index e3afa3d96ee982eecf52f0801aa3777cfb44d3cc..76b4166eed03ec93df91908c7f667ecbf7b324f6 100644
+index 35b58ea510c2cd2006af0f92931d0e6f9a7be590..b26283545257273b3327f3112ebd8faae865a99c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1928,7 +1928,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1949,7 +1949,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          CraftAdvancement craft = (CraftAdvancement) advancement;
          AdvancementDataPlayer data = getHandle().getAdvancementData();
          AdvancementProgress progress = data.getProgress(craft.getHandle());
