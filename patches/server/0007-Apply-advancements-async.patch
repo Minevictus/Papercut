@@ -92,10 +92,10 @@ index cf83059fec9f11df992827f0c0249243caa9ac33..bb6becf7ae26de6c5cc88a692e96d999
          }
  
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index 3c5ba8f2fd59d37639f87ac888cc950e7cd628f7..d0529694c3009856b92375d0d9e1119e7e163c15 100644
+index 3c2f1f140c3991195bb8147bd65d9cd16a8fd3da..ba4d217b4de56ff74ffe1b9a3bc66291da5d7a44 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
-@@ -170,6 +170,7 @@ public abstract class PlayerList {
+@@ -181,6 +181,7 @@ public abstract class PlayerList {
  
          this.a(entityplayer, (EntityPlayer) null, worldserver1);
          PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
@@ -103,7 +103,7 @@ index 3c5ba8f2fd59d37639f87ac888cc950e7cd628f7..d0529694c3009856b92375d0d9e1119e
          GameRules gamerules = worldserver1.getGameRules();
          boolean flag = gamerules.getBoolean(GameRules.DO_IMMEDIATE_RESPAWN);
          boolean flag1 = gamerules.getBoolean(GameRules.REDUCED_DEBUG_INFO);
-@@ -480,8 +481,8 @@ public abstract class PlayerList {
+@@ -491,8 +492,8 @@ public abstract class PlayerList {
  
          AdvancementDataPlayer advancementdataplayer = (AdvancementDataPlayer) entityplayer.getAdvancementData(); // CraftBukkit
  
@@ -114,7 +114,7 @@ index 3c5ba8f2fd59d37639f87ac888cc950e7cd628f7..d0529694c3009856b92375d0d9e1119e
          }
  
      }
-@@ -534,7 +535,7 @@ public abstract class PlayerList {
+@@ -545,7 +546,7 @@ public abstract class PlayerList {
  
          entityplayer.decouple();
          worldserver.removePlayer(entityplayer);
@@ -123,7 +123,7 @@ index 3c5ba8f2fd59d37639f87ac888cc950e7cd628f7..d0529694c3009856b92375d0d9e1119e
          this.players.remove(entityplayer);
          this.playersByName.remove(entityplayer.getName().toLowerCase(java.util.Locale.ROOT)); // Spigot
          this.server.getBossBattleCustomData().b(entityplayer);
-@@ -1289,9 +1290,44 @@ public abstract class PlayerList {
+@@ -1300,9 +1301,44 @@ public abstract class PlayerList {
          return serverstatisticmanager;
      }
  
@@ -169,7 +169,7 @@ index 3c5ba8f2fd59d37639f87ac888cc950e7cd628f7..d0529694c3009856b92375d0d9e1119e
  
          if (advancementdataplayer == null) {
              File file = this.server.a(SavedFile.ADVANCEMENTS).toFile();
-@@ -1344,8 +1380,13 @@ public abstract class PlayerList {
+@@ -1355,8 +1391,13 @@ public abstract class PlayerList {
          }*/
  
          for (EntityPlayer player : players) {
