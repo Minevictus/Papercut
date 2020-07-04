@@ -1,0 +1,58 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Sun, 5 Jul 2020 00:58:44 +0200
+Subject: [PATCH] Add dragon block protections
+
+---
+ .../net/minecraft/server/EntityEnderDragon.java    | 14 +++++++++++++-
+ .../java/us/minevict/papercut/PapercutConfig.java  |  5 +++++
+ 2 files changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/src/main/java/net/minecraft/server/EntityEnderDragon.java b/src/main/java/net/minecraft/server/EntityEnderDragon.java
+index 63a759cc18b5b765bc9d34f71dd775fd35dee280..6ec55cb6627a86654e9ab79a17de204ea18e1ed6 100644
+--- a/src/main/java/net/minecraft/server/EntityEnderDragon.java
++++ b/src/main/java/net/minecraft/server/EntityEnderDragon.java
+@@ -415,7 +415,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
+                     Block block = iblockdata.getBlock();
+ 
+                     if (!iblockdata.isAir() && iblockdata.getMaterial() != Material.FIRE) {
+-                        if (this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) && !TagsBlock.DRAGON_IMMUNE.isTagged(block)) {
++                        if (this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) && !TagsBlock.DRAGON_IMMUNE.isTagged(block) && !isBlockProtectedByDragonPapercut(block)) { // Papercut
+                             // CraftBukkit start - Add blocks to list rather than destroying them
+                             // flag1 = this.world.a(blockposition, false) || flag1;
+                             flag1 = true;
+@@ -488,6 +488,18 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
+         return flag;
+     }
+ 
++    // Papercut start
++    private boolean isBlockProtectedByDragonPapercut(Block block) {
++        if (!us.minevict.papercut.PapercutConfig.dragonBlockBreakChanges) return false;
++        return block == Blocks.DIAMOND_BLOCK
++            || block == Blocks.IRON_BLOCK
++            || block == Blocks.NETHERITE_BLOCK
++            || block == Blocks.GOLD_BLOCK
++            || block == Blocks.EMERALD_BLOCK
++            || block == Blocks.BEACON;
++    }
++    // Papercut end
++
+     public boolean a(EntityComplexPart entitycomplexpart, DamageSource damagesource, float f) {
+         if (this.bN.a().getControllerPhase() == DragonControllerPhase.DYING) {
+             return false;
+diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
+index 1ecafe17df803f40e9f01126c64c3bd2ab5cf98c..589c514739b31b56f0c3651423e400f38aecf794 100644
+--- a/src/main/java/us/minevict/papercut/PapercutConfig.java
++++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
+@@ -117,6 +117,11 @@ public final class PapercutConfig {
+     trampleChanges = getBoolean("trample-changes", trampleChanges);
+   }
+ 
++  public static boolean dragonBlockBreakChanges = true;
++  private static void dragonBlockBreakChanges() {
++    dragonBlockBreakChanges = getBoolean("dragon-block-break-changes", dragonBlockBreakChanges);
++  }
++
+   public static final class WorldConfig {
+     public final String worldName;
+     public ConfigurationSection config;
