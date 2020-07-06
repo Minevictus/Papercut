@@ -8,7 +8,7 @@ Subject: [PATCH] Patch PaperMC/Paper#3708
  1 file changed, 1 insertion(+)
 
 diff --git a/src/main/java/net/minecraft/server/MobSpawnerAbstract.java b/src/main/java/net/minecraft/server/MobSpawnerAbstract.java
-index 2f1d168bd6daad1bbd41977b18263d1fe67a3da0..8ba0ec4f7f9f4429944648554d4368d44f477a21 100644
+index 17e5e1f191efd91b0797826cb96e5f230d622a0d..2107d8be564b12563ae116469b90c36d91a31d7f 100644
 --- a/src/main/java/net/minecraft/server/MobSpawnerAbstract.java
 +++ b/src/main/java/net/minecraft/server/MobSpawnerAbstract.java
 @@ -129,6 +129,7 @@ public abstract class MobSpawnerAbstract {

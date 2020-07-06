@@ -8,7 +8,7 @@ Subject: [PATCH] Papercut brand change
  1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 06aa32269efe17a6de85ca79d1889d4f5e342868..78a110497c37119e60486716841dc1a96621eff7 100644
+index 15ce1c66462351d6d1ba55c111db13ef1c9f0789..82bb10c64ad212fae9d1192af5bd8b4cbf4d4659 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -3,18 +3,18 @@

@@ -8,10 +8,10 @@ Subject: [PATCH] Prevent overflow in villager gossip
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/main/java/net/minecraft/server/Reputation.java b/src/main/java/net/minecraft/server/Reputation.java
-index 28c9f9ed2d532a1eb14b74c2e9723a2cf1b3c6fa..215a43441cbf9c65df43f7b217c50a41bfbbf116 100644
+index b3a4ec25446878fce5961e9014d24a3009571438..214894b3c785adeca606378f9aa235308c80852f 100644
 --- a/src/main/java/net/minecraft/server/Reputation.java
 +++ b/src/main/java/net/minecraft/server/Reputation.java
-@@ -61,7 +61,7 @@ public class Reputation {
+@@ -73,7 +73,7 @@ public class Reputation {
              for (int k = 0; k < list.size(); ++k) {
                  Reputation.b reputation_b = (Reputation.b) list.get(k);
  

@@ -8,10 +8,10 @@ Subject: [PATCH] Add Papercut config
  1 file changed, 8 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index b464cc1a70aca3450a5de84a657a1e069a1a8ab6..1701e756ae54946fb7969a5214a709afda3b5478 100644
+index 0653e0ffe96748dc971ec7e8027f8159696adf62..6b7baef2111374b1266efefe184d254b27af1a30 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1424,6 +1424,14 @@ public interface Server extends PluginMessageRecipient {
+@@ -1438,6 +1438,14 @@ public interface Server extends PluginMessageRecipient {
          }
          // Paper end
  

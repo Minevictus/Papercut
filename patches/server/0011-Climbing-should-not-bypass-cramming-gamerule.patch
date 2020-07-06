@@ -19,10 +19,10 @@ Original patch: https://raw.githubusercontent.com/pl3xgaming/Purpur/master/patch
  11 files changed, 34 insertions(+), 13 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index fcb3d3adae52fd70e856344a727a344cf78cfce3..903e22b86ead1194ffe185cc408f6c8ac42f3dd2 100644
+index 9c4b02d776f8b99c6703c8dfc5d9fac0702bbe80..3c388d14fba1762f8de362211b36da68699fb243 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
-@@ -1516,7 +1516,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -1519,7 +1519,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
          return false;
      }
  
@@ -34,7 +34,7 @@ index fcb3d3adae52fd70e856344a727a344cf78cfce3..903e22b86ead1194ffe185cc408f6c8a
          return false;
      }
  
-@@ -1524,6 +1527,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -1527,6 +1530,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
      public boolean canCollideWith(Entity entity) {
          return isCollidable();
      }
@@ -99,7 +99,7 @@ index 364697e0155012c300219ad94a3995809e6c2f8f..e933ee4b1737fb15e805195a64e25238
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index 7a2140e4b901027997b2884275b35b43fe2175bc..3861d168c3895af2e0a7f8a2e4df13bda036a6ff 100644
+index c388999d104682b84b5f0936efce9d270247d08c..ef0ad5b14a3c1e6aa6f590d09a341b1c8428c61c 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
 @@ -2835,7 +2835,7 @@ public abstract class EntityLiving extends Entity {

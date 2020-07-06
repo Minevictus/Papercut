@@ -59,7 +59,7 @@ index b598c48692ff340a081995384aeecf9a2266d10f..b482ee4658f964d55bdc256033b57ccd
          this.generator = gen;
          this.world = new CraftWorld((WorldServer) this, gen, env);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 2ea691216b9ea69c697dba74f4cfb2e44cf39351..7eeb6c674cf8e8618950e639de6fbe696ed78285 100644
+index 114bdf8bb83fd4b2517acc626a68ad4d906e1c62..f22c81fc64bfe05f777dc00347223b2f41105078 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -848,6 +848,7 @@ public final class CraftServer implements Server {
@@ -78,7 +78,7 @@ index 2ea691216b9ea69c697dba74f4cfb2e44cf39351..7eeb6c674cf8e8618950e639de6fbe69
          }
  
          Plugin[] pluginClone = pluginManager.getPlugins().clone(); // Paper
-@@ -2208,6 +2210,9 @@ public final class CraftServer implements Server {
+@@ -2231,6 +2233,9 @@ public final class CraftServer implements Server {
              return com.destroystokyo.paper.PaperConfig.config;
          }
  
@@ -89,7 +89,7 @@ index 2ea691216b9ea69c697dba74f4cfb2e44cf39351..7eeb6c674cf8e8618950e639de6fbe69
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 57aa5d25529683e849d5b837da019277068c0e6b..21b6add2922062001cdb8691a3225ecde2a7ea75 100644
+index a3b6566a8438d4aee4428989dbe7ac823d6aa913..4af0a791cccdb801c4e051bbf1502bf067552b67 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -139,6 +139,14 @@ public class Main {
