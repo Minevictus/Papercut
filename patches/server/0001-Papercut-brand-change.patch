@@ -5,13 +5,13 @@ Subject: [PATCH] Papercut brand change
 
 ---
  pom.xml                                       | 24 +++++++++----------
- .../paper/PaperVersionFetcher.java            | 16 +++++++------
+ .../paper/PaperVersionFetcher.java            | 18 +++++++-------
  src/main/java/net/minecraft/server/EULA.java  |  2 +-
  .../net/minecraft/server/MinecraftServer.java |  2 +-
  .../org/bukkit/craftbukkit/CraftServer.java   |  2 +-
  .../java/org/bukkit/craftbukkit/Main.java     |  2 +-
  .../bukkit/craftbukkit/util/Versioning.java   |  2 +-
- 7 files changed, 26 insertions(+), 24 deletions(-)
+ 7 files changed, 27 insertions(+), 25 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
 index ef8ee637a8a0e5e703922b2991c58f4f116b23fb..d816e5e746597bc5a990bd388db67b6a136f9bf4 100644
@@ -81,9 +81,18 @@ index ef8ee637a8a0e5e703922b2991c58f4f116b23fb..d816e5e746597bc5a990bd388db67b6a
                  </configuration>
                  <executions>
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index 49a38c6608b652ff48ef4eaca0dd3ccb1ba570e3..4f3e9735ebb0e0c69ff35294520301a65d8b2938 100644
+index 49a38c6608b652ff48ef4eaca0dd3ccb1ba570e3..552e6e1c114ba6b81bb1eafe469927541eed0845 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
+@@ -13,7 +13,7 @@ import java.net.URL;
+ 
+ public class PaperVersionFetcher implements VersionFetcher {
+     private static final java.util.regex.Pattern VER_PATTERN = java.util.regex.Pattern.compile("^([0-9\\.]*)\\-.*R"); // R is an anchor, will always give '-R' at end
+-    private static final String GITHUB_BRANCH_NAME = "master";
++    private static final String GITHUB_BRANCH_NAME = "ver/1.16"; // Papercut
+     private static @Nullable String mcVer;
+ 
+     @Override
 @@ -24,8 +24,8 @@ public class PaperVersionFetcher implements VersionFetcher {
      @Nonnull
      @Override
