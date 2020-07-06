@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Mon, 6 Jul 2020 23:15:01 +0200
+Subject: [PATCH] Invalid data means reset data
+
+---
+ src/main/java/net/minecraft/server/AdvancementDataPlayer.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
+index f06a0dcbad235a0aef6b9674507cf928845da08e..ca67e442acd1713aabb1702d8313bc0757ae56a2 100644
+--- a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
++++ b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
+@@ -190,7 +190,7 @@ public class AdvancementDataPlayer {
+                     }
+ 
+                 }
+-            } catch (JsonParseException jsonparseexception) {
++            } catch (JsonParseException | NumberFormatException jsonparseexception) { // Papercut
+                 AdvancementDataPlayer.LOGGER.error("Couldn't parse player advancements in {}", this.f, jsonparseexception);
+             } catch (IOException ioexception) {
+                 AdvancementDataPlayer.LOGGER.error("Couldn't access player advancements in {}", this.f, ioexception);
