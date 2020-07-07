@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 7 Jul 2020 23:51:18 +0200
+Subject: [PATCH] Select all gossips if they are bad
+
+---
+ src/main/java/net/minecraft/server/Reputation.java | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/main/java/net/minecraft/server/Reputation.java b/src/main/java/net/minecraft/server/Reputation.java
+index b3a4ec25446878fce5961e9014d24a3009571438..3fb94e1db5a7a7ee49e3156139bfb039fd0f5e4d 100644
+--- a/src/main/java/net/minecraft/server/Reputation.java
++++ b/src/main/java/net/minecraft/server/Reputation.java
+@@ -73,9 +73,10 @@ public class Reputation {
+             for (int k = 0; k < list.size(); ++k) {
+                 Reputation.b reputation_b = (Reputation.b) list.get(k);
+ 
+-                j += Math.abs(reputation_b.a());
++                j = reputation_b.a();
+                 aint[k] = j - 1;
+             }
++            if (j <= 0) return new java.util.ArrayList<>(list); // Papercut - select all gossips for transfer if they're all horrible
+ 
+             Set<Reputation.b> set = Sets.newIdentityHashSet();
+ 
