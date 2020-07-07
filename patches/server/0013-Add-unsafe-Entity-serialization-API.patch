@@ -11,10 +11,10 @@ Subject: [PATCH] Add unsafe Entity serialization API
  4 files changed, 43 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 3c388d14fba1762f8de362211b36da68699fb243..79e9dae782d05485a05a6a231a732d402cd7b12d 100644
+index d04126a9b489ca42bfc49af9bdd27f406f89fd6f..31fe6d6acd5e3b416b6043f5ddfbc2cdd8f78c05 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
-@@ -1557,6 +1557,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -1733,6 +1733,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
          }
      }
  
@@ -43,7 +43,7 @@ index 18a806ebbf092b904983691529ce5edf2da4e6db..34c3a4ff30d98675df4bb008825fd12f
          return SystemUtils.a(a(nbttagcompound).map((entitytypes) -> {
              return entitytypes.a(world);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 953b60d74a4406688e7363d98b38ebd74771f03a..55e1a04ddf8a387503109630a2ea61d41451f687 100644
+index fe52b11634d176c7fb989c0cd4e7300fb93743ec..8e472b00bb33e34d4584e9a28880f465ca71b1fd 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -156,6 +156,7 @@ import org.bukkit.craftbukkit.persistence.CraftPersistentDataTypeRegistry;
@@ -54,7 +54,7 @@ index 953b60d74a4406688e7363d98b38ebd74771f03a..55e1a04ddf8a387503109630a2ea61d4
  import org.bukkit.event.entity.EntityDamageEvent;
  import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
  import org.bukkit.metadata.MetadataValue;
-@@ -1121,5 +1122,12 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1152,5 +1153,12 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public void setRawInvulnerable(boolean invulnerability) {
          getHandle().setInvulnerable(invulnerability);
      }

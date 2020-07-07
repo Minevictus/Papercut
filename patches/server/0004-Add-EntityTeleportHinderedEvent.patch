@@ -128,7 +128,7 @@ index ce239d2b2fe942915aa093b86343c3740d10e273..2cb092c7e2f0e1daca294400b4c3d710
              this.c = 100;
              if (this.exitPortal == null && this.world.getDimensionKey() == World.THE_END) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 8002a38bcc806a5d79531fe1a9c12b2c5ac6c37b..790e65b0ebd886983f85c07e72667c63c6887738 100644
+index 309e7f6ee72c83a8be311309ee92a320b68fcfe0..1ff76b79374065b4faca17a23bfc5ba9a5171c4a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -168,6 +168,7 @@ import org.bukkit.plugin.Plugin;

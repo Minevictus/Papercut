@@ -8,7 +8,7 @@ Subject: [PATCH] Kick players before disabling plugins
  1 file changed, 16 insertions(+), 6 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 18cf21778265507e304c143fbd8c1b93e6249095..f6cb3ea7dda4eb17529097e2257cb2fd516de3df 100644
+index 83bf9d7a8d51c1fc5faeb1f182e39694f20a328c..84aaaa7abe4f168ff3cb2a6e0b5b2f610055f5de 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -769,6 +769,14 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas

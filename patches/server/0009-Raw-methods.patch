@@ -10,10 +10,10 @@ Subject: [PATCH] Raw methods
  3 files changed, 41 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 790e65b0ebd886983f85c07e72667c63c6887738..953b60d74a4406688e7363d98b38ebd74771f03a 100644
+index 1ff76b79374065b4faca17a23bfc5ba9a5171c4a..fe52b11634d176c7fb989c0cd4e7300fb93743ec 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1104,4 +1104,22 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1135,4 +1135,22 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return getHandle().isInLava();
      }
      // Paper end

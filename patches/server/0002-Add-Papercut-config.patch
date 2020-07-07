@@ -6,81 +6,80 @@ Subject: [PATCH] Add Papercut config
 ---
  .../java/co/aikar/timings/TimingsExport.java  |   1 +
  .../net/minecraft/server/DedicatedServer.java |   1 +
- src/main/java/net/minecraft/server/World.java |   3 +
+ src/main/java/net/minecraft/server/World.java |   2 +
  .../org/bukkit/craftbukkit/CraftServer.java   |   5 +
  .../java/org/bukkit/craftbukkit/Main.java     |   8 +
  .../us/minevict/papercut/PapercutConfig.java  | 214 ++++++++++++++++++
- 6 files changed, 232 insertions(+)
+ 6 files changed, 231 insertions(+)
  create mode 100644 src/main/java/us/minevict/papercut/PapercutConfig.java
 
 diff --git a/src/main/java/co/aikar/timings/TimingsExport.java b/src/main/java/co/aikar/timings/TimingsExport.java
-index e33e889c291d37a821a4fbd40d9aac7bb079de0d..37918ded95a3c9ef03da54a8bb58a82e2c827c5f 100644
+index 5dfa0658838c4801cdf260eae8b98163f729e5af..7afae12df248bd7731f14633bf71a166365a3488 100644
 --- a/src/main/java/co/aikar/timings/TimingsExport.java
 +++ b/src/main/java/co/aikar/timings/TimingsExport.java
-@@ -230,6 +230,7 @@ public class TimingsExport extends Thread {
-             pair("spigot", mapAsJSON(Bukkit.spigot().getSpigotConfig(), null)),
+@@ -231,6 +231,7 @@ public class TimingsExport extends Thread {
              pair("bukkit", mapAsJSON(Bukkit.spigot().getBukkitConfig(), null)),
-             pair("paper", mapAsJSON(Bukkit.spigot().getPaperConfig(), null))
+             pair("paper", mapAsJSON(Bukkit.spigot().getPaperConfig(), null)), // Tuinity - add config to timings report
+             pair("tuinity", mapAsJSON(Bukkit.spigot().getTuinityConfig(), null)) // Tuinity - add config to timings report
 +            , pair("papercut", mapAsJSON(Bukkit.spigot().getPapercutConfig(), null)) // Papercut
          ));
  
          new TimingsExport(listeners, parent, history).start();
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index 8b2755a3b95e472e884976195d1d3551fc260e39..27596f96f9671648eaf3cc6e45879e714c4a8c82 100644
+index 578f7809cb09e746778d05b153e02c569f0d1d90..afa01dd383320027f83b03e0aff39a530f97c4f2 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
-@@ -170,6 +170,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
-         com.destroystokyo.paper.PaperConfig.registerCommands();
+@@ -171,6 +171,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
          com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // load version history now
          // Paper end
+         com.tuinity.tuinity.config.TuinityConfig.init((java.io.File) options.valueOf("tuinity-settings")); // Tuinity - Server Config
 +        us.minevict.papercut.PapercutConfig.init((java.io.File) options.valueOf("papercut-settings")); // Papercut
  
          this.setPVP(dedicatedserverproperties.pvp);
          this.setAllowFlight(dedicatedserverproperties.allowFlight);
 diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
-index b598c48692ff340a081995384aeecf9a2266d10f..b482ee4658f964d55bdc256033b57ccd37790334 100644
+index 4a956f36812f36ea9898cb9e0c231ddb5eaa12cd..584d71dbd9543dcb014fd41e420edfc5095e2eba 100644
 --- a/src/main/java/net/minecraft/server/World.java
 +++ b/src/main/java/net/minecraft/server/World.java
-@@ -94,6 +94,8 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
-     public final com.destroystokyo.paper.PaperWorldConfig paperConfig; // Paper
+@@ -95,6 +95,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
      public final ChunkPacketBlockController chunkPacketBlockController; // Paper - Anti-Xray
  
+     public final com.tuinity.tuinity.config.TuinityConfig.WorldConfig tuinityConfig; // Tuinity - Server Config
 +    public final us.minevict.papercut.PapercutConfig.WorldConfig papercutConfig; // Papercut
-+
+ 
      public final co.aikar.timings.WorldTimingsHandler timings; // Paper
      public static BlockPosition lastPhysicsProblem; // Spigot
-     private org.spigotmc.TickLimiter entityLimiter;
-@@ -120,6 +122,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
+@@ -122,6 +123,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
      protected World(WorldDataMutable worlddatamutable, ResourceKey<World> resourcekey, ResourceKey<DimensionManager> resourcekey1, DimensionManager dimensionmanager, Supplier<GameProfilerFiller> supplier, boolean flag, boolean flag1, long i, org.bukkit.generator.ChunkGenerator gen, org.bukkit.World.Environment env, java.util.concurrent.Executor executor) {
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((WorldDataServer) worlddatamutable).getName()); // Spigot
          this.paperConfig = new com.destroystokyo.paper.PaperWorldConfig((((WorldDataServer)worlddatamutable).getName()), this.spigotConfig); // Paper
 +        this.papercutConfig = new us.minevict.papercut.PapercutConfig.WorldConfig(((WorldDataServer)worlddatamutable).getName()); // Papercut
          this.chunkPacketBlockController = this.paperConfig.antiXray ? new ChunkPacketBlockControllerAntiXray(this.paperConfig, executor) : ChunkPacketBlockController.NO_OPERATION_INSTANCE; // Paper - Anti-Xray
+         this.tuinityConfig = new com.tuinity.tuinity.config.TuinityConfig.WorldConfig(((WorldDataServer)worlddatamutable).getName()); // Tuinity - Server Config
          this.generator = gen;
-         this.world = new CraftWorld((WorldServer) this, gen, env);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 114bdf8bb83fd4b2517acc626a68ad4d906e1c62..f22c81fc64bfe05f777dc00347223b2f41105078 100644
+index 285b942e8d8d6a134ab80948ebd3dcb76df1e9df..fb39a78d1236613c47249acca025b3baf37f80ca 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -848,6 +848,7 @@ public final class CraftServer implements Server {
- 
+@@ -849,6 +849,7 @@ public final class CraftServer implements Server {
          org.spigotmc.SpigotConfig.init((File) console.options.valueOf("spigot-settings")); // Spigot
          com.destroystokyo.paper.PaperConfig.init((File) console.options.valueOf("paper-settings")); // Paper
+         com.tuinity.tuinity.config.TuinityConfig.init((File) console.options.valueOf("tuinity-settings")); // Tuinity - Server Config
 +        us.minevict.papercut.PapercutConfig.init((File) console.options.valueOf("papercut-settings")); // Papercut
          for (WorldServer world : console.getWorlds()) {
              world.worldDataServer.setDifficulty(config.difficulty);
              world.setSpawnFlags(config.spawnMonsters, config.spawnAnimals);
-@@ -882,6 +883,7 @@ public final class CraftServer implements Server {
-             }
+@@ -884,6 +885,7 @@ public final class CraftServer implements Server {
              world.spigotConfig.init(); // Spigot
              world.paperConfig.init(); // Paper
+             world.tuinityConfig.init(); // Tuinity - Server Config
 +            world.papercutConfig.init(); // Papercut
          }
  
          Plugin[] pluginClone = pluginManager.getPlugins().clone(); // Paper
-@@ -2231,6 +2233,9 @@ public final class CraftServer implements Server {
-             return com.destroystokyo.paper.PaperConfig.config;
+@@ -2244,6 +2246,9 @@ public final class CraftServer implements Server {
          }
+         // Tuinity end - add config to timings report
  
 +        @Override
 +        public YamlConfiguration getPapercutConfig() { return us.minevict.papercut.PapercutConfig.config; }
@@ -89,12 +88,12 @@ index 114bdf8bb83fd4b2517acc626a68ad4d906e1c62..f22c81fc64bfe05f777dc00347223b2f
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index a3b6566a8438d4aee4428989dbe7ac823d6aa913..4af0a791cccdb801c4e051bbf1502bf067552b67 100644
+index 25895798a8ffa9acf6f579a9e69b25b93a2410fc..18d1f321305d66b9bf49501c45c1bbe9eb9f1702 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
-@@ -139,6 +139,14 @@ public class Main {
+@@ -146,6 +146,14 @@ public class Main {
                          .describedAs("Yml file");
-                 // Paper end
+                 /* Conctete End - Server Config */
  
 +                // Papercut start
 +                acceptsAll(asList("papercut", "papercut-settings"), "File for papercut settings")

@@ -11,7 +11,7 @@ Subject: [PATCH] Apply advancements async
  4 files changed, 60 insertions(+), 12 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
-index 57b9d13447a4f7804827c1bd41121c3069c696bd..f06a0dcbad235a0aef6b9674507cf928845da08e 100644
+index d3387a4e16f81b820d40502d2c46ebb3db88f824..ed0e4ae0f29871968772ee0c8e7b38ed47a0ab15 100644
 --- a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 +++ b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 @@ -59,6 +59,7 @@ public class AdvancementDataPlayer {
@@ -69,7 +69,7 @@ index 8fd3c913ac5315a5c1cce002498bfe2ec08aaf42..ff16b5acedb599b13cb87c8fc38609b1
      // CraftBukkit start
      public void a(WorldServer worldserver, double d0, double d1, double d2, float f, float f1) {
 diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
-index cf83059fec9f11df992827f0c0249243caa9ac33..bb6becf7ae26de6c5cc88a692e96d999e65cedbf 100644
+index 37f55c66b6cbca9650b050fe08f60c101c2d35bf..9a7720539eef44cbcf962e47ffbf764a54ab6371 100644
 --- a/src/main/java/net/minecraft/server/PlayerConnection.java
 +++ b/src/main/java/net/minecraft/server/PlayerConnection.java
 @@ -106,6 +106,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
@@ -80,7 +80,7 @@ index cf83059fec9f11df992827f0c0249243caa9ac33..bb6becf7ae26de6c5cc88a692e96d999
  
      public PlayerConnection(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayer entityplayer) {
          this.minecraftServer = minecraftserver;
-@@ -540,8 +541,8 @@ public class PlayerConnection implements PacketListenerPlayIn {
+@@ -547,8 +548,8 @@ public class PlayerConnection implements PacketListenerPlayIn {
              MinecraftKey minecraftkey = packetplayinadvancements.d();
              Advancement advancement = this.minecraftServer.getAdvancementData().a(minecraftkey);
  

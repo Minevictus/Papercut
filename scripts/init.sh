@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # BEGIN config
 FORK_NAME="Papercut"
-UPSTREAM_NAME="Paper"
+UPSTREAM_NAME="Tuinity"
 API_REPO=""
 MOJANGAPI_REPO=""
 SERVER_REPO=""

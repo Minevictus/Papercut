@@ -8,7 +8,7 @@ Subject: [PATCH] Invalid data means reset data
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
-index f06a0dcbad235a0aef6b9674507cf928845da08e..ca67e442acd1713aabb1702d8313bc0757ae56a2 100644
+index ed0e4ae0f29871968772ee0c8e7b38ed47a0ab15..4acbc60407ac6f4ffca2a4da929d0d6442c93958 100644
 --- a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 +++ b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 @@ -190,7 +190,7 @@ public class AdvancementDataPlayer {

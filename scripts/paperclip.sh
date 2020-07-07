@@ -32,8 +32,8 @@ PS1="$"
 (
 set -e
 basedir="$(cd "$1" && pwd -P)"
-workdir="$basedir/$UPSTREAM_NAME/work"
-mcver=$(cat "$workdir/Paper/BuildData/info.json" | grep minecraftVersion | cut -d '"' -f 4)
+workdir="$basedir/$UPSTREAM_NAME/Paper/work"
+mcver=$(cat "$workdir/BuildData/info.json" | grep minecraftVersion | cut -d '"' -f 4)
 paperjar="$basedir/Papercut-Server/target/papercut-$mcver.jar"
 vanillajar="$workdir/Minecraft/$mcver/$mcver.jar"
 

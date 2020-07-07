@@ -8,29 +8,29 @@ Subject: [PATCH] Papercut brand change
  1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 15ce1c66462351d6d1ba55c111db13ef1c9f0789..82bb10c64ad212fae9d1192af5bd8b4cbf4d4659 100644
+index 63dfd1c647fd4d3b9b9924627d766c095d286f14..82bb10c64ad212fae9d1192af5bd8b4cbf4d4659 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -3,18 +3,18 @@
           xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
      <modelVersion>4.0.0</modelVersion>
      <parent>
--        <groupId>com.destroystokyo.paper</groupId>
--        <artifactId>paper-parent</artifactId>
+-        <groupId>com.tuinity</groupId>
+-        <artifactId>tuinity-parent</artifactId>
 +        <groupId>us.minevict.papercut</groupId> <!-- Papercut -->
 +        <artifactId>papercut-parent</artifactId> <!-- Papercut -->
          <version>dev-SNAPSHOT</version>
+-        <relativePath>../pom.xml</relativePath>
 +        <relativePath>../pom.xml</relativePath> <!-- Papercut -->
      </parent>
  
--    <groupId>com.destroystokyo.paper</groupId>
--    <artifactId>paper-api</artifactId>
+-    <artifactId>tuinity-api</artifactId>
 +    <artifactId>papercut-api</artifactId> <!-- Papercut -->
      <version>1.16.1-R0.1-SNAPSHOT</version>
      <packaging>jar</packaging>
  
--    <name>Paper-API</name>
--    <url>https://github.com/PaperMC/Paper</url>
+-    <name>Tuinity-API</name>
+-    <url>https://github.com/Spottedleaf/Tuinity</url>
 +    <name>Papercut-API</name> <!-- Papercut -->
 +    <url>https://github.com/Minevictus/Papercut</url> <!-- Papercut -->
      <description>An enhanced plugin API for Minecraft servers.</description>

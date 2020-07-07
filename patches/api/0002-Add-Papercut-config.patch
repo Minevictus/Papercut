@@ -8,12 +8,12 @@ Subject: [PATCH] Add Papercut config
  1 file changed, 8 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 0653e0ffe96748dc971ec7e8027f8159696adf62..6b7baef2111374b1266efefe184d254b27af1a30 100644
+index 65a40c4a9b24fa607d284e203becba034520b75d..8cd8c367a6d60c24426a34a2ede937e2baa479d1 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1438,6 +1438,14 @@ public interface Server extends PluginMessageRecipient {
+@@ -1446,6 +1446,14 @@ public interface Server extends PluginMessageRecipient {
          }
-         // Paper end
+         // Tuinity end - add config to timings report
  
 +        // Papercut start
 +        @NotNull
