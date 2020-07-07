@@ -12,32 +12,32 @@ git submodule update --init --recursive
 
 if [[ "$1" == up* ]]; then
     (
-        cd "$basedir/Paper/"
+        cd "$basedir/$UPSTREAM_NAME/"
         git fetch && git reset --hard origin/master
         cd ../
-        git add Paper
+        git add "$UPSTREAM_NAME"
     )
 fi
 
-paperVer=$(gethead Paper)
-cd "$basedir/Paper/"
+paperVer=$(gethead "$UPSTREAM_NAME")
+cd "$basedir/$UPSTREAM_NAME/"
 
-./paper patch
+./$UPSTREAM_NAME_LC patch
 
-cd "Paper-Server"
+cd "$UPSTREAM_NAME-Server"
 mcVer=$(mvn -o org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=minecraft_version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }')
 
 basedir
 . "$basedir"/scripts/importmcdev.sh
 
-minecraftversion=$(cat "$basedir"/Paper/work/BuildData/info.json | grep minecraftVersion | cut -d '"' -f 4)
-version=$(echo -e "Paper: $paperVer\nmc-dev:$importedmcdev")
+minecraftversion=$(cat "$basedir/$UPSTREAM_NAME"/work/BuildData/info.json | grep minecraftVersion | cut -d '"' -f 4)
+version=$(echo -e "$UPSTREAM_NAME: $paperVer\nmc-dev:$importedmcdev")
 tag="${minecraftversion}-${mcVer}-$(echo -e $version | shasum | awk '{print $1}')"
 echo "$tag" > "$basedir"/current-paper
 
 "$basedir"/scripts/generatesources.sh
 
-cd Paper/
+cd "$UPSTREAM_NAME/"
 
 function tag {
 (
@@ -56,18 +56,18 @@ if [ "$(cat "$basedir"/current-paper)" != "$tag" ]; then
     forcetag=1
 fi
 
-cd Paper-MojangAPI
-git init
-git add -A
-git commit -m "Paper" --author="Paper <auto@mated.null>"
+#cd $UPSTREAM_NAME-MojangAPI
+#git init
+#git add -A
+#git commit -m "Paper" --author="Paper <auto@mated.null>"
+#
+#cd ..
 
-cd ..
+tag $UPSTREAM_NAME-API $forcetag
+#tag $UPSTREAM_NAME-MojangAPI $forcetag
+tag $UPSTREAM_NAME-Server $forcetag
 
-tag Paper-API $forcetag
-tag Paper-MojangAPI $forcetag
-tag Paper-Server $forcetag
-
-pushRepo Paper-API $PAPER_API_REPO $tag
-pushRepo Paper-MojangAPI $PAPER_MOJANGAPI_REPO $tag
-pushRepo Paper-Server $PAPER_SERVER_REPO $tag
+pushRepo $UPSTREAM_NAME-API $PAPER_API_REPO $tag
+#pushRepo $UPSTREAM_NAME-MojangAPI $PAPER_MOJANGAPI_REPO $tag
+pushRepo $UPSTREAM_NAME-Server $PAPER_SERVER_REPO $tag
 

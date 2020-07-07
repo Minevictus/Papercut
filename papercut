@@ -47,9 +47,9 @@ case "$1" in
             "s" | "server")
             type="Server"
             ;;
-            "m" | "mojang" | "mojangapi")
-            type="MojangAPI"
-            ;;
+#            "m" | "mojang" | "mojangapi")
+#            type="MojangAPI"
+#            ;;
             "a" | "api")
             type="API"
             ;;
@@ -84,7 +84,7 @@ case "$1" in
         basedir
         mvn -N install
         cd "$basedir/${FORK_NAME}-API" && mvn -e clean install &&
-            cd "$basedir/${FORK_NAME}-MojangAPI" && mvn -e clean install &&
+#            cd "$basedir/${FORK_NAME}-MojangAPI" && mvn -e clean install &&
             cd "$basedir/${FORK_NAME}-Server" && mvn -e clean install
     )
     ;;
@@ -99,7 +99,7 @@ case "$1" in
         cd "$basedir"
         mvn -N install
         cd "$basedir/${FORK_NAME}-API" && mvn -e clean install &&
-            cd "$basedir/${FORK_NAME}-MojangAPI" && mvn -e clean install &&
+#            cd "$basedir/${FORK_NAME}-MojangAPI" && mvn -e clean install &&
             cd "$basedir/${FORK_NAME}-Server" && mvn -e clean install
         cd "$basedir"
         ./scripts/paperclip.sh
@@ -110,7 +110,7 @@ case "$1" in
         basedir
         mvn -N install
         cd "$basedir/${FORK_NAME}-API" && mvn clean deploy &&
-            cd "$basedir/${FORK_NAME}-MojangAPI" && mvn clean deploy
+#            cd "$basedir/${FORK_NAME}-MojangAPI" && mvn clean deploy
             cd "$basedir/${FORK_NAME}-Server" && mvn clean deploy
     )
     ;;
@@ -126,9 +126,9 @@ case "$1" in
     "a" | "api")
         cd "$basedir/${FORK_NAME}-API"
     ;;
-    "m" | "mojang" | "mojangapi" | "mojang-api")
-        cd "$basedir/${FORK_NAME}-MojangAPI"
-    ;;
+#    "m" | "mojang" | "mojangapi" | "mojang-api")
+#        cd "$basedir/${FORK_NAME}-MojangAPI"
+#    ;;
     "s" | "server")
         cd "$basedir/${FORK_NAME}-Server"
     ;;
@@ -150,15 +150,15 @@ case "$1" in
         echo ""
         echo " Normal commands:"
         echo "  * rb, rebuild  | Rebuild patches, can be called from anywhere."
-        echo "  * p, patch     | Apply all patches to top of Paper without building it. Can be run from anywhere."
-        echo "  * up, upstream | Build Paper upstream, pass arg up to update paper. Can be run from anywhere."
+        echo "  * p, patch     | Apply all patches on top of upstream without building it. Can be run from anywhere."
+        echo "  * up, upstream | Build upstream, pass arg up to update upstream. Can be run from anywhere."
         echo "  * b, build     | Build API and Server but no deploy. Can be ran anywhere."
         echo "  * d, deploy    | Build and Deploy API jar and build Server. Can be ran anywhere."
         echo ""
         echo " These commands require the setup command before use:"
         echo "  * r, root      | Change directory to the root of the project."
         echo "  * a, api       | Move to the ${FORK_NAME}-API directory."
-        echo "  * m, mojangapi | Move to the ${FORK_NAME}-MojangAPI directory."
+#        echo "  * m, mojangapi | Move to the ${FORK_NAME}-MojangAPI directory."
         echo "  * s, server    | Move to the ${FORK_NAME}-Server directory."
         echo "  * e, edit      | Use to edit a specific patch, give it the argument \"server\" or \"api\""
         echo "                 | respectively to edit the correct project. Use the argument \"continue\" after"

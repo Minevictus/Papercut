@@ -12,8 +12,8 @@ done
 cd $basedir
 paperVer=$(cat current-paper)
 
-minecraftversion=$(cat $basedir/Paper/work/BuildData/info.json | grep minecraftVersion | cut -d '"' -f 4)
-decompile="Paper/work/Minecraft/$minecraftversion/spigot"
+minecraftversion=$(cat "$basedir/$UPSTREAM_NAME"/work/BuildData/info.json | grep minecraftVersion | cut -d '"' -f 4)
+decompile="$UPSTREAM_NAME/work/Minecraft/$minecraftversion/spigot"
 
 mkdir -p mc-dev/src/net/minecraft/server
 
@@ -25,7 +25,7 @@ fi
 rm src/net/minecraft/server/*.java
 cp $basedir/$decompile/net/minecraft/server/*.java src/net/minecraft/server
 
-base="$basedir/Paper/Paper-Server/src/main/java/net/minecraft/server"
+base="$basedir/$UPSTREAM_NAME/$UPSTREAM_NAME-Server/src/main/java/net/minecraft/server"
 cd $basedir/mc-dev/src/net/minecraft/server/
 for file in $(/bin/ls $base)
 do

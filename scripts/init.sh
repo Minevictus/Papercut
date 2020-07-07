@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # BEGIN config
 FORK_NAME="Papercut"
+UPSTREAM_NAME="Paper"
 API_REPO=""
 MOJANGAPI_REPO=""
 SERVER_REPO=""
@@ -9,6 +10,7 @@ PAPER_MOJANGAPI_REPO=""
 PAPER_SERVER_REPO=""
 MCDEV_REPO=""
 # END config
+UPSTREAM_NAME_LC="$(echo "$UPSTREAM_NAME" | tr '[:upper:]' '[:lower:]')"
 
 sourceBase=$(dirname $SOURCE)/../
 cd "${basedir:-$sourceBase}"
