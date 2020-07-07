@@ -10,7 +10,7 @@ steps:
     commands:
       - apt-get update
       - apt-get install -qy patch
-      - ./papercut jar
+      - ./papercut build
   - name: release
     image: curlimages/curl:latest
     user: root
