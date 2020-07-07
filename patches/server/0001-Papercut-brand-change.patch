@@ -4,17 +4,17 @@ Date: Tue, 26 May 2020 20:16:27 +0200
 Subject: [PATCH] Papercut brand change
 
 ---
- pom.xml                                       | 24 +++++++++----------
- .../paper/PaperVersionFetcher.java            | 15 ++++++++----
+ pom.xml                                       | 20 +++++++++----------
+ .../paper/PaperVersionFetcher.java            | 15 +++++++++-----
  src/main/java/net/minecraft/server/EULA.java  |  2 +-
  .../net/minecraft/server/MinecraftServer.java |  2 +-
  .../org/bukkit/craftbukkit/CraftServer.java   |  2 +-
  .../java/org/bukkit/craftbukkit/Main.java     |  2 +-
  .../bukkit/craftbukkit/util/Versioning.java   |  2 +-
- 7 files changed, 27 insertions(+), 22 deletions(-)
+ 7 files changed, 25 insertions(+), 20 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 6fd59681784a5cc369f4903b4da0d11174b805f2..c631f23b810d1cd275469aa93e5fca462b948bf4 100644
+index 6fd59681784a5cc369f4903b4da0d11174b805f2..0f1b0ff435ab44c0aad0600fa8d388629e22a919 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,11 +1,11 @@
@@ -32,7 +32,7 @@ index 6fd59681784a5cc369f4903b4da0d11174b805f2..c631f23b810d1cd275469aa93e5fca46
  
      <properties>
          <!-- <skipTests>true</skipTests> Paper - This [was] not going to end well -->
-@@ -18,22 +18,22 @@
+@@ -18,16 +18,16 @@
      </properties>
  
      <parent>
@@ -51,14 +51,6 @@ index 6fd59681784a5cc369f4903b4da0d11174b805f2..c631f23b810d1cd275469aa93e5fca46
 -            <artifactId>tuinity-api</artifactId>
 +            <groupId>us.minevict.papercut</groupId> <!-- Papercut -->
 +            <artifactId>papercut-api</artifactId> <!-- Papercut -->
-             <version>${project.version}</version>
-             <scope>compile</scope>
-         </dependency>
-         <dependency>
--            <groupId>com.destroystokyo.paper</groupId>
--            <artifactId>paper-mojangapi</artifactId>
-+            <groupId>us.minevict.papercut</groupId> <!-- Papercut -->
-+            <artifactId>papercut-mojangapi</artifactId> <!-- Papercut -->
              <version>${project.version}</version>
              <scope>compile</scope>
          </dependency>
