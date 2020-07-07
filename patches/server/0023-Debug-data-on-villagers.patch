@@ -1,0 +1,65 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Tue, 7 Jul 2020 22:13:26 +0200
+Subject: [PATCH] Debug data on villagers
+
+---
+ .../net/minecraft/server/EntityVillager.java   | 18 ++++++++++++++++++
+ .../net/minecraft/server/VillagerData.java     | 11 +++++++++++
+ 2 files changed, 29 insertions(+)
+
+diff --git a/src/main/java/net/minecraft/server/EntityVillager.java b/src/main/java/net/minecraft/server/EntityVillager.java
+index b764b6183d6aefb0c2b170c70c2a079eba025441..427d3e15ad0ccde39676c6345442a903483d6b25 100644
+--- a/src/main/java/net/minecraft/server/EntityVillager.java
++++ b/src/main/java/net/minecraft/server/EntityVillager.java
+@@ -574,6 +574,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
+         this.a(MemoryModuleType.JOB_SITE);
+         this.a(MemoryModuleType.MEETING_POINT);
+         super.die(damagesource);
++        villagerDataTraceLog(); // Papercut
+     }
+ 
+     private void a(Entity entity) {
+@@ -999,5 +1000,22 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
+     public boolean isPersistent() {
+         return true;
+     }
++
++    @Override
++    public void die() {
++      super.die();
++      villagerDataTraceLog();
++    }
++
++    public void villagerDataTraceLog() {
++        new Exception("Villager was removed! "
++            + "Persistent: " + persistent
++            + "; age: " + getAge()
++            + "; position: " + getPositionVector()
++            + "; dead: " + dead + " (" + deathTicks + ")"
++            + "; experience: " + getExperience()
++            + "; villager data: " + getVillagerData())
++            .printStackTrace();
++    }
+     // Papercut end
+ }
+diff --git a/src/main/java/net/minecraft/server/VillagerData.java b/src/main/java/net/minecraft/server/VillagerData.java
+index 349ca6c3d2457f1d4c63972fbf5bc61d903ca495..36e55e7da8d556d7d16438a62581b468bdfde02c 100644
+--- a/src/main/java/net/minecraft/server/VillagerData.java
++++ b/src/main/java/net/minecraft/server/VillagerData.java
+@@ -60,4 +60,15 @@ public class VillagerData {
+     public static boolean d(int i) {
+         return i >= 1 && i < 5;
+     }
++
++    // Papercut start
++    @Override
++    public String toString() {
++        return "VillagerData{" +
++            "type=" + c +
++            ", profession=" + d +
++            ", level=" + e +
++            '}';
++    }
++    // Papercut end
+ }
