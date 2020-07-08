@@ -1,0 +1,96 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Wed, 8 Jul 2020 13:01:44 +0200
+Subject: [PATCH] Revert "Improve physics code"
+
+This reverts commit 2f18108123a33312a073906cd2a5fe2da18dc049 in
+CraftBukkit.
+---
+ .../java/net/minecraft/server/ItemStack.java   |  2 +-
+ src/main/java/net/minecraft/server/World.java  | 18 +++++++++---------
+ .../org/bukkit/craftbukkit/CraftWorld.java     |  2 +-
+ 3 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/src/main/java/net/minecraft/server/ItemStack.java b/src/main/java/net/minecraft/server/ItemStack.java
+index 22e3d6cb262371fe517b2d98cfccbfcb2f713d14..6d5314825a6fd82604047f38f64a068244a9d7c5 100644
+--- a/src/main/java/net/minecraft/server/ItemStack.java
++++ b/src/main/java/net/minecraft/server/ItemStack.java
+@@ -324,7 +324,7 @@ public final class ItemStack {
+                             block.getBlock().onPlace(block, world, newblockposition, oldBlock, true);
+                         }
+ 
+-                        world.notifyAndUpdatePhysics(newblockposition, null, oldBlock, block, world.getType(newblockposition), updateFlag, 512); // send null chunk as chunk.k() returns false by this point
++                        world.notifyAndUpdatePhysics(newblockposition, null, oldBlock, block, world.getType(newblockposition), updateFlag); // send null chunk as chunk.k() returns false by this point  // Papercut - revert CB Improve physics code
+                     }
+ 
+                     // Special case juke boxes as they update their tile entity. Copied from ItemRecord.
+diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
+index 584d71dbd9543dcb014fd41e420edfc5095e2eba..05a080a5735c3cdd524c44aa39f5b9f0e426ce15 100644
+--- a/src/main/java/net/minecraft/server/World.java
++++ b/src/main/java/net/minecraft/server/World.java
+@@ -519,7 +519,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
+                     // Modularize client and physic updates
+                     // Spigot start
+                     try {
+-                        notifyAndUpdatePhysics(blockposition, chunk, iblockdata1, iblockdata, iblockdata2, i, j);
++                        notifyAndUpdatePhysics(blockposition, chunk, iblockdata1, iblockdata, iblockdata2, i); // Papercut - revert CB Improve physics code
+                     } catch (StackOverflowError ex) {
+                         lastPhysicsProblem = new BlockPosition(blockposition);
+                     }
+@@ -533,7 +533,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
+     }
+ 
+     // CraftBukkit start - Split off from above in order to directly send client and physic updates
+-    public void notifyAndUpdatePhysics(BlockPosition blockposition, Chunk chunk, IBlockData oldBlock, IBlockData newBlock, IBlockData actualBlock, int i, int j) {
++    public void notifyAndUpdatePhysics(BlockPosition blockposition, Chunk chunk, IBlockData oldBlock, IBlockData newBlock, IBlockData actualBlock, int i) { // Papercut - revert CB Improve physics code
+         com.tuinity.tuinity.util.TickThread.softEnsureTickThread("Async notify and update"); // Tuinity
+         IBlockData iblockdata = newBlock;
+         IBlockData iblockdata1 = oldBlock;
+@@ -552,18 +552,18 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
+                 // Paper end - per player view distance
+             }
+ 
+-            if ((i & 1) != 0) {
++            if (!this.isClientSide && (i & 1) != 0) { // Papercut - revert CB Improve physics code
+                 this.update(blockposition, iblockdata1.getBlock());
+-                if (!this.isClientSide && iblockdata.isComplexRedstone()) {
++                if (iblockdata.isComplexRedstone()) { // Papercut - revert CB Improve physics code
+                     this.updateAdjacentComparators(blockposition, newBlock.getBlock());
+                 }
+             }
+ 
+-            if ((i & 16) == 0 && j > 0) {
+-                int k = i & -34;
++            if ((i & 16) == 0) { // Papercut - revert CB Improve physics code
++                int j = i & -2; // Papercut - revert CB Improve physics code
+ 
+                 // CraftBukkit start
+-                iblockdata1.b(this, blockposition, k, j - 1); // Don't call an event for the old block to limit event spam
++                iblockdata1.b(this, blockposition, j); // Don't call an event for the old block to limit event spam // Papercut - revert CB Improve physics code
+                 CraftWorld world = ((WorldServer) this).getWorld();
+                 if (world != null && ((WorldServer)this).hasPhysicsEvent) { // Paper
+                     BlockPhysicsEvent event = new BlockPhysicsEvent(world.getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ()), CraftBlockData.fromData(iblockdata));
+@@ -574,8 +574,8 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
+                     }
+                 }
+                 // CraftBukkit end
+-                iblockdata.a((GeneratorAccess) this, blockposition, k, j - 1);
+-                iblockdata.b(this, blockposition, k, j - 1);
++                iblockdata.a((GeneratorAccess) this, blockposition, j); // Papercut - revert CB Improve physics code
++                iblockdata.b(this, blockposition, j); // Papercut - revert CB Improve physics code
+             }
+ 
+             this.a(blockposition, iblockdata1, iblockdata2);
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index b12da9e3b3197ae86f20e0a30bc7e4953d3a3c6f..21bd9f14e17dc5ca011deddf3f6a554ae5564f16 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -905,7 +905,7 @@ public class CraftWorld implements World {
+                 int flag = ((CraftBlockState) blockstate).getFlag();
+                 delegate.setBlockData(blockstate.getX(), blockstate.getY(), blockstate.getZ(), blockstate.getBlockData());
+                 net.minecraft.server.IBlockData newBlock = world.getType(position);
+-                world.notifyAndUpdatePhysics(position, null, oldBlock, newBlock, newBlock, flag, 512);
++                world.notifyAndUpdatePhysics(position, null, oldBlock, newBlock, newBlock, flag);
+             }
+             world.capturedBlockStates.clear();
+             return true;
