@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
+# get base dir regardless of execution location
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+. $(dirname $SOURCE)/init.sh
+
 (
 set -e
 PS1="$"
@@ -13,7 +22,7 @@ updated=""
 logsuffix=""
 if [ ! -z "$paper" ]; then
     logsuffix="$logsuffix\n\n$UPSTREAM_NAME Changes:\n$paper"
-    if [ -z "$updated" ]; then updated="$UPSTREAM_NAME"; else updated="$updated/$UPSTREAM_NAME"; fi
+    if [ -z "$updated" ]; then updated="$UPSTREAM_NAME"; else updated="$updated/Paper"; fi
 fi
 disclaimer="Upstream has released updates that appears to apply and compile correctly"
 
