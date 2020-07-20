@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Sun, 19 Jul 2020 17:41:18 +0200
+Subject: [PATCH] Revert "Use consistent priorities for light tasks"
+
+---
+ src/main/java/net/minecraft/server/LightEngineThreaded.java | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/main/java/net/minecraft/server/LightEngineThreaded.java b/src/main/java/net/minecraft/server/LightEngineThreaded.java
+index 721f86a5405c9575d8ee3fc661395e65487b6d96..b3f259a7550d0b87be16a370442bdefc233a1db0 100644
+--- a/src/main/java/net/minecraft/server/LightEngineThreaded.java
++++ b/src/main/java/net/minecraft/server/LightEngineThreaded.java
+@@ -230,7 +230,10 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
+         // Paper start
+         long pair = chunkcoordintpair.pair();
+         CompletableFuture<IChunkAccess> future = new CompletableFuture<>();
+-        IntSupplier prioritySupplier = d.getPrioritySupplier(pair);
++        // Rainforest start
++        IntSupplier prioritySupplier1 = d.getPrioritySupplier(pair);
++        IntSupplier prioritySupplier = flag ? () -> Math.max(1, prioritySupplier1.getAsInt() - 10) : prioritySupplier1;
++        // Rainforest end
+         this.e.a(ChunkTaskQueueSorter.a(() -> {
+             this.queue.add(pair, prioritySupplier.getAsInt(), LightEngineThreaded.Update.PRE_UPDATE, SystemUtils.a(() -> {
+                 // Paper end
