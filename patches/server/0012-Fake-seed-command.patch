@@ -39,11 +39,11 @@ index 0000000000000000000000000000000000000000..c2e1bbdf99dd5c63454d0c2ed2d74898
 +    }
 +}
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
-index a76f1620ac92d3f09a4bcf00846ea94d79787cb6..69b1881b7a8326aff5609fae075b146a01da9b32 100644
+index 95770fd094ec0f6a3fc44dcc161d38555a18d04f..608ef5c9350280d9bdf95cf6a250aeadaae2fb5e 100644
 --- a/src/main/java/us/minevict/papercut/PapercutConfig.java
 +++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
 @@ -107,6 +107,11 @@ public final class PapercutConfig {
-     applyAdvancementsAsync = getBoolean("apply-async-advancements", applyAdvancementsAsync);
+     asyncAdvancements = getBoolean("async-advancements", asyncAdvancements);
    }
  
 +  public static boolean seedCommandChange = true;

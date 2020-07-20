@@ -5,11 +5,11 @@ Subject: [PATCH] Apply advancements async
 
 ---
  .../AdvancementDataPlayerDelegate.java        | 107 ++++++++++++++++++
- .../rainforest/RainforestConfig.java          |   5 +
  .../server/AdvancementDataPlayer.java         |   3 +-
  .../net/minecraft/server/EntityPlayer.java    |  31 +++--
  .../minecraft/server/PlayerConnection.java    |   2 +-
  .../java/net/minecraft/server/PlayerList.java |  42 ++++++-
+ .../us/minevict/papercut/PapercutConfig.java  |   5 +
  6 files changed, 178 insertions(+), 12 deletions(-)
  create mode 100644 src/main/java/com/proximyst/rainforest/AdvancementDataPlayerDelegate.java
 
@@ -126,25 +126,11 @@ index 0000000000000000000000000000000000000000..9049e719ddf832f50653319563dcb232
 +    return future;
 +  }
 +}
-diff --git a/src/main/java/com/proximyst/rainforest/RainforestConfig.java b/src/main/java/com/proximyst/rainforest/RainforestConfig.java
-index 0d854bda9611b45d78815f9fe9cafb8901de210f..1d28680bed17739f026b799da25d07358b2cb2b5 100644
---- a/src/main/java/com/proximyst/rainforest/RainforestConfig.java
-+++ b/src/main/java/com/proximyst/rainforest/RainforestConfig.java
-@@ -185,4 +185,9 @@ public final class RainforestConfig {
-     config.addDefault(path, def);
-     return config.getString(path, config.getString(path));
-   }
-+
-+  public static boolean asyncAdvancements = true;
-+  private static void asyncAdvancements() {
-+    asyncAdvancements = getBoolean("async-advancements", asyncAdvancements);
-+  }
- }
 diff --git a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
-index 1a26e3c561f7004b10c57fd24a0315b0ec7c5640..b7abe22975d15e4223da08b9d5bfe2a8ff907680 100644
+index 1588d101e0939c883757a5be91b30966d456a6bf..0eaa872b0cf2dd096e12580dffd03e43d0e8f7e0 100644
 --- a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 +++ b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
-@@ -59,6 +59,7 @@ public class AdvancementDataPlayer {
+@@ -63,6 +63,7 @@ public class AdvancementDataPlayer {
          this.d(advancementdataworld);
      }
  
@@ -152,7 +138,7 @@ index 1a26e3c561f7004b10c57fd24a0315b0ec7c5640..b7abe22975d15e4223da08b9d5bfe2a8
      public void a(EntityPlayer entityplayer) {
          this.player = entityplayer;
      }
-@@ -133,7 +134,7 @@ public class AdvancementDataPlayer {
+@@ -137,7 +138,7 @@ public class AdvancementDataPlayer {
  
      }
  
@@ -251,10 +237,10 @@ index 4550e3449b146d5d416ece620d036cb17547b30e..b39e98a0612198a642e4530b56e85434
      public void a(WorldServer worldserver, double d0, double d1, double d2, float f, float f1) {
          this.a(worldserver, d0, d1, d2, f, f1, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause.UNKNOWN);
 diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
-index 95d57c6de95eca580ca4e3183db851e5a15de342..e7273bb18d84798e0644189cccb828d0668f65cb 100644
+index 5af6140a7782935d0c66e58ef587fe49a27c2352..2a492853e76eb73c3f38294d9924851213c71731 100644
 --- a/src/main/java/net/minecraft/server/PlayerConnection.java
 +++ b/src/main/java/net/minecraft/server/PlayerConnection.java
-@@ -540,7 +540,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
+@@ -547,7 +547,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
              MinecraftKey minecraftkey = packetplayinadvancements.d();
              Advancement advancement = this.minecraftServer.getAdvancementData().a(minecraftkey);
  
@@ -264,19 +250,18 @@ index 95d57c6de95eca580ca4e3183db851e5a15de342..e7273bb18d84798e0644189cccb828d0
              }
          }
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index 9382e8f79e8edec8885c629a36e230fbec50e1fb..f6120cb260f5a7e3562657a9c74ba7131916c0dd 100644
+index 9382e8f79e8edec8885c629a36e230fbec50e1fb..e35003cba347fa13366f12ff8dcb3c376799dcdb 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
-@@ -7,6 +7,8 @@ import com.google.common.collect.Sets;
+@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
  import com.mojang.authlib.GameProfile;
  import com.mojang.serialization.DataResult;
  import com.mojang.serialization.Dynamic;
 +import com.proximyst.rainforest.AdvancementDataPlayerDelegate;
-+import com.proximyst.rainforest.RainforestConfig;
  import io.netty.buffer.Unpooled;
  import java.io.File;
  import java.net.SocketAddress;
-@@ -18,6 +20,7 @@ import java.util.Map;
+@@ -18,6 +19,7 @@ import java.util.Map;
  import java.util.Optional;
  import java.util.Set;
  import java.util.UUID;
@@ -284,6 +269,14 @@ index 9382e8f79e8edec8885c629a36e230fbec50e1fb..f6120cb260f5a7e3562657a9c74ba713
  import javax.annotation.Nullable;
  import org.apache.logging.log4j.LogManager;
  import org.apache.logging.log4j.Logger;
+@@ -42,6 +44,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
+ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+ import org.bukkit.util.Vector;
+ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
++import us.minevict.papercut.PapercutConfig;
+ // CraftBukkit end
+ 
+ public abstract class PlayerList {
 @@ -489,7 +492,7 @@ public abstract class PlayerList {
              serverstatisticmanager.save();
          }
@@ -299,7 +292,7 @@ index 9382e8f79e8edec8885c629a36e230fbec50e1fb..f6120cb260f5a7e3562657a9c74ba713
  
 +    // Rainforest start - async advancements
 +    public AdvancementDataPlayer applyAdvancementsAsync(EntityPlayer entityPlayer) {
-+        if (!RainforestConfig.asyncAdvancements) {
++        if (!PapercutConfig.asyncAdvancements) {
 +            return f(entityPlayer);
 +        }
 +
@@ -339,3 +332,19 @@ index 9382e8f79e8edec8885c629a36e230fbec50e1fb..f6120cb260f5a7e3562657a9c74ba713
  
          if (advancementdataplayer == null) {
              File file = this.server.a(SavedFile.ADVANCEMENTS).toFile();
+diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
+index 878d1b6c7d3382203e200bb152c290df40e6725d..1256b689481f9d31dc2fbbf6072293c293ed6c2e 100644
+--- a/src/main/java/us/minevict/papercut/PapercutConfig.java
++++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
+@@ -102,6 +102,11 @@ public final class PapercutConfig {
+     return PapercutConfig.config.getDouble(path, dfl);
+   }
+ 
++  public static boolean asyncAdvancements = true;
++  private static void asyncAdvancements() {
++    asyncAdvancements = getBoolean("async-advancements", asyncAdvancements);
++  }
++
+   public static final class WorldConfig {
+     public final String worldName;
+     public ConfigurationSection config;

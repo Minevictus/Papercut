@@ -73,14 +73,14 @@ index 6fd59681784a5cc369f4903b4da0d11174b805f2..0f1b0ff435ab44c0aad0600fa8d38862
                  </configuration>
                  <executions>
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index 255bbd6e48b95c70fad02ba692c64c7579496827..552e6e1c114ba6b81bb1eafe469927541eed0845 100644
+index 60d6469b8115f57a0b117aaef56c8192b7621104..552e6e1c114ba6b81bb1eafe469927541eed0845 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 @@ -13,7 +13,7 @@ import java.net.URL;
  
  public class PaperVersionFetcher implements VersionFetcher {
      private static final java.util.regex.Pattern VER_PATTERN = java.util.regex.Pattern.compile("^([0-9\\.]*)\\-.*R"); // R is an anchor, will always give '-R' at end
--    private static final String GITHUB_BRANCH_NAME = "master";
+-    private static final String GITHUB_BRANCH_NAME = "ver/1.16"; // TODO TEMPORARY, REMOVE ONCE MASTER
 +    private static final String GITHUB_BRANCH_NAME = "ver/1.16"; // Papercut
      private static @Nullable String mcVer;
  
@@ -154,7 +154,7 @@ index ba42171096b1d0be518c43f6eacc85ead935a941..285b942e8d8d6a134ab80948ebd3dcb7
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index b4e65963efdf4f192908c8433bdeca7c549708a2..25895798a8ffa9acf6f579a9e69b25b93a2410fc 100644
+index 2cebdb36f1943839a2f2d053c9949329b8ea8413..5071108285fa6396de1779fb9951aee41f432459 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -259,7 +259,7 @@ public class Main {

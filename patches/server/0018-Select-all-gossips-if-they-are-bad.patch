@@ -8,10 +8,10 @@ Subject: [PATCH] Select all gossips if they are bad
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/src/main/java/net/minecraft/server/Reputation.java b/src/main/java/net/minecraft/server/Reputation.java
-index b3a4ec25446878fce5961e9014d24a3009571438..3fb94e1db5a7a7ee49e3156139bfb039fd0f5e4d 100644
+index dffac0dc85fe7d093c58663f91ad687a6be50ad5..0bc8bae77d8f3d09735957cf325e9686705d80cb 100644
 --- a/src/main/java/net/minecraft/server/Reputation.java
 +++ b/src/main/java/net/minecraft/server/Reputation.java
-@@ -73,9 +73,10 @@ public class Reputation {
+@@ -74,9 +74,10 @@ public class Reputation {
              for (int k = 0; k < list.size(); ++k) {
                  Reputation.b reputation_b = (Reputation.b) list.get(k);
  
