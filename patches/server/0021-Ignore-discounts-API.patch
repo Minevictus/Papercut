@@ -1,0 +1,138 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Wed, 22 Jul 2020 22:43:58 +0200
+Subject: [PATCH] Ignore discounts API
+
+---
+ .../net/minecraft/server/EntityVillager.java  |  2 ++
+ .../net/minecraft/server/MerchantRecipe.java  | 11 ++++++++++
+ .../inventory/CraftMerchantRecipe.java        | 22 +++++++++++++++++--
+ 3 files changed, 33 insertions(+), 2 deletions(-)
+
+diff --git a/src/main/java/net/minecraft/server/EntityVillager.java b/src/main/java/net/minecraft/server/EntityVillager.java
+index bf019043a9338aca8d91da809f1d5520531386e7..9aabf9c498c6ed50add4acc49f195002e5eebef2 100644
+--- a/src/main/java/net/minecraft/server/EntityVillager.java
++++ b/src/main/java/net/minecraft/server/EntityVillager.java
+@@ -390,6 +390,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
+ 
+             while (iterator.hasNext()) {
+                 MerchantRecipe merchantrecipe = (MerchantRecipe) iterator.next();
++                if (merchantrecipe.ignoreDiscounts) continue; // Papercut
+ 
+                 // CraftBukkit start
+                 int bonus = -MathHelper.d((float) i * merchantrecipe.getPriceMultiplier());
+@@ -409,6 +410,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
+ 
+             while (iterator1.hasNext()) {
+                 MerchantRecipe merchantrecipe1 = (MerchantRecipe) iterator1.next();
++                if (merchantrecipe1.ignoreDiscounts) continue; // Papercut
+                 double d0 = 0.3D + 0.0625D * (double) j;
+                 int k = (int) Math.floor(d0 * (double) merchantrecipe1.a().getCount());
+ 
+diff --git a/src/main/java/net/minecraft/server/MerchantRecipe.java b/src/main/java/net/minecraft/server/MerchantRecipe.java
+index e42382a5c385c27b6322b03e87870eb20b21cb22..b2a86b7937759a0ed88344bfd77116fec9eeb281 100644
+--- a/src/main/java/net/minecraft/server/MerchantRecipe.java
++++ b/src/main/java/net/minecraft/server/MerchantRecipe.java
+@@ -1,6 +1,8 @@
+ package net.minecraft.server;
+ 
+ import org.bukkit.craftbukkit.inventory.CraftMerchantRecipe; // CraftBukkit
++import org.bukkit.craftbukkit.util.CraftMagicNumbers;
++import org.bukkit.craftbukkit.util.CraftMagicNumbers.NBT;
+ 
+ public class MerchantRecipe {
+ 
+@@ -14,6 +16,7 @@ public class MerchantRecipe {
+     private int demand;
+     public float priceMultiplier;
+     public int xp;
++    public boolean ignoreDiscounts; // Papercut
+     // CraftBukkit start
+     private CraftMerchantRecipe bukkitHandle;
+ 
+@@ -21,8 +24,14 @@ public class MerchantRecipe {
+         return (bukkitHandle == null) ? bukkitHandle = new CraftMerchantRecipe(this) : bukkitHandle;
+     }
+ 
++    // Papercut start
+     public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2, int uses, int maxUses, int experience, float priceMultiplier, CraftMerchantRecipe bukkit) {
++      this(itemstack, itemstack1, itemstack2, uses, maxUses, experience, priceMultiplier, bukkit, false);
++    }
++    public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2, int uses, int maxUses, int experience, float priceMultiplier, CraftMerchantRecipe bukkit, boolean ignoreDiscounts) {
+         this(itemstack, itemstack1, itemstack2, uses, maxUses, experience, priceMultiplier);
++        this.ignoreDiscounts = ignoreDiscounts;
++        // Papercut end
+         this.bukkitHandle = bukkit;
+     }
+     // CraftBukkit end
+@@ -54,6 +63,7 @@ public class MerchantRecipe {
+ 
+         this.specialPrice = nbttagcompound.getInt("specialPrice");
+         this.demand = nbttagcompound.getInt("demand");
++        this.ignoreDiscounts = nbttagcompound.getBoolean("Papercut.IgnoreDiscounts"); // Papercut
+     }
+ 
+     public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, int i, int j, float f) {
+@@ -184,6 +194,7 @@ public class MerchantRecipe {
+         nbttagcompound.setFloat("priceMultiplier", this.priceMultiplier);
+         nbttagcompound.setInt("specialPrice", this.specialPrice);
+         nbttagcompound.setInt("demand", this.demand);
++        nbttagcompound.setBoolean("Papercut.IgnoreDiscounts", this.ignoreDiscounts); // Papercut
+         return nbttagcompound;
+     }
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
+index e198251617bfd6b0fe932d8bfa5dfcafdac919c2..340637683a7b3e627e19325c9a1a2177b5718ae9 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
+@@ -16,8 +16,13 @@ public class CraftMerchantRecipe extends MerchantRecipe {
+         addIngredient(CraftItemStack.asBukkitCopy(merchantRecipe.buyingItem2));
+     }
+ 
++    // Papercut start
+     public CraftMerchantRecipe(ItemStack result, int uses, int maxUses, boolean experienceReward, int experience, float priceMultiplier) {
+-        super(result, uses, maxUses, experienceReward, experience, priceMultiplier);
++      this(result, uses, maxUses, experienceReward, experience, priceMultiplier, false);
++    }
++    public CraftMerchantRecipe(ItemStack result, int uses, int maxUses, boolean experienceReward, int experience, float priceMultiplier, boolean ignoreDiscounts) {
++        super(result, uses, maxUses, experienceReward, experience, priceMultiplier, ignoreDiscounts);
++        // Papercut end
+         this.handle = new net.minecraft.server.MerchantRecipe(
+                 net.minecraft.server.ItemStack.b,
+                 net.minecraft.server.ItemStack.b,
+@@ -27,6 +32,7 @@ public class CraftMerchantRecipe extends MerchantRecipe {
+                 experience,
+                 priceMultiplier,
+                 this
++                , ignoreDiscounts // Papercut
+         );
+         this.setExperienceReward(experienceReward);
+     }
+@@ -81,6 +87,18 @@ public class CraftMerchantRecipe extends MerchantRecipe {
+         handle.priceMultiplier = priceMultiplier;
+     }
+ 
++    // Papercut start
++    @Override
++    public boolean shouldIgnoreDiscounts() {
++        return handle.ignoreDiscounts;
++    }
++
++    @Override
++    public void setIgnoreDiscounts(boolean ignoreDiscounts) {
++        handle.ignoreDiscounts = ignoreDiscounts;
++    }
++    // Papercut end
++
+     public net.minecraft.server.MerchantRecipe toMinecraft() {
+         List<ItemStack> ingredients = getIngredients();
+         Preconditions.checkState(!ingredients.isEmpty(), "No offered ingredients");
+@@ -95,7 +113,7 @@ public class CraftMerchantRecipe extends MerchantRecipe {
+         if (recipe instanceof CraftMerchantRecipe) {
+             return (CraftMerchantRecipe) recipe;
+         } else {
+-            CraftMerchantRecipe craft = new CraftMerchantRecipe(recipe.getResult(), recipe.getUses(), recipe.getMaxUses(), recipe.hasExperienceReward(), recipe.getVillagerExperience(), recipe.getPriceMultiplier());
++            CraftMerchantRecipe craft = new CraftMerchantRecipe(recipe.getResult(), recipe.getUses(), recipe.getMaxUses(), recipe.hasExperienceReward(), recipe.getVillagerExperience(), recipe.getPriceMultiplier(), recipe.shouldIgnoreDiscounts()); // Papercut
+             craft.setIngredients(recipe.getIngredients());
+ 
+             return craft;
