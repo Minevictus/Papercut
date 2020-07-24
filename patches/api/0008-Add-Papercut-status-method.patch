@@ -9,10 +9,10 @@ Subject: [PATCH] Add Papercut status method
  2 files changed, 28 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 4e92ce18227c8f650fe5c6f4a670e6f56d629872..384d4216d33b52e4c36e0f5ea8b9f15fbe1b50dd 100644
+index 62cc1c74c11f56dcbd1e24e9c5478497742e6351..6051cdc241e5b436e94ae5a3b10644e6a7dd01b9 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -1765,4 +1765,18 @@ public final class Bukkit {
+@@ -1776,4 +1776,18 @@ public final class Bukkit {
      public static Server.Spigot spigot() {
          return server.spigot();
      }
@@ -32,10 +32,10 @@ index 4e92ce18227c8f650fe5c6f4a670e6f56d629872..384d4216d33b52e4c36e0f5ea8b9f15f
 +    // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 8cd8c367a6d60c24426a34a2ede937e2baa479d1..e552b1a691d154693c280f4285871ba8bc0aec3a 100644
+index 8263a155803f8807a2d3c988df11abdab767be9c..2a4ff68d761b86e72daf431fc4aafe7b301a0fa3 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1554,4 +1554,18 @@ public interface Server extends PluginMessageRecipient {
+@@ -1563,4 +1563,18 @@ public interface Server extends PluginMessageRecipient {
      @NotNull
      com.destroystokyo.paper.entity.ai.MobGoals getMobGoals();
      // Paper end

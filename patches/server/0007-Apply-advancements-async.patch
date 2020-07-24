@@ -127,7 +127,7 @@ index 0000000000000000000000000000000000000000..9049e719ddf832f50653319563dcb232
 +  }
 +}
 diff --git a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
-index 1588d101e0939c883757a5be91b30966d456a6bf..0eaa872b0cf2dd096e12580dffd03e43d0e8f7e0 100644
+index 17789407b9e86896a963a305a13357286aa5f319..2e88442e13546e9005e3783b09feaddbed7cea16 100644
 --- a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 +++ b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 @@ -63,6 +63,7 @@ public class AdvancementDataPlayer {

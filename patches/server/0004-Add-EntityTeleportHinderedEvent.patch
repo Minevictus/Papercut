@@ -88,7 +88,7 @@ index 77f8d5e6662fa75e622f07b3e6efae04c38735fe..107c182becf2dd7b72522f817587d182
              EntityPortalEnterEvent event = new EntityPortalEnterEvent(entity.getBukkitEntity(), new org.bukkit.Location(world.getWorld(), blockposition.getX(), blockposition.getY(), blockposition.getZ()));
              world.getServer().getPluginManager().callEvent(event);
 diff --git a/src/main/java/net/minecraft/server/TileEntityEndGateway.java b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
-index ce239d2b2fe942915aa093b86343c3740d10e273..2cb092c7e2f0e1daca294400b4c3d7103d2aee0d 100644
+index 89537dec8ed278e79e078cb2fd3d3e839cdbab59..f324634e30bb4ab477f2c0db3e985afaf6b77eaf 100644
 --- a/src/main/java/net/minecraft/server/TileEntityEndGateway.java
 +++ b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
 @@ -12,6 +12,8 @@ import org.bukkit.Location;
@@ -126,7 +126,7 @@ index ce239d2b2fe942915aa093b86343c3740d10e273..2cb092c7e2f0e1daca294400b4c3d710
 +
          if (this.world instanceof WorldServer && !this.f()) {
              this.c = 100;
-             if (this.exitPortal == null && this.world.getDimensionKey() == World.THE_END) {
+             if (this.exitPortal == null && this.world.getTypeKey() == DimensionManager.THE_END) { // CraftBukkit - work in alternate worlds
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 index 6f18a789805163de63561569e84d9fa1b3dabb61..b3ab1f021f2681053b73f6bc8a04b65fcfffd08d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
@@ -158,7 +158,7 @@ index 6f18a789805163de63561569e84d9fa1b3dabb61..b3ab1f021f2681053b73f6bc8a04b65f
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index b832ece4948323e60fabecdeee5c9051b65c5e8e..0ded43bfadd6d1e287982d3edf09611bdd172623 100644
+index 72cd52fd7f0ba8df5be8989111d76e7180f033d7..fa9487803d3d74f62255a0a0215e8fdeafb1a897 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -130,6 +130,7 @@ import org.bukkit.plugin.messaging.StandardMessenger;
@@ -169,7 +169,7 @@ index b832ece4948323e60fabecdeee5c9051b65c5e8e..0ded43bfadd6d1e287982d3edf09611b
  
  @DelegateDeserialization(CraftOfflinePlayer.class)
  public class CraftPlayer extends CraftHumanEntity implements Player {
-@@ -769,6 +770,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -775,6 +776,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          }
  
          if (entity.isVehicle()) {
