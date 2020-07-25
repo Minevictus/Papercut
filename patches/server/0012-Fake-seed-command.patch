@@ -4,40 +4,26 @@ Date: Mon, 29 Jun 2020 14:37:55 +0200
 Subject: [PATCH] Fake seed command
 
 ---
- .../net/minecraft/server/CommandSeed.java     | 23 +++++++++++++++++++
- .../us/minevict/papercut/PapercutConfig.java  |  5 ++++
- 2 files changed, 28 insertions(+)
- create mode 100644 src/main/java/net/minecraft/server/CommandSeed.java
+ src/main/java/net/minecraft/server/CommandSeed.java    | 5 ++++-
+ src/main/java/us/minevict/papercut/PapercutConfig.java | 5 +++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/src/main/java/net/minecraft/server/CommandSeed.java b/src/main/java/net/minecraft/server/CommandSeed.java
-new file mode 100644
-index 0000000000000000000000000000000000000000..c2e1bbdf99dd5c63454d0c2ed2d7489865e49021
---- /dev/null
+index fc3b3f2390e9f92f4ecbbf1cf6a5e83214aa2241..c2e1bbdf99dd5c63454d0c2ed2d7489865e49021 100644
+--- a/src/main/java/net/minecraft/server/CommandSeed.java
 +++ b/src/main/java/net/minecraft/server/CommandSeed.java
-@@ -0,0 +1,23 @@
-+package net.minecraft.server;
-+
-+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-+
-+public class CommandSeed {
-+
-+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher, boolean flag) {
-+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("seed").requires((commandlistenerwrapper) -> {
-+            return !flag || commandlistenerwrapper.hasPermission(2);
-+        })).executes((commandcontext) -> {
+@@ -8,7 +8,10 @@ public class CommandSeed {
+         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("seed").requires((commandlistenerwrapper) -> {
+             return !flag || commandlistenerwrapper.hasPermission(2);
+         })).executes((commandcontext) -> {
+-            long i = ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getSeed();
 +            // Papercut start
 +            CommandListenerWrapper source = (CommandListenerWrapper) commandcontext.getSource();
 +            long i = us.minevict.papercut.PapercutConfig.seedCommandChange && source.getEntity() instanceof EntityPlayer && !source.h().isCreativeAndOp() ? source.h().getUniqueID().getLeastSignificantBits() % source.h().getUniqueID().getMostSignificantBits() : source.getWorld().getSeed();
 +            // Papercut end
-+            IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.a((IChatBaseComponent) (new ChatComponentText(String.valueOf(i))).format((chatmodifier) -> {
-+                return chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.COPY_TO_CLIPBOARD, String.valueOf(i))).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.copy.click"))).setInsertion(String.valueOf(i));
-+            }));
-+
-+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.seed.success", new Object[]{ichatmutablecomponent}), false);
-+            return (int) i;
-+        }));
-+    }
-+}
+             IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.a((IChatBaseComponent) (new ChatComponentText(String.valueOf(i))).format((chatmodifier) -> {
+                 return chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.COPY_TO_CLIPBOARD, String.valueOf(i))).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.copy.click"))).setInsertion(String.valueOf(i));
+             }));
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
 index 95770fd094ec0f6a3fc44dcc161d38555a18d04f..608ef5c9350280d9bdf95cf6a250aeadaae2fb5e 100644
 --- a/src/main/java/us/minevict/papercut/PapercutConfig.java
