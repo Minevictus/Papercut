@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Sat, 25 Jul 2020 13:09:47 +0200
+Subject: [PATCH] Import: Fix PersistentDataContainer contract violation
+
+Drop once merged into Paper:
+https://github.com/PaperMC/Paper/pull/3990
+---
+ src/main/java/net/minecraft/server/TileEntity.java              | 2 +-
+ .../org/bukkit/craftbukkit/block/CraftBlockEntityState.java     | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/main/java/net/minecraft/server/TileEntity.java b/src/main/java/net/minecraft/server/TileEntity.java
+index e1f1d6e33fd76bd11eb23e78457ba711bf9d5cde..63a41520ecd28dbeb0061b56abb37820c2ec7d76 100644
+--- a/src/main/java/net/minecraft/server/TileEntity.java
++++ b/src/main/java/net/minecraft/server/TileEntity.java
+@@ -16,7 +16,7 @@ public abstract class TileEntity implements KeyedObject, Cloneable { // Paper //
+ 
+     public Timing tickTimer = MinecraftTimings.getTileEntityTimings(this); // Paper
+     // CraftBukkit start - data containers
+-    private static final CraftPersistentDataTypeRegistry DATA_TYPE_REGISTRY = new CraftPersistentDataTypeRegistry();
++    public static final CraftPersistentDataTypeRegistry DATA_TYPE_REGISTRY = new CraftPersistentDataTypeRegistry(); // Paper - private -> public
+     public CraftPersistentDataContainer persistentDataContainer;
+     // CraftBukkit end
+     private static final Logger LOGGER = LogManager.getLogger();
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
+index dc0e6e49e9eb5004e53d24304bce095bcef8f4c2..32af4c50a7dd84d72eb43b905de219683cdf9bca 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
+@@ -31,6 +31,7 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
+         // Paper start
+         this.snapshotDisabled = DISABLE_SNAPSHOT;
+         if (DISABLE_SNAPSHOT) {
++            if (this.tileEntity.persistentDataContainer == null) this.tileEntity.persistentDataContainer = new org.bukkit.craftbukkit.persistence.CraftPersistentDataContainer(TileEntity.DATA_TYPE_REGISTRY);
+             this.snapshot = this.tileEntity;
+         } else {
+             this.snapshot = this.createSnapshot(this.tileEntity);
+@@ -61,6 +62,7 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
+         // Paper start
+         this.snapshotDisabled = DISABLE_SNAPSHOT;
+         if (DISABLE_SNAPSHOT) {
++            if (this.tileEntity.persistentDataContainer == null) this.tileEntity.persistentDataContainer = new org.bukkit.craftbukkit.persistence.CraftPersistentDataContainer(TileEntity.DATA_TYPE_REGISTRY);
+             this.snapshot = this.tileEntity;
+         } else {
+             this.snapshot = this.createSnapshot(this.tileEntity);
