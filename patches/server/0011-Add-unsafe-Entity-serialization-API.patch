@@ -68,11 +68,11 @@ index c60b50fac7255fc0a74919cb11ffc15444243dbb..c56d0ebc0b1757ab9e91b943d48a3912
      // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 461cfb96f496aaf5caa12d8ae9847c8756b711e7..8d47aac6ce67255a4cd38e2966327b9bdbc93ee9 100644
+index bf9cbee62080a7241fd5895d971c90eb2803ed57..538f5ca02ff7b0f0369e8aacbdab1e02c675f21f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -35,15 +35,20 @@ import net.minecraft.server.NBTBase;
- import net.minecraft.server.NBTTagCompound;
+@@ -36,15 +36,20 @@ import net.minecraft.server.NBTTagCompound;
+ import net.minecraft.server.NBTTagString;
  import net.minecraft.server.SavedFile;
  import net.minecraft.server.SharedConstants;
 +import net.minecraft.server.EntityTypes; // Papercut
@@ -92,7 +92,7 @@ index 461cfb96f496aaf5caa12d8ae9847c8756b711e7..8d47aac6ce67255a4cd38e2966327b9b
  import org.bukkit.inventory.ItemStack;
  import org.bukkit.material.MaterialData;
  import org.bukkit.plugin.InvalidPluginException;
-@@ -391,6 +396,26 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -394,6 +399,26 @@ public final class CraftMagicNumbers implements UnsafeValues {
      }
      // Paper end
  
