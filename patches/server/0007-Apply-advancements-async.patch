@@ -237,7 +237,7 @@ index 4550e3449b146d5d416ece620d036cb17547b30e..b39e98a0612198a642e4530b56e85434
      public void a(WorldServer worldserver, double d0, double d1, double d2, float f, float f1) {
          this.a(worldserver, d0, d1, d2, f, f1, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause.UNKNOWN);
 diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
-index bf603ba34f85f6bf0142b8515f21abed018bee7b..4c0923d365228f9d6de524177bdd58decfb0fe38 100644
+index 82a5658425269ea277a470f223e5ae2ff5173e7c..024f9156c687ae7e1344de800cf8689f9b950e06 100644
 --- a/src/main/java/net/minecraft/server/PlayerConnection.java
 +++ b/src/main/java/net/minecraft/server/PlayerConnection.java
 @@ -547,7 +547,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
