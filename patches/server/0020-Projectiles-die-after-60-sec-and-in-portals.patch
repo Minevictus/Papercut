@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Thu, 30 Jul 2020 11:57:24 +0200
+Subject: [PATCH] Projectiles die after 60 sec and in portals
+
+---
+ .../java/net/minecraft/server/IProjectile.java    | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/src/main/java/net/minecraft/server/IProjectile.java b/src/main/java/net/minecraft/server/IProjectile.java
+index 6e175e30a6c1fc69bd2f8417d2df38ee1b78545b..21f75681804b92e32fe74337f042cd87fb0be3ef 100644
+--- a/src/main/java/net/minecraft/server/IProjectile.java
++++ b/src/main/java/net/minecraft/server/IProjectile.java
+@@ -67,6 +67,11 @@ public abstract class IProjectile extends Entity {
+ 
+     @Override
+     public void tick() {
++        // Papercut start - despawn projectiles after 60 seconds
++        if (ticksLived >= 60 * 20) {
++            die();
++        }
++        // Papercut end
+         if (!this.d) {
+             this.d = this.h();
+         }
+@@ -74,6 +79,16 @@ public abstract class IProjectile extends Entity {
+         super.tick();
+     }
+ 
++    // Papercut start - projectiles going through portals get despawned
++    @Override
++    protected void doPortalTick() {
++        if (this.inPortal && !(this instanceof EntityThrownTrident)) {
++            die();
++        }
++        super.doPortalTick();
++    }
++    // Papercut end
++
+     private boolean h() {
+         Entity entity = this.getShooter();
+ 
