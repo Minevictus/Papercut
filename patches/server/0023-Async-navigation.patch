@@ -1,0 +1,607 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "tsao-chi@the-lingo.org" <tsao-chi@the-lingo.org>
+Date: Tue, 4 Aug 2020 18:29:57 +0200
+Subject: [PATCH] Async navigation
+
+Co-Authored By: Mariell Hoversholm <proximyst@proximyst.com>
+
+This is a ported and safer version of Akarin's async navigation.
+---
+ .../server/AsyncNavigationAbstract.java       | 183 ++++++++++++++++++
+ .../net/minecraft/server/ControllerMove.java  |   3 +-
+ .../java/net/minecraft/server/EntityBee.java  |   9 +
+ .../minecraft/server/EntityInsentient.java    |   6 +
+ .../net/minecraft/server/EntityLiving.java    |   3 +-
+ .../java/net/minecraft/server/Navigation.java |   4 +-
+ .../minecraft/server/NavigationAbstract.java  |  40 ++--
+ .../minecraft/server/NavigationFlying.java    |  35 +++-
+ .../java/net/minecraft/server/PathEntity.java |   7 +
+ .../java/net/minecraft/server/PathPoint.java  |   2 +-
+ .../java/net/minecraft/server/Pathfinder.java |   1 +
+ .../minecraft/server/PathfinderAbstract.java  |   2 +-
+ .../minecraft/server/PathfinderNormal.java    |   1 +
+ .../minecraft/server/PathfinderTurtle.java    |   2 +-
+ .../net/minecraft/server/PathfinderWater.java |   2 +-
+ 15 files changed, 274 insertions(+), 26 deletions(-)
+ create mode 100644 src/main/java/net/minecraft/server/AsyncNavigationAbstract.java
+
+diff --git a/src/main/java/net/minecraft/server/AsyncNavigationAbstract.java b/src/main/java/net/minecraft/server/AsyncNavigationAbstract.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..5d09aac215094a38bb1043eeb3991bd3f309fd3c
+--- /dev/null
++++ b/src/main/java/net/minecraft/server/AsyncNavigationAbstract.java
+@@ -0,0 +1,183 @@
++package net.minecraft.server;
++
++import com.google.common.collect.ImmutableSet;
++
++import java.util.Set;
++import java.util.concurrent.ExecutorService;
++import java.util.concurrent.Executors;
++
++/**
++ * A {@link NavigationAbstract} which supports executing its navigation later on with its own threads.
++ * <p>
++ * The {@link #tick()} method does <i>not</i> force asynchronous navigation. If plugins want to use that, it works.
++ */
++public abstract class AsyncNavigationAbstract extends NavigationAbstract {
++    protected static final ExecutorService NAVIGATION_EXECUTOR = Executors.newFixedThreadPool(
++        Integer.getInteger(
++            "Paper.WorkerThreadCount",
++            Math.min(8, Math.max(Runtime.getRuntime().availableProcessors() - 2, 1))
++        ),
++        runnable -> {
++            Thread thread = new Thread();
++            thread.setDaemon(true); // Don't hinder the server from shutting down.
++            thread.setPriority(Thread.NORM_PRIORITY - 1); // Navigation should not be the 1st concern of the server
++            thread.setName("Navigation thread");
++            return thread;
++        });
++
++    protected long lastPathfindAsync; // NavigationAbstract#n equivalent for async pathfinds
++
++    public AsyncNavigationAbstract(EntityInsentient entityinsentient, World world) {
++        super(entityinsentient, world);
++    }
++
++    public void asyncRecalculatePath() {
++        if (this.getWorld().getTime() - this.lastPathfindAsync <= 20L) {
++            asyncTick(getCurrentPath());
++            return;
++        }
++
++        if (this.getCurrentTarget() == null)
++            return;
++
++        this.lastPathfindAsync = this.getWorld().getTime();
++
++        BlockPosition chunkCoordinates = this.getEntity().getChunkCoordinates();
++        int followRange = (int) Math.floor(this.getEntity().getAttributeValue(GenericAttributes.FOLLOW_RANGE) + 8F);
++        ChunkCache cache = new ChunkCache(
++            this.getWorld(),
++            chunkCoordinates.add(-followRange, -followRange, -followRange),
++            chunkCoordinates.add(followRange, followRange, followRange)
++        );
++
++        if (this.getCurrentPath() != null && !this.getCurrentPath().isDone()) {
++            asyncTick(this.getCurrentPath());
++            return;
++        }
++
++        NAVIGATION_EXECUTOR.execute(() -> {
++            PathEntity path = this.asyncFindPathToAny(cache, ImmutableSet.of(this.getCurrentTarget()), this.getCurrentDistance());
++            this.getWorld().getMinecraftServer().processQueue.add(() -> {
++                if (path != null && path.getDestination() != null)
++                    this.setCurrentTarget(path.getDestination());
++
++                this.setCurrentPath(path);
++            });
++        });
++    }
++
++    // Essentially #a(Set<BlockPosition> set, int i, boolean flag, int j) except without event.
++    // TODO: Add an async pathfinding event
++    public PathEntity asyncFindPathToAny(ChunkCache chunkCache, Set<BlockPosition> positions, int range) {
++        if (this.getEntity().locY() < 0.0D
++            || !this.isAtValidPosition())
++            // Can't path below the world and in invalid positions.
++            return null;
++
++        return this.getPathfinder().findPathToAny(
++            chunkCache,
++            this.getEntity(),
++            positions,
++            this.getCurrentPathStartTime(),
++            range,
++            this.getRangeMultiplier()
++        );
++    }
++
++    public void asyncTick() {
++        incrementTick();
++        asyncRecalculatePath();
++    }
++
++    public void asyncTick(PathEntity path) {
++        if (shouldContinueSearching(path)) return;
++
++        Vec3D vector;
++        if (this.isAtValidPosition())
++            this.applyPath(path);
++        else if (path.getNextIndex() < path.getSize()) {
++            vector = this.getImaginaryEntityPosition();
++            Vec3D position = path.getPosition(this.getEntity(), path.getNextIndex());
++
++            if (vector.getY() > position.getY()
++                && !this.getEntity().isOnGround()
++                && Math.floor(vector.getX()) == Math.floor(vector.getX())
++                && Math.floor(vector.getZ()) == Math.floor(vector.getZ())) {
++                path.setNextIndex(path.getNextIndex() + 1);
++            }
++        }
++
++        if (shouldContinueSearching(path)) return;
++
++        vector = path.getPosition(this.getEntity());
++        BlockPosition pos = new BlockPosition(vector);
++
++        this.getEntity().getControllerMove().setTargetPosition(
++            vector.getX(),
++            this.getWorld().getType(pos.down()).isAir()
++                ? vector.getY()
++                : PathfinderNormal.getFeetY(this.getWorld(), pos),
++            vector.getZ(),
++            this.getSpeed()
++        );
++    }
++
++    protected void applyPath(PathEntity path) {
++        Vec3D vector = this.getImaginaryEntityPosition();
++
++        float entityWidth = this.getEntity().getWidth();
++        this.setChebyshevMinimumReachProximity(
++            entityWidth > 0.75F
++                ? entityWidth / 2F
++                : 0.75F - entityWidth / 2F
++        );
++
++        BaseBlockPosition nextPosition = path.getNext();
++        double x = Math.abs(this.getEntity().locX() - nextPosition.getX() - 0.5D);
++        double y = Math.abs(this.getEntity().locY() - nextPosition.getY());
++        double z = Math.abs(this.getEntity().locZ() - nextPosition.getZ() - 0.5D);
++        boolean hasReachedDestination = x < this.getChebyshevMinimumReachProximity()
++            && z < this.getChebyshevMinimumReachProximity()
++            && y < 1D;
++
++        if (hasReachedDestination || this.getEntity().isAcceptablePathType(path.getCurrentPoint().getType()) && this.shouldTargetNextNodeInDirection(vector))
++            path.setNextIndex(path.getNextIndex() + 1);
++
++        if (this.getCurrentTick() - this.getCurrentPathStartTime() > 100) {
++            if (vector.distanceSquared(this.getCurrentPathStartPosition()) < 2.25D) {
++                this.stopPathfinding();
++            }
++
++            this.setCurrentPathStartTime(this.getCurrentTick());
++            this.setCurrentPathStartPosition(vector);
++        }
++
++        if (shouldContinueSearching(getCurrentPath())) return;
++
++        nextPosition = path.getNext();
++        if (nextPosition.equals(this.getLastNodePosition())) {
++            this.addToCurrentNodeStartTickMs(SystemUtils.getMonotonicMillis() - this.getLastActiveTickMs());
++        } else {
++            this.setLastNodePosition(nextPosition);
++            this.setCurrentNodeTimeout(
++                this.getEntity().getSpeed() > 0F
++                    // TODO: OBFHELPERs
++                    ? vector.f(Vec3D.c(nextPosition)) / (double) this.getEntity().getSpeed() * 1000D
++                    : 0D
++            );
++        }
++
++        if (this.getCurrentNodeTimeout() > 0D
++            && (double) this.getCurrentNodeStartTickMs() > this.getCurrentNodeTimeout() * 3D) {
++            this.resetStuckTimeout();
++            this.stopPathfinding();
++        }
++
++        this.setLastActiveTickMs(SystemUtils.getMonotonicMillis());
++    }
++
++    public final boolean shouldContinueSearching(PathEntity path) {
++        // We must not have more to do in the existing path.
++        return path == null || path.isDone();
++    }
++}
+diff --git a/src/main/java/net/minecraft/server/ControllerMove.java b/src/main/java/net/minecraft/server/ControllerMove.java
+index ac6f9d9e5252b819f91703ad6aeaae3d580eeca0..8da65a71928eac5721d50e73417b2abb0497d0f8 100644
+--- a/src/main/java/net/minecraft/server/ControllerMove.java
++++ b/src/main/java/net/minecraft/server/ControllerMove.java
+@@ -2,7 +2,7 @@ package net.minecraft.server;
+ 
+ public class ControllerMove {
+ 
+-    protected final EntityInsentient a; public EntityInsentient getEntity() { return a; } // Paper - OBFHELPER
++    protected final EntityInsentient a; public final EntityInsentient getEntity() { return a; } // Paper - OBFHELPER
+     protected double b;
+     protected double c;
+     protected double d;
+@@ -24,6 +24,7 @@ public class ControllerMove {
+         return this.e;
+     }
+ 
++    public final void setTargetPosition(double x, double y, double z, double speedModifier) { this.a(x, y, z, speedModifier); } // Paper - OBFHELPER
+     public void a(double d0, double d1, double d2, double d3) {
+         this.b = d0;
+         this.c = d1;
+diff --git a/src/main/java/net/minecraft/server/EntityBee.java b/src/main/java/net/minecraft/server/EntityBee.java
+index e6868e2b65e3c2bde7696272b242a47e7394e27f..a884bf11838d660df25141d99d680d68a1827221 100644
+--- a/src/main/java/net/minecraft/server/EntityBee.java
++++ b/src/main/java/net/minecraft/server/EntityBee.java
+@@ -450,6 +450,15 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
+                     super.c();
+                 }
+             }
++
++            // Paper start
++            @Override
++            public void asyncTick() {
++                if (!EntityBee.this.bJ.k()) {
++                    super.asyncTick();
++                }
++            }
++            // Paper end
+         };
+ 
+         navigationflying.a(false);
+diff --git a/src/main/java/net/minecraft/server/EntityInsentient.java b/src/main/java/net/minecraft/server/EntityInsentient.java
+index 605bbf0174e60f795e445193a0284739ea452946..d7f1a219a1f979cfe3d4694d45fdc14d8f15a093 100644
+--- a/src/main/java/net/minecraft/server/EntityInsentient.java
++++ b/src/main/java/net/minecraft/server/EntityInsentient.java
+@@ -116,6 +116,7 @@ public abstract class EntityInsentient extends EntityLiving {
+         this.bA.put(pathtype, f);
+     }
+ 
++    public final boolean isAcceptablePathType(PathType pathtype) { return this.b(pathtype); } // Paper - OBFHELPER
+     public boolean b(PathType pathtype) {
+         return pathtype != PathType.DANGER_FIRE && pathtype != PathType.DANGER_CACTUS && pathtype != PathType.DANGER_OTHER;
+     }
+@@ -757,6 +758,11 @@ public abstract class EntityInsentient extends EntityLiving {
+         this.goalSelector.doTick();
+         this.world.getMethodProfiler().exit();
+         this.world.getMethodProfiler().enter("navigation");
++        // Paper start - async navigation
++        if (this.navigation instanceof AsyncNavigationAbstract)
++            ((AsyncNavigationAbstract) this.navigation).asyncTick();
++        else
++            // Paper end
+         this.navigation.c();
+         this.world.getMethodProfiler().exit();
+         this.world.getMethodProfiler().enter("mob tick");
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index 9b9318f840642520c6d2a903823c579b6b0e14c0..c6999f85b4171c5de3d509fd92dde95d6c555abc 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -115,7 +115,7 @@ public abstract class EntityLiving extends Entity {
+     public int hurtTimestamp;
+     private EntityLiving bz;
+     private int bA;
+-    private float bB;
++    private float bB; public final float getSpeed() { return this.bB; } // Paper - OBFHELPER
+     private int jumpTicks;
+     private float bD;
+     public ItemStack activeItem; // Paper - public
+@@ -2012,6 +2012,7 @@ public abstract class EntityLiving extends Entity {
+         return this.getAttributeMap().a(attributebase);
+     }
+ 
++    public final double getAttributeValue(AttributeBase attributebase) { return this.b(attributebase); } // Paper - OBFHELPER
+     public double b(AttributeBase attributebase) {
+         return this.getAttributeMap().c(attributebase);
+     }
+diff --git a/src/main/java/net/minecraft/server/Navigation.java b/src/main/java/net/minecraft/server/Navigation.java
+index 681465d8a74831461dce4615d2d19c7ed46bc299..590e58d0195d0e6e715b4d25d151774577acfcd5 100644
+--- a/src/main/java/net/minecraft/server/Navigation.java
++++ b/src/main/java/net/minecraft/server/Navigation.java
+@@ -2,7 +2,7 @@ package net.minecraft.server;
+ 
+ import java.util.Iterator;
+ 
+-public class Navigation extends NavigationAbstract {
++public class Navigation extends AsyncNavigationAbstract {
+ 
+     private boolean p;
+ 
+@@ -183,7 +183,7 @@ public class Navigation extends NavigationAbstract {
+                     double d3 = (double) j2 + 0.5D - vec3d.z;
+ 
+                     if (d2 * d0 + d3 * d1 >= 0.0D) {
+-                        PathType pathtype = this.o.a(this.b, i2, j - 1, j2, this.a, l, i1, j1, true, true);
++                        PathType pathtype = this.o.a(this.getNodeCreator().getChunkCache(), i2, j - 1, j2, this.a, l, i1, j1, true, true); // Paper - use chunk cache
+ 
+                         if (!this.a(pathtype)) {
+                             return false;
+diff --git a/src/main/java/net/minecraft/server/NavigationAbstract.java b/src/main/java/net/minecraft/server/NavigationAbstract.java
+index 345e3abdd9abb5d4686f18546a71af9d072b9227..f86a088369afa056b1d35a4ead2db75508d57e61 100644
+--- a/src/main/java/net/minecraft/server/NavigationAbstract.java
++++ b/src/main/java/net/minecraft/server/NavigationAbstract.java
+@@ -8,25 +8,25 @@ import javax.annotation.Nullable;
+ 
+ public abstract class NavigationAbstract {
+ 
+-    protected final EntityInsentient a; public Entity getEntity() { return a; } // Paper - OBFHELPER
+-    protected final World b;
++    protected final EntityInsentient a; public EntityInsentient getEntity() { return a; } // Paper - OBFHELPER
++    protected final World b; protected final World getWorld() { return this.b; } // Paper - OBFHELPER
+     @Nullable
+-    protected PathEntity c; protected final PathEntity getCurrentPath() { return this.c; } // Paper - OBFHELPER
+-    protected double d;
+-    protected int e;
+-    protected int f;
+-    protected Vec3D g;
+-    protected BaseBlockPosition h;
+-    protected long i;
+-    protected long j;
+-    protected double k;
+-    protected float l;
++    protected PathEntity c; protected final PathEntity getCurrentPath() { return this.c; } protected final void setCurrentPath(PathEntity path) { this.c = path; } // Paper - OBFHELPER
++    protected double d; protected final double getSpeed() { return this.d; } // Paper - OBFHELPER
++    protected int e; protected final int getCurrentTick() { return this.e; } protected final void incrementTick() { ++this.e; } // Paper - OBFHELPER
++    protected int f; protected final int getCurrentPathStartTime() { return this.f; } protected final void setCurrentPathStartTime(int time) { this.f = time; } // Paper - OBFHELPER
++    protected Vec3D g; protected final Vec3D getCurrentPathStartPosition() { return this.g; } protected final void setCurrentPathStartPosition(Vec3D position) { this.g = position; } // Paper - OBFHELPER
++    protected BaseBlockPosition h; protected final BaseBlockPosition getLastNodePosition() { return this.h; } protected final void setLastNodePosition(BaseBlockPosition position) { this.h = position; } // Paper - OBFHELPER
++    protected long i; protected final long getCurrentNodeStartTickMs() { return this.i; } protected final void addToCurrentNodeStartTickMs(long amount) { this.i += amount; } // Paper - OBFHELPER
++    protected long j; protected final long getLastActiveTickMs() { return this.j; } protected final void setLastActiveTickMs(long ms) { this.j = ms; } // Paper - OBFHELPER
++    protected double k; protected final double getCurrentNodeTimeout() { return this.k; } protected final void setCurrentNodeTimeout(double timeout) { this.k = timeout; } // Paper - OBFHELPER
++    protected float l; protected final float getChebyshevMinimumReachProximity() { return this.l; } protected final void setChebyshevMinimumReachProximity(float proximity) { this.l = proximity; } // Paper - OBFHELPER
+     protected boolean m; protected final boolean needsPathRecalculation() { return this.m; } // Tuinity - OBFHELPER
+     protected long n;
+-    protected PathfinderAbstract o;
+-    private BlockPosition p;
+-    private int q;
+-    private float r;
++    protected PathfinderAbstract o; protected final PathfinderAbstract getNodeCreator() { return this.o; } // Paper - OBFHELPER
++    private BlockPosition p; protected final BlockPosition getCurrentTarget() { return this.p; } protected final void setCurrentTarget(BlockPosition target) { this.p = target; } // Paper - OBFHELPER
++    private int q; protected final int getCurrentDistance() { return this.q; } // Paper - OBFHELPER
++    private float r; protected final float getRangeMultiplier() { return this.r; } // Paper - OBFHELPER
+     private final Pathfinder s; public Pathfinder getPathfinder() { return this.s; } // Paper - OBFHELPER
+ 
+     // Tuinity start
+@@ -70,6 +70,7 @@ public abstract class NavigationAbstract {
+         return this.m;
+     }
+ 
++    public final void recalculatePath() { this.j(); } // Paper - OBFHELPER
+     public void j() {
+         if (this.b.getTime() - this.n > 20L) {
+             if (this.p != null) {
+@@ -228,6 +229,7 @@ public abstract class NavigationAbstract {
+         return this.c;
+     }
+ 
++    public final void tick() { c(); } // Paper - OBFHELPER
+     public void c() {
+         ++this.e;
+         if (this.m) {
+@@ -275,6 +277,7 @@ public abstract class NavigationAbstract {
+         this.a(vec3d);
+     }
+ 
++    protected final boolean shouldTargetNextNodeInDirection(Vec3D direction) { return this.b(direction); } // Paper - OBFHELPER
+     private boolean b(Vec3D vec3d) {
+         if (this.c.e() <= this.c.f() + 1) {
+             return false;
+@@ -325,6 +328,7 @@ public abstract class NavigationAbstract {
+ 
+     }
+ 
++    protected final void resetStuckTimeout() { this.e(); } // Paper - OBFHELPER
+     private void e() {
+         this.h = BaseBlockPosition.ZERO;
+         this.i = 0L;
+@@ -344,8 +348,10 @@ public abstract class NavigationAbstract {
+         this.c = null;
+     }
+ 
++    protected final Vec3D getImaginaryEntityPosition() { return this.b(); } // Paper - OBFHELPER
+     protected abstract Vec3D b();
+ 
++    protected final boolean isAtValidPosition() { return this.a(); } // Paper - OBFHELPER
+     protected abstract boolean a();
+ 
+     protected boolean p() {
+@@ -391,7 +397,7 @@ public abstract class NavigationAbstract {
+     }
+ 
+     public void b(BlockPosition blockposition) {
+-        if (this.c != null && !this.c.b() && this.c.e() != 0) { // Tuinity - diff on change - needed for isViableForPathRecalculationChecking()
++        if (this.c != null && !this.c.b() && this.c.e() != 0) {
+             PathPoint pathpoint = this.c.c();
+             Vec3D vec3d = new Vec3D(((double) pathpoint.a + this.a.locX()) / 2.0D, ((double) pathpoint.b + this.a.locY()) / 2.0D, ((double) pathpoint.c + this.a.locZ()) / 2.0D);
+ 
+diff --git a/src/main/java/net/minecraft/server/NavigationFlying.java b/src/main/java/net/minecraft/server/NavigationFlying.java
+index 0c33a0c9d59d79a39826b5ee14144604717ffebe..9114c2f79b3f64bf95ea798dc490170a0c856c54 100644
+--- a/src/main/java/net/minecraft/server/NavigationFlying.java
++++ b/src/main/java/net/minecraft/server/NavigationFlying.java
+@@ -1,6 +1,6 @@
+ package net.minecraft.server;
+ 
+-public class NavigationFlying extends NavigationAbstract {
++public class NavigationFlying extends AsyncNavigationAbstract { // Paper - async navigation
+ 
+     public NavigationFlying(EntityInsentient entityinsentient, World world) {
+         super(entityinsentient, world);
+@@ -55,6 +55,39 @@ public class NavigationFlying extends NavigationAbstract {
+         }
+     }
+ 
++    @Override
++    public void asyncTick(PathEntity path) {
++        if (shouldContinueSearching(path)) return;
++
++        Vec3D vector;
++        if (this.isAtValidPosition())
++            this.applyPath(path);
++        else if (path.getNextIndex() < path.getSize()) {
++            vector = this.getImaginaryEntityPosition();
++            Vec3D position = path.getPosition(this.getEntity(), path.getNextIndex());
++
++            if (vector.getY() > position.getY()
++                && !this.getEntity().isOnGround()
++                && Math.floor(this.getEntity().locX()) == Math.floor(vector.getX())
++                && Math.floor(this.getEntity().locY()) == Math.floor(vector.getY())
++                && Math.floor(this.getEntity().locZ()) == Math.floor(vector.getZ())) {
++                path.setNextIndex(path.getNextIndex() + 1);
++            }
++        }
++
++        if (shouldContinueSearching(path)) return;
++
++        vector = path.getPosition(this.getEntity());
++        BlockPosition pos = new BlockPosition(vector);
++
++        this.getEntity().getControllerMove().setTargetPosition(
++            vector.getX(),
++            vector.getY(),
++            vector.getZ(),
++            this.getSpeed()
++        );
++    }
++
+     @Override
+     protected boolean a(Vec3D vec3d, Vec3D vec3d1, int i, int j, int k) {
+         int l = MathHelper.floor(vec3d.x);
+diff --git a/src/main/java/net/minecraft/server/PathEntity.java b/src/main/java/net/minecraft/server/PathEntity.java
+index 9154c01a22bc7b6d2dd390bb7b6e21ef52c8006c..bd03d6c7e2440c5bbef7633e9debeecda4b2d117 100644
+--- a/src/main/java/net/minecraft/server/PathEntity.java
++++ b/src/main/java/net/minecraft/server/PathEntity.java
+@@ -25,6 +25,7 @@ public class PathEntity {
+         ++this.e;
+     }
+ 
++    public final boolean isDone() { return this.b(); } // Paper - OBFHELPER
+     public boolean b() {
+         return this.e >= this.a.size();
+     }
+@@ -52,6 +53,7 @@ public class PathEntity {
+         this.a.set(i, pathpoint);
+     }
+ 
++    public final int getSize() { return this.e(); } // Paper - OBFHELPER
+     public int e() {
+         return this.a.size();
+     }
+@@ -60,10 +62,12 @@ public class PathEntity {
+         return this.e;
+     }
+ 
++    public final void setNextIndex(int index) { this.c(index); } // Paper - OBFHELPER
+     public void c(int i) {
+         this.e = i;
+     }
+ 
++    public final Vec3D getPosition(Entity entity, int index) { return this.a(entity, index); } // Paper - OBFHELPER
+     public Vec3D a(Entity entity, int i) {
+         PathPoint pathpoint = (PathPoint) this.a.get(i);
+         double d0 = (double) pathpoint.a + (double) ((int) (entity.getWidth() + 1.0F)) * 0.5D;
+@@ -73,6 +77,7 @@ public class PathEntity {
+         return new Vec3D(d0, d1, d2);
+     }
+ 
++    public final Vec3D getPosition(Entity entity) { return this.a(entity); } // Paper - OBFHELPER
+     public Vec3D a(Entity entity) {
+         return this.a(entity, this.e);
+     }
+@@ -83,6 +88,7 @@ public class PathEntity {
+         return new BaseBlockPosition(pathpoint.a, pathpoint.b, pathpoint.c);
+     }
+ 
++    public final PathPoint getCurrentPoint() { return this.h(); } // Paper - OBFHELPER
+     public PathPoint h() {
+         return (PathPoint) this.a.get(this.e);
+     }
+@@ -114,6 +120,7 @@ public class PathEntity {
+         return "Path(length=" + this.a.size() + ")";
+     }
+ 
++    public final BlockPosition getDestination() { return this.m(); } // Paper - OBFHELPER
+     public BlockPosition m() {
+         return this.f;
+     }
+diff --git a/src/main/java/net/minecraft/server/PathPoint.java b/src/main/java/net/minecraft/server/PathPoint.java
+index e9fb295bdf727cd4543cbe5a18447ceba3d41ee0..65125c95ff0e89b3b7db5252a0ec8ea4844a94a5 100644
+--- a/src/main/java/net/minecraft/server/PathPoint.java
++++ b/src/main/java/net/minecraft/server/PathPoint.java
+@@ -14,7 +14,7 @@ public class PathPoint {
+     public boolean i;
+     public float j;
+     public float k;
+-    public PathType l;
++    public PathType l; public final PathType getType() { return this.l; } // Paper - OBFHELPER
+ 
+     public PathPoint(int i, int j, int k) {
+         this.l = PathType.BLOCKED;
+diff --git a/src/main/java/net/minecraft/server/Pathfinder.java b/src/main/java/net/minecraft/server/Pathfinder.java
+index 22424e7e97015aae2ce3dc6c42eecef257e354e0..3df06064d9b20fac42b1e140caab308751e1002b 100644
+--- a/src/main/java/net/minecraft/server/Pathfinder.java
++++ b/src/main/java/net/minecraft/server/Pathfinder.java
+@@ -22,6 +22,7 @@ public class Pathfinder {
+         this.b = i;
+     }
+ 
++    @Nullable public PathEntity findPathToAny(ChunkCache chunkcache, EntityInsentient entityinsentient, Set<BlockPosition> set, float f, int i, float f1) { return a(chunkcache, entityinsentient, set, f, i, f1); } // Paper - OBFHELPER
+     @Nullable
+     public PathEntity a(ChunkCache chunkcache, EntityInsentient entityinsentient, Set<BlockPosition> set, float f, int i, float f1) {
+         this.d.a();
+diff --git a/src/main/java/net/minecraft/server/PathfinderAbstract.java b/src/main/java/net/minecraft/server/PathfinderAbstract.java
+index 5cfcac3bc29e3f3d139b10209f5082cba292a434..5a338c2289cd993a7243e6512ec758e992f48490 100644
+--- a/src/main/java/net/minecraft/server/PathfinderAbstract.java
++++ b/src/main/java/net/minecraft/server/PathfinderAbstract.java
+@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+ 
+ public abstract class PathfinderAbstract {
+ 
+-    protected ChunkCache a;
++    protected ChunkCache a; protected final ChunkCache getChunkCache() { return this.a; } // Paper - OBFHELPER
+     protected EntityInsentient b;
+     protected final Int2ObjectMap<PathPoint> c = new Int2ObjectOpenHashMap();
+     protected int d;
+diff --git a/src/main/java/net/minecraft/server/PathfinderNormal.java b/src/main/java/net/minecraft/server/PathfinderNormal.java
+index ec55785af2b432b692d3a3bf4298ffb32489bf3b..29c978aaa2b9f50f5dba70943653af7658d98fc7 100644
+--- a/src/main/java/net/minecraft/server/PathfinderNormal.java
++++ b/src/main/java/net/minecraft/server/PathfinderNormal.java
+@@ -194,6 +194,7 @@ public class PathfinderNormal extends PathfinderAbstract {
+         return true;
+     }
+ 
++    public static double getFeetY(IBlockAccess iblockaccess, BlockPosition blockposition) { return a(iblockaccess, blockposition); } // Paper - OBFHELPER
+     public static double a(IBlockAccess iblockaccess, BlockPosition blockposition) {
+         BlockPosition blockposition1 = blockposition.down();
+         VoxelShape voxelshape = iblockaccess.getType(blockposition1).getCollisionShape(iblockaccess, blockposition1);
+diff --git a/src/main/java/net/minecraft/server/PathfinderTurtle.java b/src/main/java/net/minecraft/server/PathfinderTurtle.java
+index cea160885783e8666b616375eac44ba6d1880e1f..faeb374e6dad859ff52d5955024d03f3359762f8 100644
+--- a/src/main/java/net/minecraft/server/PathfinderTurtle.java
++++ b/src/main/java/net/minecraft/server/PathfinderTurtle.java
+@@ -148,7 +148,7 @@ public class PathfinderTurtle extends PathfinderNormal {
+                 if (pathtype == PathType.OPEN) {
+                     AxisAlignedBB axisalignedbb = new AxisAlignedBB((double) i - d2 + 0.5D, (double) j + 0.001D, (double) k - d2 + 0.5D, (double) i + d2 + 0.5D, (double) ((float) j + this.b.getHeight()), (double) k + d2 + 0.5D);
+ 
+-                    if (!this.b.world.getCubes(this.b, axisalignedbb)) {
++                    if (!this.getChunkCache().getCubes(this.b, axisalignedbb)) { // Paper - use chunk cache
+                         return null;
+                     }
+ 
+diff --git a/src/main/java/net/minecraft/server/PathfinderWater.java b/src/main/java/net/minecraft/server/PathfinderWater.java
+index fba6692a1e537b90e20aa448567c0ad6db653332..00e584c5cd46276e9275b2aee61ba7c7000f9289 100644
+--- a/src/main/java/net/minecraft/server/PathfinderWater.java
++++ b/src/main/java/net/minecraft/server/PathfinderWater.java
+@@ -63,7 +63,7 @@ public class PathfinderWater extends PathfinderAbstract {
+     @Override
+     protected PathPoint a(int i, int j, int k) {
+         PathPoint pathpoint = null;
+-        PathType pathtype = this.a(this.b.world, i, j, k);
++        PathType pathtype = this.a(this.getChunkCache(), i, j, k); // Paper - use chunk cache
+         float f = this.b.a(pathtype);
+ 
+         if (f >= 0.0F) {
