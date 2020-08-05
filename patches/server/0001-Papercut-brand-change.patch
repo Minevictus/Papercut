@@ -128,7 +128,7 @@ index 229c3b0f0c650b501f31147adaa17194af57fedd..d7716cbc90f96673a35fcaa825bf0c1d
                      throwable = throwable1;
                      throw throwable1;
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index bb54a4aa718360ce38308ab23bde3669376bf595..95e6cfe3973b9345ee81afde95bda031441dc2e4 100644
+index d6b1cb8c48ff731837f07b80882be3dcc0258211..302d09466b8af544aa84b38d0f805b3c74c5079c 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1506,7 +1506,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas

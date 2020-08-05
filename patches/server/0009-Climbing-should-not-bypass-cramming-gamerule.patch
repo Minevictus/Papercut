@@ -19,7 +19,7 @@ Original patch: https://raw.githubusercontent.com/pl3xgaming/Purpur/master/patch
  11 files changed, 34 insertions(+), 13 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 3db19a9bab8ffdc42f280a27c867bf7d1a1ab9e7..d04126a9b489ca42bfc49af9bdd27f406f89fd6f 100644
+index db62601ea730c0c2fbc6469248ad92e81502f578..19c9d6846aadd2e5dd0d73c574aafc7fe802233a 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
 @@ -1695,7 +1695,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
@@ -45,9 +45,9 @@ index 3db19a9bab8ffdc42f280a27c867bf7d1a1ab9e7..d04126a9b489ca42bfc49af9bdd27f40
 +    // Papercut end
      // CraftBukkit end
  
-     public void runKillTrigger(Entity entity, int kills, DamageSource damageSource) { this.a(entity, kills, damageSource); } // Paper - OBFHELPER
+     public final void runKillTrigger(Entity entity, int kills, DamageSource damageSource) { this.a(entity, kills, damageSource); } // Paper - OBFHELPER
 diff --git a/src/main/java/net/minecraft/server/EntityArmorStand.java b/src/main/java/net/minecraft/server/EntityArmorStand.java
-index 250bccee4a27801b41c50d59e93396c696ab6974..6fc0a85852bab65b8c92ce7c58f6525543ff7687 100644
+index 98b0f1efb506803dfd213ad45a48adb365094a83..7f1d9f577d483000f018dd6d35bcb43a5e461009 100644
 --- a/src/main/java/net/minecraft/server/EntityArmorStand.java
 +++ b/src/main/java/net/minecraft/server/EntityArmorStand.java
 @@ -318,7 +318,7 @@ public class EntityArmorStand extends EntityLiving {
@@ -99,7 +99,7 @@ index 364697e0155012c300219ad94a3995809e6c2f8f..e933ee4b1737fb15e805195a64e25238
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index 8a773d7de4b8eb2f6846ca277e1ef0af2a86abec..9b9318f840642520c6d2a903823c579b6b0e14c0 100644
+index b1143468374296c960b0d01dbaf022f208252d12..e3e2eec93a4374ea6cc7fadca580b775af56141b 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
 @@ -2834,7 +2834,7 @@ public abstract class EntityLiving extends Entity {

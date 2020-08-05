@@ -38,7 +38,7 @@ index 578f7809cb09e746778d05b153e02c569f0d1d90..afa01dd383320027f83b03e0aff39a53
          this.setPVP(dedicatedserverproperties.pvp);
          this.setAllowFlight(dedicatedserverproperties.allowFlight);
 diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
-index 4a956f36812f36ea9898cb9e0c231ddb5eaa12cd..584d71dbd9543dcb014fd41e420edfc5095e2eba 100644
+index 21f34b82f030773dfc79bdef164a664ceabcc992..e9751e305de1356a3c5e0546d22e5dc4a68c51a4 100644
 --- a/src/main/java/net/minecraft/server/World.java
 +++ b/src/main/java/net/minecraft/server/World.java
 @@ -95,6 +95,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {

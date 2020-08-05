@@ -158,7 +158,7 @@ index 6f18a789805163de63561569e84d9fa1b3dabb61..b3ab1f021f2681053b73f6bc8a04b65f
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 72cd52fd7f0ba8df5be8989111d76e7180f033d7..fa9487803d3d74f62255a0a0215e8fdeafb1a897 100644
+index adf918fd757fe3147f897de3ade64a9adf1d3203..92419f5cb1e9d5c9714b19355c223de3f63440c4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -130,6 +130,7 @@ import org.bukkit.plugin.messaging.StandardMessenger;

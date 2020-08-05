@@ -11,7 +11,7 @@ Subject: [PATCH] Add unsafe Entity serialization API
  4 files changed, 43 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index d04126a9b489ca42bfc49af9bdd27f406f89fd6f..31fe6d6acd5e3b416b6043f5ddfbc2cdd8f78c05 100644
+index 19c9d6846aadd2e5dd0d73c574aafc7fe802233a..deda9848d6b130e57706147f5d46f86a3100c267 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
 @@ -1733,6 +1733,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
