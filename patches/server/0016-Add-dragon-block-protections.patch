@@ -41,10 +41,10 @@ index 63a759cc18b5b765bc9d34f71dd775fd35dee280..6ec55cb6627a86654e9ab79a17de204e
          if (this.bN.a().getControllerPhase() == DragonControllerPhase.DYING) {
              return false;
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
-index 60e7fcf6e7c9d45e7849a78d4b55ee1d058d380b..fd4ac1332b5d60b1627cf3a2dfeb9e138ea558f1 100644
+index dcc76b475a3a8fbfbcfdef1bd596dd77abc29ca2..023e8dd896d473dbe7b37a2e105c34bf0eb86fe5 100644
 --- a/src/main/java/us/minevict/papercut/PapercutConfig.java
 +++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
-@@ -117,6 +117,11 @@ public final class PapercutConfig {
+@@ -112,6 +112,11 @@ public final class PapercutConfig {
      trampleChanges = getBoolean("trample-changes", trampleChanges);
    }
  

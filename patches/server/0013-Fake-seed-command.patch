@@ -25,11 +25,11 @@ index fc3b3f2390e9f92f4ecbbf1cf6a5e83214aa2241..c2e1bbdf99dd5c63454d0c2ed2d74898
                  return chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.COPY_TO_CLIPBOARD, String.valueOf(i))).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.copy.click"))).setInsertion(String.valueOf(i));
              }));
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
-index 95770fd094ec0f6a3fc44dcc161d38555a18d04f..608ef5c9350280d9bdf95cf6a250aeadaae2fb5e 100644
+index 28adee3258eb7d72fd53c6bdf5d86167aa840fab..db2a624e49a535520cec3bf07e8b21a6ac919711 100644
 --- a/src/main/java/us/minevict/papercut/PapercutConfig.java
 +++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
-@@ -107,6 +107,11 @@ public final class PapercutConfig {
-     asyncAdvancements = getBoolean("async-advancements", asyncAdvancements);
+@@ -102,6 +102,11 @@ public final class PapercutConfig {
+     return PapercutConfig.config.getDouble(path, dfl);
    }
  
 +  public static boolean seedCommandChange = true;

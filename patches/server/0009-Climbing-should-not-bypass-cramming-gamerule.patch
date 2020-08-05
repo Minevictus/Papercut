@@ -189,10 +189,10 @@ index a52dd0c021e264a57a62bde27ea9d2a6a97e2335..2c766b09ff39540950546ad0b63d74ba
              } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).ey())) {
                  return false;
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
-index 1256b689481f9d31dc2fbbf6072293c293ed6c2e..95770fd094ec0f6a3fc44dcc161d38555a18d04f 100644
+index 878d1b6c7d3382203e200bb152c290df40e6725d..28adee3258eb7d72fd53c6bdf5d86167aa840fab 100644
 --- a/src/main/java/us/minevict/papercut/PapercutConfig.java
 +++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
-@@ -215,5 +215,10 @@ public final class PapercutConfig {
+@@ -210,5 +210,10 @@ public final class PapercutConfig {
        }
        return this.config.getDouble(path, this.worldDefaults.getDouble(path));
      }
