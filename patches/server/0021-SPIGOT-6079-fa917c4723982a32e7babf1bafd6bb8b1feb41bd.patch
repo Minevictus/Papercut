@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Mon, 17 Aug 2020 18:21:15 +0200
+Subject: [PATCH] SPIGOT-6079: fa917c4723982a32e7babf1bafd6bb8b1feb41bd
+
+Drop once Paper updates upstream!
+---
+ src/main/java/org/bukkit/craftbukkit/CraftServer.java | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index f2a4edeb2e7163c1a452371ed23509efd8a56ef2..2a63afd8e837c012cfb18eaebb659db604f84554 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -1112,9 +1112,7 @@ public final class CraftServer implements Server {
+ 
+         boolean hardcore = creator.hardcore();
+ 
+-        IRegistryCustom.Dimension iregistrycustom_dimension = IRegistryCustom.b();
+-
+-        RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.a((DynamicOps) DynamicOpsNBT.a, console.dataPackResources.h(), iregistrycustom_dimension);
++        RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.a((DynamicOps) DynamicOpsNBT.a, console.dataPackResources.h(), console.f);
+         WorldDataServer worlddata = (WorldDataServer) worldSession.a((DynamicOps) registryreadops, console.datapackconfiguration);
+ 
+         WorldSettings worldSettings;
