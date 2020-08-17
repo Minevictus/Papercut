@@ -4,32 +4,11 @@ Date: Tue, 4 Aug 2020 14:10:07 +0200
 Subject: [PATCH] Apply advancements async
 
 ---
- .../com/destroystokyo/paper/PaperConfig.java  | 11 --------
  .../server/AdvancementDataPlayer.java         |  1 +
- .../net/minecraft/server/EntityPlayer.java    | 25 ++++++++++++++++--
- .../java/net/minecraft/server/PlayerList.java | 26 +++++++++++++++++--
- 4 files changed, 48 insertions(+), 15 deletions(-)
+ .../net/minecraft/server/EntityPlayer.java    | 25 +++++++++++++++++--
+ .../java/net/minecraft/server/PlayerList.java | 23 +++++++++++++++--
+ 3 files changed, 45 insertions(+), 4 deletions(-)
 
-diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-index 60f03502a7fd622d2de3b2da9fe8014b289f3d31..56e4359ba32339e1bef58061585ff3e12e4215f3 100644
---- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
-+++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-@@ -435,15 +435,4 @@ public class PaperConfig {
-         allowPistonDuplication = getBoolean("settings.unsupported-settings.allow-piston-duplication", config.getBoolean("settings.unsupported-settings.allow-tnt-duplication", false));
-         set("settings.unsupported-settings.allow-tnt-duplication", null);
-     }
--
--    public static int playerAutoSaveRate = -1;
--    public static int maxPlayerAutoSavePerTick = 10;
--    private static void playerAutoSaveRate() {
--        playerAutoSaveRate = getInt("settings.player-auto-save-rate", -1);
--        maxPlayerAutoSavePerTick = getInt("settings.max-player-auto-save-per-tick", -1);
--        if (maxPlayerAutoSavePerTick == -1) { // -1 Automatic / "Recommended"
--            // 10 should be safe for everyone unless you mass spamming player auto save
--            maxPlayerAutoSavePerTick = (playerAutoSaveRate == -1 || playerAutoSaveRate > 100) ? 10 : 20;
--        }
--    }
- }
 diff --git a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 index 17789407b9e86896a963a305a13357286aa5f319..cf539c98073b475eb5b769c8cc11d48a7e6d58f1 100644
 --- a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
@@ -108,7 +87,7 @@ index a947aabfc8c886b5a4be2626e06aa24c04e6f79b..169ea4d47260d8e89616ae26e3508a8c
      }
  
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index f9eb17cb6eda0b343240240720495751cf605385..8065908927074d1fa8a13e09cde9cac3fd8b090a 100644
+index f9eb17cb6eda0b343240240720495751cf605385..4b3ddad0b01ebea52d8305506f4aaa3d6e8125c9 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
 @@ -18,6 +18,7 @@ import java.util.Map;
@@ -128,15 +107,12 @@ index f9eb17cb6eda0b343240240720495751cf605385..8065908927074d1fa8a13e09cde9cac3
  
          if (advancementdataplayer != null) {
              advancementdataplayer.b();
-@@ -1334,9 +1335,30 @@ public abstract class PlayerList {
+@@ -1334,9 +1335,27 @@ public abstract class PlayerList {
          return serverstatisticmanager;
      }
  
 +    // Paper start - async advancements
 +    public CompletableFuture<AdvancementDataPlayer> loadAdvancementDataPlayerAsync(EntityPlayer entityPlayer) {
-+        if (!com.destroystokyo.paper.PaperConfig.asyncAdvancements) {
-+            return CompletableFuture.completedFuture(f(entityPlayer));
-+        }
 +        if (entityPlayer.getAdvancementDataIfLoadedImmediately() != null) {
 +            entityPlayer.getAdvancementData().setPlayer(entityPlayer);
 +            return CompletableFuture.completedFuture(entityPlayer.getAdvancementData());

@@ -4,11 +4,29 @@ Date: Thu, 28 May 2020 10:43:25 +0200
 Subject: [PATCH] Raw methods
 
 ---
+ .../net/minecraft/server/EntityLiving.java     |  4 ++--
  .../bukkit/craftbukkit/entity/CraftEntity.java | 18 ++++++++++++++++++
- .../craftbukkit/entity/CraftLivingEntity.java  |  9 +++++++++
+ .../craftbukkit/entity/CraftLivingEntity.java  | 10 ++++++++++
  .../bukkit/craftbukkit/entity/CraftPlayer.java | 14 ++++++++++++++
- 3 files changed, 41 insertions(+)
+ 4 files changed, 44 insertions(+), 2 deletions(-)
 
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index aba9f08db6b6e104456765d311e5863b276cd2bc..ee41f8d0bcaa43da684accc1f7e3ee9055e399cb 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -80,10 +80,10 @@ public abstract class EntityLiving extends Entity {
+     public int maxNoDamageTicks;
+     public final float ay;
+     public final float az;
+-    public float aA;
++    public float aA; public final void setBodyYaw(float yaw) { this.aA = yaw; } // Papercut - OBFHELPER
+     public float aB;
+     public float aC;
+-    public float aD;
++    public float aD; public final void setPrevHeadYaw(float yaw) { this.aD = yaw; } // Papercut - OBFHELPER
+     public float aE;
+     @Nullable
+     public EntityHuman killer;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 index b932acd6ccc30c0112ca4754b5c8200b79616111..f08fc3cc3fcf6c1f632fe51337d0b288362de10a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
@@ -37,10 +55,10 @@ index b932acd6ccc30c0112ca4754b5c8200b79616111..f08fc3cc3fcf6c1f632fe51337d0b288
 +    // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 3777aba5f32f58f4620d4fe496af4e641ff8c858..3291dd19e3aa2567092574781742121f4351b070 100644
+index 3777aba5f32f58f4620d4fe496af4e641ff8c858..e0d1c2384500293bc0bede161fbc46ed9d0159f3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -752,4 +752,13 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -752,4 +752,14 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
      }
  
      // Paper end
@@ -49,8 +67,9 @@ index 3777aba5f32f58f4620d4fe496af4e641ff8c858..3291dd19e3aa2567092574781742121f
 +    @Override
 +    public void rawRotate(float yaw, float pitch) {
 +        rawRotateClamped(yaw, pitch);
-+        getHandle().aK = getHandle().yaw;
-+        getHandle().aL = getHandle().yaw;
++        getHandle().setPrevHeadYaw(getHandle().yaw);
++        getHandle().setBodyYaw(getHandle().yaw);
++        // getHandle().aL = getHandle().yaw; // Why? This is flyingSpeed in yarn.
 +    }
 +    // Papercut end
  }
