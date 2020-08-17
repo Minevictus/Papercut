@@ -12,7 +12,7 @@ Subject: [PATCH] Add EntityTeleportHinderedEvent
  5 files changed, 77 insertions(+), 3 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/BlockEnderPortal.java b/src/main/java/net/minecraft/server/BlockEnderPortal.java
-index c08038a930537109e5a0e4bafd742b3a0c36f44c..b27d0984cee7c852328e644ba1f1a9e0834d0f83 100644
+index b8f5350ac8e58a3466c2f8a6fffbc6235795d2d4..da878fdb07776de2ee3ebc71486c9faf889d9e3b 100644
 --- a/src/main/java/net/minecraft/server/BlockEnderPortal.java
 +++ b/src/main/java/net/minecraft/server/BlockEnderPortal.java
 @@ -3,6 +3,8 @@ package net.minecraft.server;
@@ -50,10 +50,10 @@ index c08038a930537109e5a0e4bafd742b3a0c36f44c..b27d0984cee7c852328e644ba1f1a9e0
              WorldServer worldserver = ((WorldServer) world).getMinecraftServer().getWorldServer(resourcekey);
  
 diff --git a/src/main/java/net/minecraft/server/BlockPortal.java b/src/main/java/net/minecraft/server/BlockPortal.java
-index 77f8d5e6662fa75e622f07b3e6efae04c38735fe..107c182becf2dd7b72522f817587d182b0462294 100644
+index 4132cd4c6f13cfa1c0cda43daaa908ff3c07f32b..f2abb014cee279216df5f83f075a992a109d64d3 100644
 --- a/src/main/java/net/minecraft/server/BlockPortal.java
 +++ b/src/main/java/net/minecraft/server/BlockPortal.java
-@@ -10,6 +10,8 @@ import org.bukkit.craftbukkit.block.CraftBlockState;
+@@ -8,6 +8,8 @@ import org.bukkit.craftbukkit.block.CraftBlockState;
  import org.bukkit.event.entity.EntityPortalEnterEvent;
  import org.bukkit.event.world.PortalCreateEvent;
  // CraftBukkit end
@@ -62,7 +62,7 @@ index 77f8d5e6662fa75e622f07b3e6efae04c38735fe..107c182becf2dd7b72522f817587d182
  
  public class BlockPortal extends Block {
  
-@@ -91,7 +93,23 @@ public class BlockPortal extends Block {
+@@ -63,7 +65,23 @@ public class BlockPortal extends Block {
  
      @Override
      public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
@@ -88,7 +88,7 @@ index 77f8d5e6662fa75e622f07b3e6efae04c38735fe..107c182becf2dd7b72522f817587d182
              EntityPortalEnterEvent event = new EntityPortalEnterEvent(entity.getBukkitEntity(), new org.bukkit.Location(world.getWorld(), blockposition.getX(), blockposition.getY(), blockposition.getZ()));
              world.getServer().getPluginManager().callEvent(event);
 diff --git a/src/main/java/net/minecraft/server/TileEntityEndGateway.java b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
-index 89537dec8ed278e79e078cb2fd3d3e839cdbab59..f324634e30bb4ab477f2c0db3e985afaf6b77eaf 100644
+index 5d158e72378c02032fe6043696b9e3dd82e71e5c..3e67e0935846162f5e606854c91513a487b11334 100644
 --- a/src/main/java/net/minecraft/server/TileEntityEndGateway.java
 +++ b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
 @@ -12,6 +12,8 @@ import org.bukkit.Location;
@@ -100,10 +100,10 @@ index 89537dec8ed278e79e078cb2fd3d3e839cdbab59..f324634e30bb4ab477f2c0db3e985afa
  
  public class TileEntityEndGateway extends TileEntityEnderPortal implements ITickable {
  
-@@ -121,6 +123,26 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
+@@ -126,6 +128,26 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
      }
  
-     public void a(Entity entity) {
+     public void b(Entity entity) {
 +        // Papercut start
 +        if (!entity.canPortal()) {
 +            return;
@@ -128,10 +128,10 @@ index 89537dec8ed278e79e078cb2fd3d3e839cdbab59..f324634e30bb4ab477f2c0db3e985afa
              this.c = 100;
              if (this.exitPortal == null && this.world.getTypeKey() == DimensionManager.THE_END) { // CraftBukkit - work in alternate worlds
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 6f18a789805163de63561569e84d9fa1b3dabb61..b3ab1f021f2681053b73f6bc8a04b65fcfffd08d 100644
+index f1710a53fa0440281013221b4c518ecaf1707fc4..b932acd6ccc30c0112ca4754b5c8200b79616111 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -168,6 +168,7 @@ import org.bukkit.plugin.Plugin;
+@@ -170,6 +170,7 @@ import org.bukkit.plugin.Plugin;
  import org.bukkit.util.BoundingBox;
  import org.bukkit.util.NumberConversions;
  import org.bukkit.util.Vector;
@@ -139,7 +139,7 @@ index 6f18a789805163de63561569e84d9fa1b3dabb61..b3ab1f021f2681053b73f6bc8a04b65f
  
  public abstract class CraftEntity implements org.bukkit.entity.Entity {
      private static PermissibleBase perm;
-@@ -507,7 +508,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -513,7 +514,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          Preconditions.checkArgument(location != null, "location");
          location.checkFinite();
  
@@ -158,10 +158,10 @@ index 6f18a789805163de63561569e84d9fa1b3dabb61..b3ab1f021f2681053b73f6bc8a04b65f
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index adf918fd757fe3147f897de3ade64a9adf1d3203..92419f5cb1e9d5c9714b19355c223de3f63440c4 100644
+index 0088701e2a29d6e372ba487b3a0cc1b6c7249dac..2e9e7534b6e5118aee9ad726a13deca336fe6c40 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -130,6 +130,7 @@ import org.bukkit.plugin.messaging.StandardMessenger;
+@@ -127,6 +127,7 @@ import org.bukkit.plugin.messaging.StandardMessenger;
  import org.bukkit.scoreboard.Scoreboard;
  
  import net.md_5.bungee.api.chat.BaseComponent; // Spigot
@@ -169,7 +169,7 @@ index adf918fd757fe3147f897de3ade64a9adf1d3203..92419f5cb1e9d5c9714b19355c223de3
  
  @DelegateDeserialization(CraftOfflinePlayer.class)
  public class CraftPlayer extends CraftHumanEntity implements Player {
-@@ -775,6 +776,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -772,6 +773,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          }
  
          if (entity.isVehicle()) {

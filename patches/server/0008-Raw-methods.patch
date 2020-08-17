@@ -10,10 +10,10 @@ Subject: [PATCH] Raw methods
  3 files changed, 41 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index b3ab1f021f2681053b73f6bc8a04b65fcfffd08d..c60b50fac7255fc0a74919cb11ffc15444243dbb 100644
+index b932acd6ccc30c0112ca4754b5c8200b79616111..f08fc3cc3fcf6c1f632fe51337d0b288362de10a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1137,4 +1137,22 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1143,4 +1143,22 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return getHandle().isInLava();
      }
      // Paper end
@@ -55,10 +55,10 @@ index 3777aba5f32f58f4620d4fe496af4e641ff8c858..3291dd19e3aa2567092574781742121f
 +    // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 92419f5cb1e9d5c9714b19355c223de3f63440c4..9a73f30d9a41581f2d6e4e545f9a7f4718266e7d 100644
+index 2e9e7534b6e5118aee9ad726a13deca336fe6c40..3b9b3225d703a6d487d302c80b539e1612386572 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2161,4 +2161,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -2158,4 +2158,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return spigot;
      }
      // Spigot end

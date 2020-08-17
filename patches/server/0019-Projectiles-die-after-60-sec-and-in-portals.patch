@@ -8,7 +8,7 @@ Subject: [PATCH] Projectiles die after 60 sec and in portals
  1 file changed, 15 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/IProjectile.java b/src/main/java/net/minecraft/server/IProjectile.java
-index 6e175e30a6c1fc69bd2f8417d2df38ee1b78545b..21f75681804b92e32fe74337f042cd87fb0be3ef 100644
+index 9f5ce64a60fe7c312399ee416b11b84213dd3bee..89307720b283f09b22ad6fd5725413aef3db9f8f 100644
 --- a/src/main/java/net/minecraft/server/IProjectile.java
 +++ b/src/main/java/net/minecraft/server/IProjectile.java
 @@ -67,6 +67,11 @@ public abstract class IProjectile extends Entity {

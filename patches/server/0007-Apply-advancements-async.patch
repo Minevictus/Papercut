@@ -4,25 +4,31 @@ Date: Tue, 4 Aug 2020 14:10:07 +0200
 Subject: [PATCH] Apply advancements async
 
 ---
- .../com/destroystokyo/paper/PaperConfig.java  |  5 ++++
+ .../com/destroystokyo/paper/PaperConfig.java  | 11 --------
  .../server/AdvancementDataPlayer.java         |  1 +
  .../net/minecraft/server/EntityPlayer.java    | 25 ++++++++++++++++--
  .../java/net/minecraft/server/PlayerList.java | 26 +++++++++++++++++--
- 4 files changed, 53 insertions(+), 4 deletions(-)
+ 4 files changed, 48 insertions(+), 15 deletions(-)
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-index 56e4359ba32339e1bef58061585ff3e12e4215f3..29200d223cf7c5948ebd0907ef5a1d9ea8114c81 100644
+index 60f03502a7fd622d2de3b2da9fe8014b289f3d31..56e4359ba32339e1bef58061585ff3e12e4215f3 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-@@ -435,4 +435,9 @@ public class PaperConfig {
+@@ -435,15 +435,4 @@ public class PaperConfig {
          allowPistonDuplication = getBoolean("settings.unsupported-settings.allow-piston-duplication", config.getBoolean("settings.unsupported-settings.allow-tnt-duplication", false));
          set("settings.unsupported-settings.allow-tnt-duplication", null);
      }
-+
-+    public static boolean asyncAdvancements;
-+    private static void asyncAdvancements() {
-+        asyncAdvancements = getBoolean("settings.async-advancements", asyncAdvancements);
-+    }
+-
+-    public static int playerAutoSaveRate = -1;
+-    public static int maxPlayerAutoSavePerTick = 10;
+-    private static void playerAutoSaveRate() {
+-        playerAutoSaveRate = getInt("settings.player-auto-save-rate", -1);
+-        maxPlayerAutoSavePerTick = getInt("settings.max-player-auto-save-per-tick", -1);
+-        if (maxPlayerAutoSavePerTick == -1) { // -1 Automatic / "Recommended"
+-            // 10 should be safe for everyone unless you mass spamming player auto save
+-            maxPlayerAutoSavePerTick = (playerAutoSaveRate == -1 || playerAutoSaveRate > 100) ? 10 : 20;
+-        }
+-    }
  }
 diff --git a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 index 17789407b9e86896a963a305a13357286aa5f319..cf539c98073b475eb5b769c8cc11d48a7e6d58f1 100644
@@ -37,10 +43,10 @@ index 17789407b9e86896a963a305a13357286aa5f319..cf539c98073b475eb5b769c8cc11d48a
          this.player = entityplayer;
      }
 diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
-index e5a81f831813209d224ffedbc03f6d8243721a25..11d3b43e4bbf719ffb7bb0c98d56a28ad025df9c 100644
+index a947aabfc8c886b5a4be2626e06aa24c04e6f79b..169ea4d47260d8e89616ae26e3508a8cc5cdc0b5 100644
 --- a/src/main/java/net/minecraft/server/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/EntityPlayer.java
-@@ -14,6 +14,7 @@ import java.util.List;
+@@ -15,6 +15,7 @@ import java.util.Optional;
  import java.util.OptionalInt;
  import java.util.Random;
  import java.util.UUID;
@@ -48,7 +54,7 @@ index e5a81f831813209d224ffedbc03f6d8243721a25..11d3b43e4bbf719ffb7bb0c98d56a28a
  import javax.annotation.Nullable;
  import org.apache.logging.log4j.LogManager;
  import org.apache.logging.log4j.Logger;
-@@ -47,7 +48,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -49,7 +50,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
      public final MinecraftServer server;
      public final PlayerInteractManager playerInteractManager;
      public final Deque<Integer> removeQueue = new ArrayDeque<>(); // Paper
@@ -58,24 +64,24 @@ index e5a81f831813209d224ffedbc03f6d8243721a25..11d3b43e4bbf719ffb7bb0c98d56a28a
      private final ServerStatisticManager serverStatisticManager;
      private float lastHealthScored = Float.MIN_VALUE;
      private int lastFoodScored = Integer.MIN_VALUE;
-@@ -130,7 +132,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -133,7 +135,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
          this.playerInteractManager = playerinteractmanager;
          this.server = minecraftserver;
          this.serverStatisticManager = minecraftserver.getPlayerList().getStatisticManager(this);
 -        this.advancementDataPlayer = minecraftserver.getPlayerList().f(this);
 +        this.advancementDataPlayerCompletableFuture = minecraftserver.getPlayerList().loadAdvancementDataPlayerAsync(this); // Paper - async advancements
          this.G = 1.0F;
-         //this.b(worldserver); // Paper - don't move to spawn on login, only first join
+         //this.c(worldserver); // Paper - don't move to spawn on login, only first join
  
-@@ -494,6 +496,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
-             CriterionTriggers.u.a(this, this.cm, this.ticksLived - this.cn);
+@@ -499,6 +501,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+             CriterionTriggers.u.a(this, this.cf, this.ticksLived - this.cg);
          }
  
 +        if (areAdvancementsLoaded()) // Paper - async advancements: don't tick advancements until they're loaded
          this.advancementDataPlayer.b(this);
      }
  
-@@ -1886,7 +1889,25 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -1852,7 +1855,25 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
          this.worldChangeInvuln = false;
      }
  
@@ -102,7 +108,7 @@ index e5a81f831813209d224ffedbc03f6d8243721a25..11d3b43e4bbf719ffb7bb0c98d56a28a
      }
  
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index 9382e8f79e8edec8885c629a36e230fbec50e1fb..85ffd82615d81dcb7767ab9ec84884dc44266db3 100644
+index f9eb17cb6eda0b343240240720495751cf605385..8065908927074d1fa8a13e09cde9cac3fd8b090a 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
 @@ -18,6 +18,7 @@ import java.util.Map;
@@ -113,7 +119,7 @@ index 9382e8f79e8edec8885c629a36e230fbec50e1fb..85ffd82615d81dcb7767ab9ec84884dc
  import javax.annotation.Nullable;
  import org.apache.logging.log4j.LogManager;
  import org.apache.logging.log4j.Logger;
-@@ -489,7 +490,7 @@ public abstract class PlayerList {
+@@ -490,7 +491,7 @@ public abstract class PlayerList {
              serverstatisticmanager.save();
          }
  
@@ -122,7 +128,7 @@ index 9382e8f79e8edec8885c629a36e230fbec50e1fb..85ffd82615d81dcb7767ab9ec84884dc
  
          if (advancementdataplayer != null) {
              advancementdataplayer.b();
-@@ -1310,9 +1311,30 @@ public abstract class PlayerList {
+@@ -1334,9 +1335,30 @@ public abstract class PlayerList {
          return serverstatisticmanager;
      }
  

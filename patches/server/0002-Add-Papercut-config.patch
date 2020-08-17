@@ -26,7 +26,7 @@ index 5dfa0658838c4801cdf260eae8b98163f729e5af..7afae12df248bd7731f14633bf71a166
  
          new TimingsExport(listeners, parent, history).start();
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index 578f7809cb09e746778d05b153e02c569f0d1d90..afa01dd383320027f83b03e0aff39a530f97c4f2 100644
+index 5907caa742002879327163005e95003e48043685..bf3fa2bc8d41272b1129f903b7beaacc8058fca4 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
 @@ -171,6 +171,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
@@ -38,7 +38,7 @@ index 578f7809cb09e746778d05b153e02c569f0d1d90..afa01dd383320027f83b03e0aff39a53
          this.setPVP(dedicatedserverproperties.pvp);
          this.setAllowFlight(dedicatedserverproperties.allowFlight);
 diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
-index 21f34b82f030773dfc79bdef164a664ceabcc992..e9751e305de1356a3c5e0546d22e5dc4a68c51a4 100644
+index 4834f7569a865fb01c0c905d78bb391e05370475..c7267eb40356f6d575deeae5bd06c26e02e4082c 100644
 --- a/src/main/java/net/minecraft/server/World.java
 +++ b/src/main/java/net/minecraft/server/World.java
 @@ -95,6 +95,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
@@ -49,19 +49,19 @@ index 21f34b82f030773dfc79bdef164a664ceabcc992..e9751e305de1356a3c5e0546d22e5dc4
  
      public final co.aikar.timings.WorldTimingsHandler timings; // Paper
      public static BlockPosition lastPhysicsProblem; // Spigot
-@@ -122,6 +123,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
-     protected World(WorldDataMutable worlddatamutable, ResourceKey<World> resourcekey, ResourceKey<DimensionManager> resourcekey1, DimensionManager dimensionmanager, Supplier<GameProfilerFiller> supplier, boolean flag, boolean flag1, long i, org.bukkit.generator.ChunkGenerator gen, org.bukkit.World.Environment env, java.util.concurrent.Executor executor) {
-         this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((WorldDataServer) worlddatamutable).getName()); // Spigot
+@@ -128,6 +129,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
          this.paperConfig = new com.destroystokyo.paper.PaperWorldConfig((((WorldDataServer)worlddatamutable).getName()), this.spigotConfig); // Paper
-+        this.papercutConfig = new us.minevict.papercut.PapercutConfig.WorldConfig(((WorldDataServer)worlddatamutable).getName()); // Papercut
-         this.chunkPacketBlockController = this.paperConfig.antiXray ? new ChunkPacketBlockControllerAntiXray(this.paperConfig, executor) : ChunkPacketBlockController.NO_OPERATION_INSTANCE; // Paper - Anti-Xray
+         this.chunkPacketBlockController = this.paperConfig.antiXray ? new ChunkPacketBlockControllerAntiXray(this, executor) : ChunkPacketBlockController.NO_OPERATION_INSTANCE; // Paper - Anti-Xray
          this.tuinityConfig = new com.tuinity.tuinity.config.TuinityConfig.WorldConfig(((WorldDataServer)worlddatamutable).getName()); // Tuinity - Server Config
++        this.papercutConfig = new us.minevict.papercut.PapercutConfig.WorldConfig(((WorldDataServer)worlddatamutable).getName()); // Papercut
          this.generator = gen;
+         this.world = new CraftWorld((WorldServer) this, gen, env);
+         this.ticksPerAnimalSpawns = this.getServer().getTicksPerAnimalSpawns(); // CraftBukkit
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 108577662844140ca8378bc922f2269dd33d9d8d..0161a37f766ebc6bbb1d002fbfebbca0d27f33f2 100644
+index 26bfff3333b5121c6028a9c25a0bc83a4d9dddb2..906ffb3ca2b00f12c6f40d90eadd81f06875c81c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -849,6 +849,7 @@ public final class CraftServer implements Server {
+@@ -848,6 +848,7 @@ public final class CraftServer implements Server {
          org.spigotmc.SpigotConfig.init((File) console.options.valueOf("spigot-settings")); // Spigot
          com.destroystokyo.paper.PaperConfig.init((File) console.options.valueOf("paper-settings")); // Paper
          com.tuinity.tuinity.config.TuinityConfig.init((File) console.options.valueOf("tuinity-settings")); // Tuinity - Server Config
@@ -69,7 +69,7 @@ index 108577662844140ca8378bc922f2269dd33d9d8d..0161a37f766ebc6bbb1d002fbfebbca0
          for (WorldServer world : console.getWorlds()) {
              world.worldDataServer.setDifficulty(config.difficulty);
              world.setSpawnFlags(config.spawnMonsters, config.spawnAnimals);
-@@ -884,6 +885,7 @@ public final class CraftServer implements Server {
+@@ -883,6 +884,7 @@ public final class CraftServer implements Server {
              world.spigotConfig.init(); // Spigot
              world.paperConfig.init(); // Paper
              world.tuinityConfig.init(); // Tuinity - Server Config
@@ -77,7 +77,7 @@ index 108577662844140ca8378bc922f2269dd33d9d8d..0161a37f766ebc6bbb1d002fbfebbca0
          }
  
          Plugin[] pluginClone = pluginManager.getPlugins().clone(); // Paper
-@@ -2251,6 +2253,9 @@ public final class CraftServer implements Server {
+@@ -2247,6 +2249,9 @@ public final class CraftServer implements Server {
          }
          // Tuinity end - add config to timings report
  
@@ -88,7 +88,7 @@ index 108577662844140ca8378bc922f2269dd33d9d8d..0161a37f766ebc6bbb1d002fbfebbca0
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 5071108285fa6396de1779fb9951aee41f432459..01bbff12160a910618033acbda9783b349d11f26 100644
+index 27f598a29408ff0e58ea2fa042c74e88c3f9572f..00091fd73bef8ccedd11f1268a31938e31051fc7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -146,6 +146,14 @@ public class Main {

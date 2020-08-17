@@ -26,10 +26,10 @@ Just added Bukkit's event system and took a few liberties with dead code and com
  create mode 100644 src/main/java/com/destroystokyo/paper/util/RedstoneWireTurbo.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index e471e764935e2a89560de56959a782b02e5e8fe1..8cc8134f701d2517d134077b2fcd223106c09478 100644
+index d5a1ade21749bba420257f3ece7878f32148d6ff..9b96b1b326169e7963d828eb9d0612c3c8cb428a 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -665,4 +665,14 @@ public class PaperWorldConfig {
+@@ -654,4 +654,14 @@ public class PaperWorldConfig {
              maxLightningFlashDistance = 512; // Vanilla value
          }
      }
@@ -1144,10 +1144,10 @@ index 7b3ccded0451f7b6634aeca0bdc1b5cc94f52b96..6abc3d4cfbe8f5cc1dbe83031d90ee8d
                  c(iblockdata, world, blockposition);
                  world.a(blockposition, false);
 diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
-index e9751e305de1356a3c5e0546d22e5dc4a68c51a4..95b7869d35479ca62a97e11b66530df846324658 100644
+index c7267eb40356f6d575deeae5bd06c26e02e4082c..7fef0ebe42ff105abd118014dbe4e19a1893e2be 100644
 --- a/src/main/java/net/minecraft/server/World.java
 +++ b/src/main/java/net/minecraft/server/World.java
-@@ -673,6 +673,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
+@@ -614,6 +614,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
  
      }
  
@@ -1155,7 +1155,7 @@ index e9751e305de1356a3c5e0546d22e5dc4a68c51a4..95b7869d35479ca62a97e11b66530df8
      public void a(BlockPosition blockposition, Block block, BlockPosition blockposition1) {
          if (!this.isClientSide) {
              IBlockData iblockdata = this.getType(blockposition);
-@@ -1340,6 +1341,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
+@@ -1274,6 +1275,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
          return this.getBlockFacePower(blockposition.down(), EnumDirection.DOWN) > 0 ? true : (this.getBlockFacePower(blockposition.up(), EnumDirection.UP) > 0 ? true : (this.getBlockFacePower(blockposition.north(), EnumDirection.NORTH) > 0 ? true : (this.getBlockFacePower(blockposition.south(), EnumDirection.SOUTH) > 0 ? true : (this.getBlockFacePower(blockposition.west(), EnumDirection.WEST) > 0 ? true : this.getBlockFacePower(blockposition.east(), EnumDirection.EAST) > 0))));
      }
  

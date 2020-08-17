@@ -8,7 +8,7 @@ Subject: [PATCH] Papercut brand change
  1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 4004ff5d3b9285c737dffcfee5ab48a164de6fc9..020a5087486e62ba1386aee65549399e83e026ab 100644
+index 95a99b7b55a980b9ad81a0d536507cf890464260..cf34d33dae12df8740cf66940fc719096d1a9bc0 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -3,18 +3,18 @@
@@ -26,7 +26,7 @@ index 4004ff5d3b9285c737dffcfee5ab48a164de6fc9..020a5087486e62ba1386aee65549399e
  
 -    <artifactId>tuinity-api</artifactId>
 +    <artifactId>papercut-api</artifactId> <!-- Papercut -->
-     <version>1.16.1-R0.1-SNAPSHOT</version>
+     <version>1.16.2-R0.1-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Tuinity-API</name>

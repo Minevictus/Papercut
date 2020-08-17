@@ -10,10 +10,10 @@ Subject: [PATCH] Ignore discounts API
  3 files changed, 33 insertions(+), 2 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/EntityVillager.java b/src/main/java/net/minecraft/server/EntityVillager.java
-index bf019043a9338aca8d91da809f1d5520531386e7..9aabf9c498c6ed50add4acc49f195002e5eebef2 100644
+index c10ff09dd005c0c8b3cd374d9de82e77efcd9097..6f0dc9ecde03e7f2fd0ac6f14a47b5230b74bd1f 100644
 --- a/src/main/java/net/minecraft/server/EntityVillager.java
 +++ b/src/main/java/net/minecraft/server/EntityVillager.java
-@@ -390,6 +390,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
+@@ -391,6 +391,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
  
              while (iterator.hasNext()) {
                  MerchantRecipe merchantrecipe = (MerchantRecipe) iterator.next();
@@ -21,7 +21,7 @@ index bf019043a9338aca8d91da809f1d5520531386e7..9aabf9c498c6ed50add4acc49f195002
  
                  // CraftBukkit start
                  int bonus = -MathHelper.d((float) i * merchantrecipe.getPriceMultiplier());
-@@ -409,6 +410,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
+@@ -410,6 +411,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
  
              while (iterator1.hasNext()) {
                  MerchantRecipe merchantrecipe1 = (MerchantRecipe) iterator1.next();

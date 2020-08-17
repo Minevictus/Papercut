@@ -8,7 +8,7 @@ Subject: [PATCH] Make reloading explode the user
  1 file changed, 8 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index a74b161d9b0701f8df5cbcef72944fd37dfc0065..f1eec258ef87c4e79b0eb0b3e318d24708ffa57b 100644
+index 7cdab6b329fdad0059372fa87e55951da4da3844..f2a4edeb2e7163c1a452371ed23509efd8a56ef2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -1,5 +1,6 @@
@@ -18,7 +18,7 @@ index a74b161d9b0701f8df5cbcef72944fd37dfc0065..f1eec258ef87c4e79b0eb0b3e318d247
  import com.google.common.base.Charsets;
  import com.google.common.base.Function;
  import com.google.common.base.Preconditions;
-@@ -818,6 +819,13 @@ public final class CraftServer implements Server {
+@@ -817,6 +818,13 @@ public final class CraftServer implements Server {
  
      @Override
      public void reload() {

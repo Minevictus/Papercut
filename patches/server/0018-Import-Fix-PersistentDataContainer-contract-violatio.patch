@@ -11,10 +11,10 @@ https://github.com/PaperMC/Paper/pull/3990
  2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/src/main/java/net/minecraft/server/TileEntity.java b/src/main/java/net/minecraft/server/TileEntity.java
-index e1f1d6e33fd76bd11eb23e78457ba711bf9d5cde..63a41520ecd28dbeb0061b56abb37820c2ec7d76 100644
+index e48fbf6280e107ab3a288f9099373df0fd6fccbd..7b58d6c7bec216e61e05d5c8a9c76aed82065f72 100644
 --- a/src/main/java/net/minecraft/server/TileEntity.java
 +++ b/src/main/java/net/minecraft/server/TileEntity.java
-@@ -16,7 +16,7 @@ public abstract class TileEntity implements KeyedObject, Cloneable { // Paper //
+@@ -16,7 +16,7 @@ public abstract class TileEntity implements KeyedObject { // Paper
  
      public Timing tickTimer = MinecraftTimings.getTileEntityTimings(this); // Paper
      // CraftBukkit start - data containers

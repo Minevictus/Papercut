@@ -9,7 +9,7 @@ Subject: [PATCH] Add dragon block protections
  2 files changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/src/main/java/net/minecraft/server/EntityEnderDragon.java b/src/main/java/net/minecraft/server/EntityEnderDragon.java
-index 63a759cc18b5b765bc9d34f71dd775fd35dee280..6ec55cb6627a86654e9ab79a17de204ea18e1ed6 100644
+index 6b2c5e8d4640e19d33cbfe76d2399e6100890dbc..cfd800331853df7935f863a42fadcec2c80aae95 100644
 --- a/src/main/java/net/minecraft/server/EntityEnderDragon.java
 +++ b/src/main/java/net/minecraft/server/EntityEnderDragon.java
 @@ -415,7 +415,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
@@ -38,7 +38,7 @@ index 63a759cc18b5b765bc9d34f71dd775fd35dee280..6ec55cb6627a86654e9ab79a17de204e
 +    // Papercut end
 +
      public boolean a(EntityComplexPart entitycomplexpart, DamageSource damagesource, float f) {
-         if (this.bN.a().getControllerPhase() == DragonControllerPhase.DYING) {
+         if (this.bG.a().getControllerPhase() == DragonControllerPhase.DYING) {
              return false;
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
 index dcc76b475a3a8fbfbcfdef1bd596dd77abc29ca2..023e8dd896d473dbe7b37a2e105c34bf0eb86fe5 100644

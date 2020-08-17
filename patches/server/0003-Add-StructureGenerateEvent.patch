@@ -4,11 +4,13 @@ Date: Tue, 28 Apr 2020 13:52:06 -0300
 Subject: [PATCH] Add StructureGenerateEvent
 
 ---
- .../java/net/minecraft/server/ChunkGenerator.java     | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ .../java/net/minecraft/server/ChunkGenerator.java    | 12 +++++++++++-
+ .../java/net/minecraft/server/StructureFeature.java  |  2 +-
+ .../net/minecraft/server/StructureGenerator.java     |  1 +
+ 3 files changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/ChunkGenerator.java b/src/main/java/net/minecraft/server/ChunkGenerator.java
-index ee6726e5c664115417c6397aa153315c8eb835a9..311032ed9f668734c14fae20aece315116dd13ab 100644
+index 9a6fef215052f9c513b23024968995c97863a453..9c2fbd04ad28efd3db2bc4d1ed75e38e8e3849f9 100644
 --- a/src/main/java/net/minecraft/server/ChunkGenerator.java
 +++ b/src/main/java/net/minecraft/server/ChunkGenerator.java
 @@ -1,5 +1,6 @@
@@ -18,27 +20,55 @@ index ee6726e5c664115417c6397aa153315c8eb835a9..311032ed9f668734c14fae20aece3151
  import com.google.common.collect.Lists;
  import com.mojang.serialization.Codec;
  import java.util.BitSet;
-@@ -9,6 +10,7 @@ import java.util.ListIterator;
- import java.util.Random;
+@@ -10,6 +11,7 @@ import java.util.Random;
  import java.util.function.Function;
+ import java.util.function.Supplier;
  import javax.annotation.Nullable;
 +import org.bukkit.StructureType; // Papercut
  
  public abstract class ChunkGenerator {
  
-@@ -233,6 +235,15 @@ public abstract class ChunkGenerator {
-         updateStructureSettings(structuremanager.getWorld(), structureSettings); // Spigot
-         StructureStart<?> structurestart1 = structurefeature.a(this, this.b, definedstructuremanager, i, chunkcoordintpair, biomebase, j, this.structureSettings.a(structurefeature.b));
+@@ -234,9 +236,17 @@ public abstract class ChunkGenerator {
+         if (structuresettingsfeature != null) {
+             StructureStart<?> structurestart1 = structurefeature.a(iregistrycustom, this, this.b, definedstructuremanager, i, chunkcoordintpair, biomebase, j, structuresettingsfeature);
  
-+        // Papercut start
-+        StructureGenerateEvent event = new StructureGenerateEvent(
-+            structuremanager.getWorld().getWorld(),
-+            StructureType.getStructureTypes().get(structurefeature.b.i().toLowerCase()),
-+            chunkcoordintpair.x,
-+            chunkcoordintpair.z
-+        );
-+        if (event.callEvent())
-+        // Papercut end
-         structuremanager.a(SectionPosition.a(ichunkaccess.getPos(), 0), structurefeature.b, structurestart1, ichunkaccess);
++            // Papercut start
++            StructureGenerateEvent event = new StructureGenerateEvent(
++                structuremanager.getWorld().getWorld(),
++                StructureType.getStructureTypes().get(structurefeature.getFeature().getRegistryKey().toLowerCase()),
++                chunkcoordintpair.x,
++                chunkcoordintpair.z
++            );
++            if (event.callEvent())
++            // Papercut end
+             structuremanager.a(SectionPosition.a(ichunkaccess.getPos(), 0), structurefeature.d, structurestart1, ichunkaccess);
+         }
+-
      }
  
+     // Spigot start
+diff --git a/src/main/java/net/minecraft/server/StructureFeature.java b/src/main/java/net/minecraft/server/StructureFeature.java
+index 8e3c0c3783b767c2ba603b3b50200ac76a7fc33e..3245eddd7544e6e84bb290994ef3a3e7a6ef8c58 100644
+--- a/src/main/java/net/minecraft/server/StructureFeature.java
++++ b/src/main/java/net/minecraft/server/StructureFeature.java
+@@ -11,7 +11,7 @@ public class StructureFeature<FC extends WorldGenFeatureConfiguration, F extends
+     }, StructureGenerator::h);
+     public static final Codec<Supplier<StructureFeature<?, ?>>> b = RegistryFileCodec.a(IRegistry.av, StructureFeature.a);
+     public static final Codec<List<Supplier<StructureFeature<?, ?>>>> c = RegistryFileCodec.b(IRegistry.av, StructureFeature.a);
+-    public final F d;
++    public final F d; public final F getFeature() { return this.d; } // Papercut - OBFHELPER
+     public final FC e;
+ 
+     public StructureFeature(F f0, FC fc) {
+diff --git a/src/main/java/net/minecraft/server/StructureGenerator.java b/src/main/java/net/minecraft/server/StructureGenerator.java
+index c3bd58069d8dbdf36f70f1dafd7c24000f31708b..50cc13abc56293434443ba0c883ffcefaf4f19a1 100644
+--- a/src/main/java/net/minecraft/server/StructureGenerator.java
++++ b/src/main/java/net/minecraft/server/StructureGenerator.java
+@@ -227,6 +227,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
+ 
+     public abstract StructureGenerator.a<C> a();
+ 
++    public final String getRegistryKey() { return this.i(); } // Papercut - OBFHELPER
+     public String i() {
+         return (String) StructureGenerator.a.inverse().get(this);
+     }
