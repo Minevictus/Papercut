@@ -58,7 +58,7 @@ index 4834f7569a865fb01c0c905d78bb391e05370475..c7267eb40356f6d575deeae5bd06c26e
          this.world = new CraftWorld((WorldServer) this, gen, env);
          this.ticksPerAnimalSpawns = this.getServer().getTicksPerAnimalSpawns(); // CraftBukkit
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 26bfff3333b5121c6028a9c25a0bc83a4d9dddb2..906ffb3ca2b00f12c6f40d90eadd81f06875c81c 100644
+index 0ce727ebd109c7f3985ed241587a070c7e00b3bb..d71a9cda01ee7e17c0b8dceb53b93c216388fbf9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -848,6 +848,7 @@ public final class CraftServer implements Server {
@@ -77,7 +77,7 @@ index 26bfff3333b5121c6028a9c25a0bc83a4d9dddb2..906ffb3ca2b00f12c6f40d90eadd81f0
          }
  
          Plugin[] pluginClone = pluginManager.getPlugins().clone(); // Paper
-@@ -2247,6 +2249,9 @@ public final class CraftServer implements Server {
+@@ -2245,6 +2247,9 @@ public final class CraftServer implements Server {
          }
          // Tuinity end - add config to timings report
  
@@ -88,7 +88,7 @@ index 26bfff3333b5121c6028a9c25a0bc83a4d9dddb2..906ffb3ca2b00f12c6f40d90eadd81f0
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 27f598a29408ff0e58ea2fa042c74e88c3f9572f..00091fd73bef8ccedd11f1268a31938e31051fc7 100644
+index 25895798a8ffa9acf6f579a9e69b25b93a2410fc..18d1f321305d66b9bf49501c45c1bbe9eb9f1702 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -146,6 +146,14 @@ public class Main {

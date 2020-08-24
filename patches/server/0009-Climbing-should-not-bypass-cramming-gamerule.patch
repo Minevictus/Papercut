@@ -18,7 +18,7 @@ Original patch: https://raw.githubusercontent.com/pl3xgaming/Purpur/master/patch
  10 files changed, 33 insertions(+), 12 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 6c0d8fdaf2fd08bd53ef2cc2485132d54f3d841a..e4f7b3101946f750d78e12cbd984411b5248058b 100644
+index 958f361a55dd5e2eada56088b0d53a54c2dd76c3..b5ac04fb812d96f3c91cc42d6f432a05af3c665c 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
 @@ -1684,7 +1684,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke

@@ -8,7 +8,7 @@ Subject: [PATCH] Ban EntityTrackerFixer
  1 file changed, 6 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 906ffb3ca2b00f12c6f40d90eadd81f06875c81c..7cdab6b329fdad0059372fa87e55951da4da3844 100644
+index d71a9cda01ee7e17c0b8dceb53b93c216388fbf9..744667a8fa780a312ade861832529ebf5ee2fa56 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -410,6 +410,12 @@ public final class CraftServer implements Server {
