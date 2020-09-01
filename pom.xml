@@ -47,7 +47,6 @@
     </build>
     <modules>
         <module>Papercut-API</module>
-        <module>Papercut-MojangAPI</module>
         <module>Papercut-Server</module>
     </modules>
 </project>
