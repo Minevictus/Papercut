@@ -18,7 +18,7 @@ Original patch: https://raw.githubusercontent.com/pl3xgaming/Purpur/master/patch
  10 files changed, 33 insertions(+), 12 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 958f361a55dd5e2eada56088b0d53a54c2dd76c3..b5ac04fb812d96f3c91cc42d6f432a05af3c665c 100644
+index fd633ab8d24753ceebd7183ac2208ff56e14e612..d242478023ce03b115d81823ae4bd9472e39398a 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
 @@ -1684,7 +1684,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
@@ -46,7 +46,7 @@ index 958f361a55dd5e2eada56088b0d53a54c2dd76c3..b5ac04fb812d96f3c91cc42d6f432a05
  
      public final void runKillTrigger(Entity entity, int kills, DamageSource damageSource) { this.a(entity, kills, damageSource); } // Paper - OBFHELPER
 diff --git a/src/main/java/net/minecraft/server/EntityArmorStand.java b/src/main/java/net/minecraft/server/EntityArmorStand.java
-index 70c2c2e3e42f9c9d03ccb07d20db246436d0e676..881fa7958586a9851cf4acec9e050178a5a602a9 100644
+index 81df71b7e165b8702575176550a587cdb8744beb..b8149eee10d8f058e106b60828e9e451338974e4 100644
 --- a/src/main/java/net/minecraft/server/EntityArmorStand.java
 +++ b/src/main/java/net/minecraft/server/EntityArmorStand.java
 @@ -320,7 +320,7 @@ public class EntityArmorStand extends EntityLiving {
@@ -98,7 +98,7 @@ index 8921c2333cd5efcb87dd52b95fe12fd5340df55f..67ea2ceda5928da06c4f1a7d87f4ceed
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index ee41f8d0bcaa43da684accc1f7e3ee9055e399cb..94344d72531cb32b2baee7d4f943fd9077f3d8d2 100644
+index 76987c3f204056b59d364c37f8ba3e659e49cf64..b0b5a3669eb5359459222682dfb667a0442e42a3 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
 @@ -2837,7 +2837,7 @@ public abstract class EntityLiving extends Entity {
@@ -152,10 +152,10 @@ index 34e08dda2e16cd4a6ecd8d8c6dc89f090ec2bc56..2569c17239887c5ff91302a0d4c38f03
  
      @Override
 diff --git a/src/main/java/net/minecraft/server/IEntitySelector.java b/src/main/java/net/minecraft/server/IEntitySelector.java
-index 06ce390b6492f23343e57e648bff241d96fdb7b6..a8eb35cb7d5e6cb0157001cf739df18b59280b32 100644
+index a9b0c78d6dba8c6ff7d524e2828f0ee7832e059e..ff87796ab5f6afd171a756a1d14546f0aff49f6a 100644
 --- a/src/main/java/net/minecraft/server/IEntitySelector.java
 +++ b/src/main/java/net/minecraft/server/IEntitySelector.java
-@@ -43,11 +43,17 @@ public final class IEntitySelector {
+@@ -42,11 +42,17 @@ public final class IEntitySelector {
      }
  
      public static Predicate<Entity> a(Entity entity) {

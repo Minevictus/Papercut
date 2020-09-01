@@ -22,7 +22,7 @@ index 17789407b9e86896a963a305a13357286aa5f319..cf539c98073b475eb5b769c8cc11d48a
          this.player = entityplayer;
      }
 diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
-index a947aabfc8c886b5a4be2626e06aa24c04e6f79b..169ea4d47260d8e89616ae26e3508a8cc5cdc0b5 100644
+index 73ea9518316ff465e86fe95143875c9de5aa2fa8..36b04066f7d0b47ec13c0a844c736cabe891d2d0 100644
 --- a/src/main/java/net/minecraft/server/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/EntityPlayer.java
 @@ -15,6 +15,7 @@ import java.util.Optional;
@@ -60,7 +60,7 @@ index a947aabfc8c886b5a4be2626e06aa24c04e6f79b..169ea4d47260d8e89616ae26e3508a8c
          this.advancementDataPlayer.b(this);
      }
  
-@@ -1852,7 +1855,25 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -1853,7 +1856,25 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
          this.worldChangeInvuln = false;
      }
  
@@ -87,7 +87,7 @@ index a947aabfc8c886b5a4be2626e06aa24c04e6f79b..169ea4d47260d8e89616ae26e3508a8c
      }
  
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index f9eb17cb6eda0b343240240720495751cf605385..4b3ddad0b01ebea52d8305506f4aaa3d6e8125c9 100644
+index 787e80c50a61d6bd80efd8bd0d4b5140908aaeed..c2ac671d5d4a05a24307794cde20c623f168e68c 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
 @@ -18,6 +18,7 @@ import java.util.Map;
@@ -107,7 +107,7 @@ index f9eb17cb6eda0b343240240720495751cf605385..4b3ddad0b01ebea52d8305506f4aaa3d
  
          if (advancementdataplayer != null) {
              advancementdataplayer.b();
-@@ -1334,9 +1335,27 @@ public abstract class PlayerList {
+@@ -1333,9 +1334,27 @@ public abstract class PlayerList {
          return serverstatisticmanager;
      }
  
