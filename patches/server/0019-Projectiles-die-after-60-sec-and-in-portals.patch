@@ -4,11 +4,11 @@ Date: Thu, 30 Jul 2020 11:57:24 +0200
 Subject: [PATCH] Projectiles die after 60 sec and in portals
 
 ---
- .../java/net/minecraft/server/IProjectile.java    | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ .../java/net/minecraft/server/IProjectile.java     | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/IProjectile.java b/src/main/java/net/minecraft/server/IProjectile.java
-index 9f5ce64a60fe7c312399ee416b11b84213dd3bee..89307720b283f09b22ad6fd5725413aef3db9f8f 100644
+index 9f5ce64a60fe7c312399ee416b11b84213dd3bee..f860647d5ba848330aae9d75dddbc17b2e15ef99 100644
 --- a/src/main/java/net/minecraft/server/IProjectile.java
 +++ b/src/main/java/net/minecraft/server/IProjectile.java
 @@ -67,6 +67,11 @@ public abstract class IProjectile extends Entity {
@@ -23,7 +23,7 @@ index 9f5ce64a60fe7c312399ee416b11b84213dd3bee..89307720b283f09b22ad6fd5725413ae
          if (!this.d) {
              this.d = this.h();
          }
-@@ -74,6 +79,16 @@ public abstract class IProjectile extends Entity {
+@@ -74,6 +79,15 @@ public abstract class IProjectile extends Entity {
          super.tick();
      }
  
@@ -32,8 +32,7 @@ index 9f5ce64a60fe7c312399ee416b11b84213dd3bee..89307720b283f09b22ad6fd5725413ae
 +    protected void doPortalTick() {
 +        if (this.inPortal && !(this instanceof EntityThrownTrident)) {
 +            die();
-+        }
-+        super.doPortalTick();
++        } else if (isAlive() && this.valid) super.doPortalTick();
 +    }
 +    // Papercut end
 +
