@@ -26,7 +26,7 @@ index 5dfa0658838c4801cdf260eae8b98163f729e5af..7afae12df248bd7731f14633bf71a166
  
          new TimingsExport(listeners, parent, history).start();
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index 5907caa742002879327163005e95003e48043685..bf3fa2bc8d41272b1129f903b7beaacc8058fca4 100644
+index c4bbe44639e017df6cc679489a09852edf285f6f..157a2f210f7c2432889eb8ef76fba2def55a9515 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
 @@ -171,6 +171,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
@@ -38,7 +38,7 @@ index 5907caa742002879327163005e95003e48043685..bf3fa2bc8d41272b1129f903b7beaacc
          this.setPVP(dedicatedserverproperties.pvp);
          this.setAllowFlight(dedicatedserverproperties.allowFlight);
 diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
-index 699dc4343384b2e347f144125a1f703f59f7cbbe..f09aea66fe90eb82a9dff1c5139cf6b728b92b0c 100644
+index a490662e06285ea604bb5a58aa110fcbdcd3d9c6..eeadeeb642ec8733ec63e86be754d2950002f86f 100644
 --- a/src/main/java/net/minecraft/server/World.java
 +++ b/src/main/java/net/minecraft/server/World.java
 @@ -95,6 +95,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
@@ -58,7 +58,7 @@ index 699dc4343384b2e347f144125a1f703f59f7cbbe..f09aea66fe90eb82a9dff1c5139cf6b7
          this.world = new CraftWorld((WorldServer) this, gen, env);
          this.ticksPerAnimalSpawns = this.getServer().getTicksPerAnimalSpawns(); // CraftBukkit
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index d94c51f8113786ad31abf0a760843efada935b5d..b0830442f99a0d87a52bee8a4c3826de007b6377 100644
+index 95ee85340893aeef2d7af11e9f7174d449d49c06..5589c2a3d5028634a633e6cb1b2b3fb74c19ae29 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -855,6 +855,7 @@ public final class CraftServer implements Server {
@@ -88,7 +88,7 @@ index d94c51f8113786ad31abf0a760843efada935b5d..b0830442f99a0d87a52bee8a4c3826de
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 25895798a8ffa9acf6f579a9e69b25b93a2410fc..18d1f321305d66b9bf49501c45c1bbe9eb9f1702 100644
+index aa1870d168b4955c1a61479b9b58277b480384d0..225a532f7f8ac0d09ca09d8b1c67a90e4de04323 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -146,6 +146,14 @@ public class Main {

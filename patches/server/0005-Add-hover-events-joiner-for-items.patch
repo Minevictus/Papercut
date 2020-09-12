@@ -51,7 +51,7 @@ index 0000000000000000000000000000000000000000..d4efe68451d79bf5ffb70a7d5def091f
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index bf3fa2bc8d41272b1129f903b7beaacc8058fca4..d763e11f2f58aff41140b2d188add4f23f1be643 100644
+index 157a2f210f7c2432889eb8ef76fba2def55a9515..1e1b2d286f1814ba60c301d6fa67e6ee03c37915 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
 @@ -205,6 +205,8 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
@@ -61,5 +61,5 @@ index bf3fa2bc8d41272b1129f903b7beaacc8058fca4..d763e11f2f58aff41140b2d188add4f2
 +        com.destroystokyo.paper.ItemStackHoverConstructor.setup(); // Paper
 +
          // CraftBukkit start
-         // this.a((PlayerList) (new DedicatedPlayerList(this, this.f, this.worldNBTStorage))); // Spigot - moved up
+         // this.a((PlayerList) (new DedicatedPlayerList(this, this.customRegistry, this.worldNBTStorage))); // Spigot - moved up
          server.loadPlugins();

@@ -22,7 +22,7 @@ index 17789407b9e86896a963a305a13357286aa5f319..cf539c98073b475eb5b769c8cc11d48a
          this.player = entityplayer;
      }
 diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
-index 73ea9518316ff465e86fe95143875c9de5aa2fa8..36b04066f7d0b47ec13c0a844c736cabe891d2d0 100644
+index 11fa231caa5be12a43e646eb2c0300e597d25dd2..75f53d1a1c45c2313ebe0e9b7a84932cee67d284 100644
 --- a/src/main/java/net/minecraft/server/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/EntityPlayer.java
 @@ -15,6 +15,7 @@ import java.util.Optional;

@@ -14,17 +14,17 @@ Subject: [PATCH] Papercut brand change
  7 files changed, 25 insertions(+), 20 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index ee19a287443127e19db8f01a826490d506553964..4f19c5bbcea0d6f97a7a8fa21de34bde4fd151bf 100644
+index f009b05e4c2ab0f093150a9eecff5629db35b517..a0d8ec8df226e0342386628b37e997413b5360bd 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,11 +1,11 @@
-  <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
      <modelVersion>4.0.0</modelVersion>
 -    <artifactId>tuinity</artifactId>
 +    <artifactId>papercut</artifactId> <!-- Papercut -->
      <packaging>jar</packaging>
-     <version>1.16.2-R0.1-SNAPSHOT</version>
+     <version>1.16.3-R0.1-SNAPSHOT</version>
 -    <name>Tuinity-Server</name>
 -    <url>https://github.com/Spottedleaf/Tuinity</url>
 +    <name>Papercut</name> <!-- Papercut -->
@@ -73,7 +73,7 @@ index ee19a287443127e19db8f01a826490d506553964..4f19c5bbcea0d6f97a7a8fa21de34bde
                  </configuration>
                  <executions>
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index 255bbd6e48b95c70fad02ba692c64c7579496827..a2b58ef201f81af64dc73e1afb7e71d0c54ece19 100644
+index 255bbd6e48b95c70fad02ba692c64c7579496827..fb76cf9a6fd889c507a31cfebe1e2a6188d7c469 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 @@ -13,7 +13,7 @@ import java.net.URL;
@@ -81,7 +81,7 @@ index 255bbd6e48b95c70fad02ba692c64c7579496827..a2b58ef201f81af64dc73e1afb7e71d0
  public class PaperVersionFetcher implements VersionFetcher {
      private static final java.util.regex.Pattern VER_PATTERN = java.util.regex.Pattern.compile("^([0-9\\.]*)\\-.*R"); // R is an anchor, will always give '-R' at end
 -    private static final String GITHUB_BRANCH_NAME = "master";
-+    private static final String GITHUB_BRANCH_NAME = "ver/1.16.2"; // Papercut
++    private static final String GITHUB_BRANCH_NAME = "ver/1.16.3"; // Papercut
      private static @Nullable String mcVer;
  
      @Override
@@ -128,7 +128,7 @@ index 229c3b0f0c650b501f31147adaa17194af57fedd..d7716cbc90f96673a35fcaa825bf0c1d
                      throwable = throwable1;
                      throw throwable1;
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 615a71a78cdb2f80e410919c75873cd6aa7c31ee..21644ff61c8197f592f19b8a6ca4382924c6f2d1 100644
+index 64f7e448cae673971e4b3ce7103fc80e5a03947b..f874f05f8f582e117cdd02aea985daba5c978071 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1510,7 +1510,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
@@ -141,7 +141,7 @@ index 615a71a78cdb2f80e410919c75873cd6aa7c31ee..21644ff61c8197f592f19b8a6ca43829
  
      public CrashReport b(CrashReport crashreport) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 2b0e1e698a7e399a276fd6fcffeb71d90a679cbb..d94c51f8113786ad31abf0a760843efada935b5d 100644
+index 77adc752883a019a105b7d575bdddee89dc11a86..95ee85340893aeef2d7af11e9f7174d449d49c06 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -230,7 +230,7 @@ import javax.annotation.Nullable; // Paper
@@ -154,7 +154,7 @@ index 2b0e1e698a7e399a276fd6fcffeb71d90a679cbb..d94c51f8113786ad31abf0a760843efa
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index b4e65963efdf4f192908c8433bdeca7c549708a2..25895798a8ffa9acf6f579a9e69b25b93a2410fc 100644
+index a9c96d45c69996df33bb6fa09558304735262bdd..aa1870d168b4955c1a61479b9b58277b480384d0 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -259,7 +259,7 @@ public class Main {

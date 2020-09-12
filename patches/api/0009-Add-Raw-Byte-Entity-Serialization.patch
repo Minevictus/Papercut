@@ -9,7 +9,7 @@ Subject: [PATCH] Add Raw Byte Entity Serialization
  2 files changed, 26 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index d3ec5084e33dff038d54cdd2aeb703a3eb25f7a7..003594198ef76fe46b9a23d9cde0fe230ff87cc3 100644
+index ac43afbf6230a481ab8cffbb3bc91b716316c00d..42afb5371582b71cfd91a3d42ba1b3ddf62796db 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
 @@ -2,6 +2,7 @@ package org.bukkit;
@@ -20,23 +20,22 @@ index d3ec5084e33dff038d54cdd2aeb703a3eb25f7a7..003594198ef76fe46b9a23d9cde0fe23
  import org.bukkit.inventory.ItemStack;
  import org.bukkit.material.MaterialData;
  import org.bukkit.plugin.InvalidPluginException;
-@@ -94,5 +95,11 @@ public interface UnsafeValues {
-     byte[] serializeItem(ItemStack item);
- 
-     ItemStack deserializeItem(byte[] data);
+@@ -117,4 +118,10 @@ public interface UnsafeValues {
+      */
+     String getTranslationKey(org.bukkit.entity.EntityType type);
+     // Paper end
 +
 +    // Papercut start
 +    byte[] serializeEntity(Entity entity);
 +
 +    Entity deserializeEntity(byte[] data, World world);
 +    // Papercut end
-     // Paper end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 6fed2208483eca4a6c01dd4a404c79b220329c9e..12da0ed83f2460e45bda2ea344aa12fdf8cc868e 100644
+index e6ea36a44f88308dced0c96e984cc7c8a183a7f2..88482dd8333aae619439a47c52cceade39f9bbcd 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -738,5 +738,24 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -734,5 +734,24 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       * @param invulnerability Their new state of invulnerability.
       */
      void setRawInvulnerable(boolean invulnerability);

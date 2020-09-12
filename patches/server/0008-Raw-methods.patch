@@ -11,10 +11,10 @@ Subject: [PATCH] Raw methods
  4 files changed, 44 insertions(+), 2 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index ba76e44aa6189ea5899306dd4bd2f131e7b6283d..76987c3f204056b59d364c37f8ba3e659e49cf64 100644
+index 0e000c7186d9f2ed6e0a1061f83d7f2d5695dc37..823882719eb34bcc2ffc4b04e1845b395bfcabd9 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
-@@ -80,10 +80,10 @@ public abstract class EntityLiving extends Entity {
+@@ -81,10 +81,10 @@ public abstract class EntityLiving extends Entity {
      public int maxNoDamageTicks;
      public final float ay;
      public final float az;
@@ -28,7 +28,7 @@ index ba76e44aa6189ea5899306dd4bd2f131e7b6283d..76987c3f204056b59d364c37f8ba3e65
      @Nullable
      public EntityHuman killer;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index b932acd6ccc30c0112ca4754b5c8200b79616111..f08fc3cc3fcf6c1f632fe51337d0b288362de10a 100644
+index f33c5d3adb20d73cc3c8d84dbc352cfeab679e92..19592230d0ca021d39789f324362371e6bac9710 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -1143,4 +1143,22 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
@@ -55,10 +55,10 @@ index b932acd6ccc30c0112ca4754b5c8200b79616111..f08fc3cc3fcf6c1f632fe51337d0b288
 +    // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 0819c31979540443576411ba8135e01a8db59775..bf112f6bfbce40ca300ba5178dab6aa4c3a66e28 100644
+index 7bac6fec57c92fb5025bd530ff1733faa36b377a..a48c9d67f3376d997567c159c6dceb0db5f16d63 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -777,4 +777,14 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -798,4 +798,14 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
          getHandle().receive(((CraftItem) item).getHandle(), quantity);
      }
      // Paper end
@@ -74,7 +74,7 @@ index 0819c31979540443576411ba8135e01a8db59775..bf112f6bfbce40ca300ba5178dab6aa4
 +    // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index a31bfa87dc086903b10515da82e56045be8e8565..ef24566208322a669757430fe89343f663a9b2fe 100644
+index 4d56936963930c0c58a372268becd4390e3d6299..62de13ff39394a49548d6fec9c6c8ea383f14236 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -2161,4 +2161,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {

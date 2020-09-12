@@ -8,10 +8,10 @@ Subject: [PATCH] Redo item serialization
  1 file changed, 33 insertions(+), 14 deletions(-)
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index c1efe830dd0807d5f7bda10cb582556af6d23383..c74a78196b1611e287805b4dd11ad216e12e58b0 100644
+index b5ec7a161b22d0a0d39a6e60ce015cbf3520651a..062db414811e3fe47b2f9b1119fa0dfaa139e224 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -339,39 +339,58 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -340,39 +340,58 @@ public final class CraftMagicNumbers implements UnsafeValues {
          Preconditions.checkNotNull(item, "null cannot be serialized");
          Preconditions.checkArgument(item.getType() != Material.AIR, "air cannot be serialized");
  
@@ -82,5 +82,5 @@ index c1efe830dd0807d5f7bda10cb582556af6d23383..c74a78196b1611e287805b4dd11ad216
 +        return compound;
 +        // Papercut end
      }
-     // Paper end
  
+     @Override

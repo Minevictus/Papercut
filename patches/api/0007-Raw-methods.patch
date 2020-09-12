@@ -9,10 +9,10 @@ Subject: [PATCH] Raw methods
  2 files changed, 58 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 7808ade92ccd3553056c57cdf77464fb8bdf9312..6fed2208483eca4a6c01dd4a404c79b220329c9e 100644
+index cb9ef706eeb994f1948708ad5e8689550ea56df7..e6ea36a44f88308dced0c96e984cc7c8a183a7f2 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -695,4 +695,48 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -691,4 +691,48 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      public boolean isInLava();
      // Paper end
