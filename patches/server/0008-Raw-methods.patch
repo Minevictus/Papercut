@@ -55,10 +55,10 @@ index f33c5d3adb20d73cc3c8d84dbc352cfeab679e92..19592230d0ca021d39789f324362371e
 +    // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 7bac6fec57c92fb5025bd530ff1733faa36b377a..a48c9d67f3376d997567c159c6dceb0db5f16d63 100644
+index 9e9bdf9bc2e5c4d72d811fcb439628d946741324..d010cac5b77034902660ae56beae515e48942b54 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -798,4 +798,14 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -809,4 +809,14 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
          getHandle().receive(((CraftItem) item).getHandle(), quantity);
      }
      // Paper end

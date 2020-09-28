@@ -11,10 +11,10 @@ Subject: [PATCH] Add unsafe Entity serialization API
  4 files changed, 43 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 473dea5dba5433d3f840d75a5e9911b41459aec4..6197d6ace37594596dc08a3ee773e8f7a1803d26 100644
+index afe0a1419ebf108bbbac67d42878a8d0595ecf0e..fc9b53f8cac3beb2dff6e57ee67633de692d8461 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
-@@ -1720,6 +1720,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -1728,6 +1728,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
          }
      }
  
@@ -68,17 +68,19 @@ index 19592230d0ca021d39789f324362371e6bac9710..ea9756211068492bd136d5929b1283c3
      // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 062db414811e3fe47b2f9b1119fa0dfaa139e224..9c6376d44186669870311688f8a040d4a567368c 100644
+index 7c0816eb048624851e23f6b27cb2f2cfc9c34100..ff1a63ee5eb99ab9d67ebe5393984b44a70dc902 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -36,16 +36,21 @@ import net.minecraft.server.NBTTagCompound;
+@@ -37,18 +37,23 @@ import net.minecraft.server.NBTTagCompound;
  import net.minecraft.server.NBTTagString;
  import net.minecraft.server.SavedFile;
  import net.minecraft.server.SharedConstants;
 +import net.minecraft.server.EntityTypes; // Papercut
  import org.bukkit.Bukkit;
+ import org.bukkit.Fluid;
  import org.bukkit.Material;
  import org.bukkit.NamespacedKey;
+ import org.bukkit.Registry;
  import org.bukkit.UnsafeValues;
 +import org.bukkit.World; // Papercut
  import org.bukkit.advancement.Advancement;
@@ -93,7 +95,7 @@ index 062db414811e3fe47b2f9b1119fa0dfaa139e224..9c6376d44186669870311688f8a040d4
  import org.bukkit.inventory.ItemStack;
  import org.bukkit.material.MaterialData;
  import org.bukkit.plugin.InvalidPluginException;
-@@ -411,6 +416,26 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -431,6 +436,26 @@ public final class CraftMagicNumbers implements UnsafeValues {
  
      // Paper end
  

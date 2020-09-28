@@ -18,10 +18,10 @@ Original patch: https://raw.githubusercontent.com/pl3xgaming/Purpur/master/patch
  10 files changed, 33 insertions(+), 12 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 3c63327cafa4c11b8154e2ffc4213f50d0b9365f..473dea5dba5433d3f840d75a5e9911b41459aec4 100644
+index 0881a17d208e9ba51d65d87576259d0c87719000..afe0a1419ebf108bbbac67d42878a8d0595ecf0e 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
-@@ -1682,7 +1682,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -1690,7 +1690,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
          return false;
      }
  
@@ -33,7 +33,7 @@ index 3c63327cafa4c11b8154e2ffc4213f50d0b9365f..473dea5dba5433d3f840d75a5e9911b4
          return false;
      }
  
-@@ -1690,6 +1693,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -1698,6 +1701,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
      public boolean canCollideWith(Entity entity) {
          return isCollidable();
      }
