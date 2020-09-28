@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Mon, 28 Sep 2020 22:46:44 +0200
+Subject: [PATCH] Remove double sqrt calls (PaperMC/Paper#4582)
+
+---
+ src/main/java/net/minecraft/server/PlayerChunkMap.java | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
+index 0afa3d8b681d87526245f830220199fcfc1ff6a6..43511899a57aeaa14503df49aa2babf9990f756f 100644
+--- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
++++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
+@@ -523,12 +523,12 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+             double dist = MCUtil.distance(playerChunkX, 0, playerChunkZ, coord.x, 0, coord.z);
+             // Prioritize immediate
+             if (dist <= 4 * 4) {
+-                updateChunkPriorityMap(priorities, coord.pair(), (int) (27 - Math.sqrt(dist)));
++                updateChunkPriorityMap(priorities, coord.pair(), (int) (27 - dist)); // Papercut - remove sqrt
+                 return;
+             }
+ 
+             // Prioritize nearby chunks
+-            updateChunkPriorityMap(priorities, coord.pair(), (int) (20 - Math.sqrt(dist) * twoThirdModifier));
++            updateChunkPriorityMap(priorities, coord.pair(), (int) (20 - dist * twoThirdModifier)); // Papercut - remove sqrt
+         });
+ 
+         // Prioritize Frustum near 3
+@@ -538,7 +538,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+             if (shouldSkipPrioritization(coord)) return;
+ 
+             double dist = MCUtil.distance(playerChunkX, 0, playerChunkZ, coord.x, 0, coord.z);
+-            updateChunkPriorityMap(priorities, coord.pair(), (int) (25 - Math.sqrt(dist) * twoThirdModifier));
++            updateChunkPriorityMap(priorities, coord.pair(), (int) (25 - dist * twoThirdModifier)); // Papercut - remove sqrt
+         });
+ 
+         // Prioritize Frustum near 5
+@@ -549,7 +549,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+                 if (shouldSkipPrioritization(coord)) return;
+ 
+                 double dist = MCUtil.distance(playerChunkX, 0, playerChunkZ, coord.x, 0, coord.z);
+-                updateChunkPriorityMap(priorities, coord.pair(), (int) (25 - Math.sqrt(dist) * twoThirdModifier));
++                updateChunkPriorityMap(priorities, coord.pair(), (int) (25 - dist * twoThirdModifier)); // Papercut - remove sqrt
+             });
+         }
+ 
+@@ -562,7 +562,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+                     return;
+                 }
+                 double dist = MCUtil.distance(playerChunkX, 0, playerChunkZ, coord.x, 0, coord.z);
+-                updateChunkPriorityMap(priorities, coord.pair(), (int) (25 - Math.sqrt(dist) * twoThirdModifier));
++                updateChunkPriorityMap(priorities, coord.pair(), (int) (25 - dist * twoThirdModifier)); // Papercut - remove sqrt
+             });
+         }
+ 
