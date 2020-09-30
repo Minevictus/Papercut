@@ -4,18 +4,20 @@ Date: Mon, 28 Sep 2020 22:46:44 +0200
 Subject: [PATCH] Remove double sqrt calls (PaperMC/Paper#4582)
 
 ---
- src/main/java/net/minecraft/server/PlayerChunkMap.java | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ .../java/net/minecraft/server/PlayerChunkMap.java    | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-index 0afa3d8b681d87526245f830220199fcfc1ff6a6..43511899a57aeaa14503df49aa2babf9990f756f 100644
+index 0afa3d8b681d87526245f830220199fcfc1ff6a6..696f41f3f4987c7af0807bc1b1664d981ea1caae 100644
 --- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
 +++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-@@ -523,12 +523,12 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+@@ -522,13 +522,13 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+ 
              double dist = MCUtil.distance(playerChunkX, 0, playerChunkZ, coord.x, 0, coord.z);
              // Prioritize immediate
-             if (dist <= 4 * 4) {
+-            if (dist <= 4 * 4) {
 -                updateChunkPriorityMap(priorities, coord.pair(), (int) (27 - Math.sqrt(dist)));
++            if (dist <= 4) { // Papercut - don't square this, it will rarely become that high
 +                updateChunkPriorityMap(priorities, coord.pair(), (int) (27 - dist)); // Papercut - remove sqrt
                  return;
              }
