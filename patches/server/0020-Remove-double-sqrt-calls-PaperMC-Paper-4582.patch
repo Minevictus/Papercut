@@ -8,10 +8,10 @@ Subject: [PATCH] Remove double sqrt calls (PaperMC/Paper#4582)
  1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-index 0afa3d8b681d87526245f830220199fcfc1ff6a6..696f41f3f4987c7af0807bc1b1664d981ea1caae 100644
+index 4628258f4a568aca8bd24be4649b929d12f9fbe9..3e22efbe9baf44a9b355ebce8d3c7832d7a14c6a 100644
 --- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
 +++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-@@ -522,13 +522,13 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+@@ -514,13 +514,13 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
  
              double dist = MCUtil.distance(playerChunkX, 0, playerChunkZ, coord.x, 0, coord.z);
              // Prioritize immediate
@@ -28,7 +28,7 @@ index 0afa3d8b681d87526245f830220199fcfc1ff6a6..696f41f3f4987c7af0807bc1b1664d98
          });
  
          // Prioritize Frustum near 3
-@@ -538,7 +538,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+@@ -530,7 +530,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
              if (shouldSkipPrioritization(coord)) return;
  
              double dist = MCUtil.distance(playerChunkX, 0, playerChunkZ, coord.x, 0, coord.z);
@@ -37,7 +37,7 @@ index 0afa3d8b681d87526245f830220199fcfc1ff6a6..696f41f3f4987c7af0807bc1b1664d98
          });
  
          // Prioritize Frustum near 5
-@@ -549,7 +549,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+@@ -541,7 +541,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
                  if (shouldSkipPrioritization(coord)) return;
  
                  double dist = MCUtil.distance(playerChunkX, 0, playerChunkZ, coord.x, 0, coord.z);
@@ -46,7 +46,7 @@ index 0afa3d8b681d87526245f830220199fcfc1ff6a6..696f41f3f4987c7af0807bc1b1664d98
              });
          }
  
-@@ -562,7 +562,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+@@ -554,7 +554,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
                      return;
                  }
                  double dist = MCUtil.distance(playerChunkX, 0, playerChunkZ, coord.x, 0, coord.z);
