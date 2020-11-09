@@ -11,7 +11,7 @@ Subject: [PATCH] Raw methods
  4 files changed, 44 insertions(+), 2 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index 0e000c7186d9f2ed6e0a1061f83d7f2d5695dc37..823882719eb34bcc2ffc4b04e1845b395bfcabd9 100644
+index 87cd6fb0c051e66d7c927769c375268c9a663ff8..9ef2e3cc4afb5be739f2d9c13465107a4bab21ac 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
 @@ -81,10 +81,10 @@ public abstract class EntityLiving extends Entity {
@@ -28,11 +28,11 @@ index 0e000c7186d9f2ed6e0a1061f83d7f2d5695dc37..823882719eb34bcc2ffc4b04e1845b39
      @Nullable
      public EntityHuman killer;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index f33c5d3adb20d73cc3c8d84dbc352cfeab679e92..19592230d0ca021d39789f324362371e6bac9710 100644
+index 1a72ab6d2424df9e25f98646712f4468bc70bc88..804cf5e84051617ddacb7dc44ff961fdec4e32ab 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1143,4 +1143,22 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
-         return getHandle().isInLava();
+@@ -1169,4 +1169,22 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         return getHandle().isTicking();
      }
      // Paper end
 +
@@ -74,10 +74,10 @@ index 9e9bdf9bc2e5c4d72d811fcb439628d946741324..d010cac5b77034902660ae56beae515e
 +    // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 4d56936963930c0c58a372268becd4390e3d6299..62de13ff39394a49548d6fec9c6c8ea383f14236 100644
+index 98d99af9d8f16bf4ded7b01e5e38b495f971f06f..e087fe38731a4135c8816781bac777f135ade915 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2161,4 +2161,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -2212,4 +2212,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return spigot;
      }
      // Spigot end

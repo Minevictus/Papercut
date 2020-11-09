@@ -11,10 +11,10 @@ Subject: [PATCH] Add unsafe Entity serialization API
  4 files changed, 43 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index afe0a1419ebf108bbbac67d42878a8d0595ecf0e..fc9b53f8cac3beb2dff6e57ee67633de692d8461 100644
+index cef4a42a928193fc902a091c3c22a9a4bd93aa2e..826ab7a86f135931fcbd02db0c87c771c951cb53 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
-@@ -1728,6 +1728,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -1758,6 +1758,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
          }
      }
  
@@ -31,7 +31,7 @@ index afe0a1419ebf108bbbac67d42878a8d0595ecf0e..fc9b53f8cac3beb2dff6e57ee67633de
          return this.isPassenger() ? false : this.a_(nbttagcompound);
      }
 diff --git a/src/main/java/net/minecraft/server/EntityTypes.java b/src/main/java/net/minecraft/server/EntityTypes.java
-index a71ad8418e08dd506fa6b912eaed725567ac4648..0f27c4a188c8346828070bab11a7a1429fda0fd5 100644
+index ac1ccd066ab80ff6f95c5bc9798f9e05e8db91cf..c062256be0249e5f2708ee1bb3210fd47d492bd4 100644
 --- a/src/main/java/net/minecraft/server/EntityTypes.java
 +++ b/src/main/java/net/minecraft/server/EntityTypes.java
 @@ -330,6 +330,7 @@ public class EntityTypes<T extends Entity> {
@@ -43,10 +43,10 @@ index a71ad8418e08dd506fa6b912eaed725567ac4648..0f27c4a188c8346828070bab11a7a142
          return SystemUtils.a(a(nbttagcompound).map((entitytypes) -> {
              return entitytypes.a(world);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 19592230d0ca021d39789f324362371e6bac9710..ea9756211068492bd136d5929b1283c392d63129 100644
+index 804cf5e84051617ddacb7dc44ff961fdec4e32ab..119dd139ec73e266fee16d9f96d30e416a0892c5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -158,6 +158,7 @@ import org.bukkit.craftbukkit.persistence.CraftPersistentDataTypeRegistry;
+@@ -160,6 +160,7 @@ import org.bukkit.craftbukkit.persistence.CraftPersistentDataTypeRegistry;
  import org.bukkit.craftbukkit.util.CraftChatMessage;
  import org.bukkit.craftbukkit.util.CraftVector;
  import org.bukkit.entity.Pose;
@@ -54,7 +54,7 @@ index 19592230d0ca021d39789f324362371e6bac9710..ea9756211068492bd136d5929b1283c3
  import org.bukkit.event.entity.EntityDamageEvent;
  import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
  import org.bukkit.metadata.MetadataValue;
-@@ -1160,5 +1161,12 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1186,5 +1187,12 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public void setRawInvulnerable(boolean invulnerability) {
          getHandle().setInvulnerable(invulnerability);
      }
@@ -68,7 +68,7 @@ index 19592230d0ca021d39789f324362371e6bac9710..ea9756211068492bd136d5929b1283c3
      // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 7c0816eb048624851e23f6b27cb2f2cfc9c34100..ff1a63ee5eb99ab9d67ebe5393984b44a70dc902 100644
+index e010e74fb1feb3e458d7a1d88738511a2e608081..be4a5488ef199a65955c42998b1cdf685f836558 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 @@ -37,18 +37,23 @@ import net.minecraft.server.NBTTagCompound;
@@ -95,7 +95,7 @@ index 7c0816eb048624851e23f6b27cb2f2cfc9c34100..ff1a63ee5eb99ab9d67ebe5393984b44
  import org.bukkit.inventory.ItemStack;
  import org.bukkit.material.MaterialData;
  import org.bukkit.plugin.InvalidPluginException;
-@@ -431,6 +436,26 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -435,6 +440,26 @@ public final class CraftMagicNumbers implements UnsafeValues {
  
      // Paper end
  

@@ -51,10 +51,10 @@ index 0000000000000000000000000000000000000000..d4efe68451d79bf5ffb70a7d5def091f
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index d71bf59e983ccec9af68a25fac34aa37e1ab28ed..fadd09602ad807c3c4bb013969665d6247058236 100644
+index 7e5b36aab5abc8f76a4963a189ed26d68b2f506a..ee19ccb31283e43777c662fa2ad15eca6a637b10 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
-@@ -201,6 +201,8 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+@@ -203,6 +203,8 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
              return false;
          }
  

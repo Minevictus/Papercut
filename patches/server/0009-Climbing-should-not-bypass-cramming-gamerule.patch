@@ -18,10 +18,10 @@ Original patch: https://raw.githubusercontent.com/pl3xgaming/Purpur/master/patch
  10 files changed, 33 insertions(+), 12 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 0881a17d208e9ba51d65d87576259d0c87719000..afe0a1419ebf108bbbac67d42878a8d0595ecf0e 100644
+index 420557c27029e2464e3c02143a1724a9bf165268..cef4a42a928193fc902a091c3c22a9a4bd93aa2e 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
-@@ -1690,7 +1690,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -1720,7 +1720,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
          return false;
      }
  
@@ -33,7 +33,7 @@ index 0881a17d208e9ba51d65d87576259d0c87719000..afe0a1419ebf108bbbac67d42878a8d0
          return false;
      }
  
-@@ -1698,6 +1701,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -1728,6 +1731,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
      public boolean canCollideWith(Entity entity) {
          return isCollidable();
      }
@@ -46,7 +46,7 @@ index 0881a17d208e9ba51d65d87576259d0c87719000..afe0a1419ebf108bbbac67d42878a8d0
  
      public final void runKillTrigger(Entity entity, int kills, DamageSource damageSource) { this.a(entity, kills, damageSource); } // Paper - OBFHELPER
 diff --git a/src/main/java/net/minecraft/server/EntityArmorStand.java b/src/main/java/net/minecraft/server/EntityArmorStand.java
-index 937fa3c69a5cba2fc2fa4506dc34ff8a37dae19c..411f81061b44cf2adee228709180b57ee2c06496 100644
+index 66597c6e1add4df2f093480f507f03788a3eb30b..571ab5516a4f68d5c149e1319822b5bf889838ea 100644
 --- a/src/main/java/net/minecraft/server/EntityArmorStand.java
 +++ b/src/main/java/net/minecraft/server/EntityArmorStand.java
 @@ -320,7 +320,7 @@ public class EntityArmorStand extends EntityLiving {
@@ -59,7 +59,7 @@ index 937fa3c69a5cba2fc2fa4506dc34ff8a37dae19c..411f81061b44cf2adee228709180b57e
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityBat.java b/src/main/java/net/minecraft/server/EntityBat.java
-index af67cf86839e3b8c028d47fd9b65513e0ab24e70..9723acdf758897859f3b528a083f276642713c84 100644
+index 38ce3563106b02bfefb54a637713f27262ff258f..fb189b5107c4e045126e0067f15b45a8ab9c62be 100644
 --- a/src/main/java/net/minecraft/server/EntityBat.java
 +++ b/src/main/java/net/minecraft/server/EntityBat.java
 @@ -50,7 +50,7 @@ public class EntityBat extends EntityAmbient {
@@ -72,7 +72,7 @@ index af67cf86839e3b8c028d47fd9b65513e0ab24e70..9723acdf758897859f3b528a083f2766
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityBoat.java b/src/main/java/net/minecraft/server/EntityBoat.java
-index 5d14c235b4badfc49d5f3cd83c159c1775782ea6..56375e6312269095b4e35e1e597608e62e016906 100644
+index 45fea38933d57e52dea19317c65682d57114a077..d4d6bf68b238420eec61b6163e9feefc75c08ac4 100644
 --- a/src/main/java/net/minecraft/server/EntityBoat.java
 +++ b/src/main/java/net/minecraft/server/EntityBoat.java
 @@ -106,7 +106,7 @@ public class EntityBoat extends Entity {
@@ -85,7 +85,7 @@ index 5d14c235b4badfc49d5f3cd83c159c1775782ea6..56375e6312269095b4e35e1e597608e6
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityHorseAbstract.java b/src/main/java/net/minecraft/server/EntityHorseAbstract.java
-index 191d9cb8279cabdb5441fb10a107eb119e0fe9d0..440be759a89d33940dd2849769a369cf260682e2 100644
+index 8af1fe5d820f3bcb5e02dd2300e8e9cbd7e4e201..27f0ba51d9e59b44164ef023ad65e0b26b8be3a5 100644
 --- a/src/main/java/net/minecraft/server/EntityHorseAbstract.java
 +++ b/src/main/java/net/minecraft/server/EntityHorseAbstract.java
 @@ -165,7 +165,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
@@ -98,7 +98,7 @@ index 191d9cb8279cabdb5441fb10a107eb119e0fe9d0..440be759a89d33940dd2849769a369cf
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index 823882719eb34bcc2ffc4b04e1845b395bfcabd9..7de6729ae8fd312833376cc73f3c0d315a10f840 100644
+index 9ef2e3cc4afb5be739f2d9c13465107a4bab21ac..a35d8dd69ce92a195e61e4f37d2d0fab55447616 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
 @@ -2849,7 +2849,7 @@ public abstract class EntityLiving extends Entity {
@@ -124,7 +124,7 @@ index 823882719eb34bcc2ffc4b04e1845b395bfcabd9..7de6729ae8fd312833376cc73f3c0d31
  
      // CraftBukkit start - collidable API
 diff --git a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
-index 9bc21ef8a1f366f77ceb31b8bd01e6cc6b8a17a5..4d1b388c8241f03c6cf4fa06f50b9dd18bcb8179 100644
+index 9af2bb392881900d74803cccd093d96b08673a25..58f96564cfcb35ba309032dd66bad140938c57cd 100644
 --- a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
 +++ b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
 @@ -107,7 +107,7 @@ public abstract class EntityMinecartAbstract extends Entity {
@@ -137,7 +137,7 @@ index 9bc21ef8a1f366f77ceb31b8bd01e6cc6b8a17a5..4d1b388c8241f03c6cf4fa06f50b9dd1
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityParrot.java b/src/main/java/net/minecraft/server/EntityParrot.java
-index 34e08dda2e16cd4a6ecd8d8c6dc89f090ec2bc56..2569c17239887c5ff91302a0d4c38f0311d8040d 100644
+index 1c682a62b8fd871848ebe8ff0dc576da6bb28810..6df1193a473ad16fe5d71606a3eb68e336890469 100644
 --- a/src/main/java/net/minecraft/server/EntityParrot.java
 +++ b/src/main/java/net/minecraft/server/EntityParrot.java
 @@ -314,8 +314,8 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
@@ -152,7 +152,7 @@ index 34e08dda2e16cd4a6ecd8d8c6dc89f090ec2bc56..2569c17239887c5ff91302a0d4c38f03
  
      @Override
 diff --git a/src/main/java/net/minecraft/server/IEntitySelector.java b/src/main/java/net/minecraft/server/IEntitySelector.java
-index a9b0c78d6dba8c6ff7d524e2828f0ee7832e059e..ff87796ab5f6afd171a756a1d14546f0aff49f6a 100644
+index 31eb6868c2de20a7aa7438dbabf7a5f790d75732..c3851de45e454bbed9384b35b4e72a94d7a7ba97 100644
 --- a/src/main/java/net/minecraft/server/IEntitySelector.java
 +++ b/src/main/java/net/minecraft/server/IEntitySelector.java
 @@ -42,11 +42,17 @@ public final class IEntitySelector {
@@ -172,7 +172,7 @@ index a9b0c78d6dba8c6ff7d524e2828f0ee7832e059e..ff87796ab5f6afd171a756a1d14546f0
 -            if (!entity1.canCollideWith(entity) || !entity.canCollideWith(entity1)) { // CraftBukkit - collidable API
 +            if (!entity1.canCollideWith(entity, ignoreClimbing) || !entity.canCollideWith(entity1, ignoreClimbing)) { // CraftBukkit - collidable API // Papercut - ignore climbing
                  return false;
-             } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).ey())) {
+             } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).ez())) {
                  return false;
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
 index 878d1b6c7d3382203e200bb152c290df40e6725d..28adee3258eb7d72fd53c6bdf5d86167aa840fab 100644

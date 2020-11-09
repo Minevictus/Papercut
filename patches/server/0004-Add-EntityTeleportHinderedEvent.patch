@@ -4,49 +4,64 @@ Date: Sun, 3 May 2020 13:31:01 -0300
 Subject: [PATCH] Add EntityTeleportHinderedEvent
 
 ---
+ .../java/net/minecraft/server/BlockBase.java  |  1 +
  .../minecraft/server/BlockEnderPortal.java    | 20 ++++++++++++++++-
  .../net/minecraft/server/BlockPortal.java     | 20 ++++++++++++++++-
  .../server/TileEntityEndGateway.java          | 22 +++++++++++++++++++
  .../craftbukkit/entity/CraftEntity.java       | 12 +++++++++-
  .../craftbukkit/entity/CraftPlayer.java       |  6 +++++
- 5 files changed, 77 insertions(+), 3 deletions(-)
+ 6 files changed, 78 insertions(+), 3 deletions(-)
 
+diff --git a/src/main/java/net/minecraft/server/BlockBase.java b/src/main/java/net/minecraft/server/BlockBase.java
+index 2760b377d1f68ac5f66e7274317379e2dda8288a..ec69ca4ebcd94d8dcea8d0157fb870eed6a606f3 100644
+--- a/src/main/java/net/minecraft/server/BlockBase.java
++++ b/src/main/java/net/minecraft/server/BlockBase.java
+@@ -250,6 +250,7 @@ public abstract class BlockBase {
+         return 0;
+     }
+ 
++    public final void collideWithBlock(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) { this.a(iblockdata, world, blockposition, entity); } // Papercut - OBFHELPER
+     @Deprecated
+     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {}
+ 
 diff --git a/src/main/java/net/minecraft/server/BlockEnderPortal.java b/src/main/java/net/minecraft/server/BlockEnderPortal.java
-index b8f5350ac8e58a3466c2f8a6fffbc6235795d2d4..da878fdb07776de2ee3ebc71486c9faf889d9e3b 100644
+index e731b6d811d179f07f84278d2cce75e0d98092ab..dcd4447dc8252ffdba69a9b8e52fd944accf6e38 100644
 --- a/src/main/java/net/minecraft/server/BlockEnderPortal.java
 +++ b/src/main/java/net/minecraft/server/BlockEnderPortal.java
-@@ -3,6 +3,8 @@ package net.minecraft.server;
+@@ -1,8 +1,11 @@
+ package net.minecraft.server;
+ 
  // CraftBukkit start
++
  import org.bukkit.event.entity.EntityPortalEnterEvent;
  import org.bukkit.event.player.PlayerTeleportEvent;
-+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause; // Papercut
-+import us.minevict.papercut.event.entity.EntityTeleportHinderedEvent; // Papercut
++import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
++import us.minevict.papercut.event.entity.EntityTeleportHinderedEvent;
  // CraftBukkit end
  
  public class BlockEnderPortal extends BlockTileEntity {
-@@ -25,7 +27,23 @@ public class BlockEnderPortal extends BlockTileEntity {
+@@ -25,7 +28,22 @@ public class BlockEnderPortal extends BlockTileEntity {
  
      @Override
      public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
 -        if (world instanceof WorldServer && !entity.isPassenger() && !entity.isVehicle() && entity.canPortal() && VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), iblockdata.getShape(world, blockposition), OperatorBoolean.AND)) {
++        // Papercut start
 +        if (world instanceof WorldServer && /*!entity.isPassenger() && !entity.isVehicle() &&*/ entity.canPortal() && VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), iblockdata.getShape(world, blockposition), OperatorBoolean.AND)) {
-+            // Papercut start
 +            if (entity.isPassenger()) { // Moved down from wrapping statement
-+              if (new EntityTeleportHinderedEvent(entity.getBukkitEntity(), EntityTeleportHinderedEvent.Reason.IS_PASSENGER, TeleportCause.END_PORTAL).callEvent()) {
-+                a(iblockdata, world, blockposition, entity);
-+              }
-+              return;
++                if (new EntityTeleportHinderedEvent(entity.getBukkitEntity(), EntityTeleportHinderedEvent.Reason.IS_PASSENGER, TeleportCause.END_PORTAL).callEvent()) {
++                    this.collideWithBlock(iblockdata, world, blockposition, entity);
++                }
++                return;
 +            }
 +
 +            if (entity.isVehicle()) {
-+              if (new EntityTeleportHinderedEvent(entity.getBukkitEntity(), EntityTeleportHinderedEvent.Reason.IS_VEHICLE, PlayerTeleportEvent.TeleportCause.END_PORTAL).callEvent()) {
-+                a(iblockdata, world, blockposition, entity);
-+              }
-+              return;
++                if (new EntityTeleportHinderedEvent(entity.getBukkitEntity(), EntityTeleportHinderedEvent.Reason.IS_VEHICLE, PlayerTeleportEvent.TeleportCause.END_PORTAL).callEvent()) {
++                    this.collideWithBlock(iblockdata, world, blockposition, entity);
++                }
++                return;
 +            }
 +            // Papercut end
-+
-             ResourceKey<World> resourcekey = world.getDimensionKey() == World.THE_END ? World.OVERWORLD : World.THE_END;
+             ResourceKey<World> resourcekey = world.getTypeKey() == DimensionManager.THE_END ? World.OVERWORLD : World.THE_END; // CraftBukkit - SPIGOT-6152: send back to main overworld in custom ends
              WorldServer worldserver = ((WorldServer) world).getMinecraftServer().getWorldServer(resourcekey);
  
 diff --git a/src/main/java/net/minecraft/server/BlockPortal.java b/src/main/java/net/minecraft/server/BlockPortal.java
@@ -88,7 +103,7 @@ index 4132cd4c6f13cfa1c0cda43daaa908ff3c07f32b..f2abb014cee279216df5f83f075a992a
              EntityPortalEnterEvent event = new EntityPortalEnterEvent(entity.getBukkitEntity(), new org.bukkit.Location(world.getWorld(), blockposition.getX(), blockposition.getY(), blockposition.getZ()));
              world.getServer().getPluginManager().callEvent(event);
 diff --git a/src/main/java/net/minecraft/server/TileEntityEndGateway.java b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
-index 5d158e72378c02032fe6043696b9e3dd82e71e5c..3e67e0935846162f5e606854c91513a487b11334 100644
+index e0118a971e1ea3c52a1380f519146b8f46a425ea..f19edc0cc658e6739d57dc729669a16f637754c6 100644
 --- a/src/main/java/net/minecraft/server/TileEntityEndGateway.java
 +++ b/src/main/java/net/minecraft/server/TileEntityEndGateway.java
 @@ -12,6 +12,8 @@ import org.bukkit.Location;
@@ -128,10 +143,10 @@ index 5d158e72378c02032fe6043696b9e3dd82e71e5c..3e67e0935846162f5e606854c91513a4
              this.c = 100;
              if (this.exitPortal == null && this.world.getTypeKey() == DimensionManager.THE_END) { // CraftBukkit - work in alternate worlds
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 407c03408a312d54ab16a80ccdee5308af43c62f..f33c5d3adb20d73cc3c8d84dbc352cfeab679e92 100644
+index 1fe253bc7261a6077747addf8d9023ca94525999..1a72ab6d2424df9e25f98646712f4468bc70bc88 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -170,6 +170,7 @@ import org.bukkit.plugin.Plugin;
+@@ -172,6 +172,7 @@ import org.bukkit.plugin.Plugin;
  import org.bukkit.util.BoundingBox;
  import org.bukkit.util.NumberConversions;
  import org.bukkit.util.Vector;
@@ -139,7 +154,7 @@ index 407c03408a312d54ab16a80ccdee5308af43c62f..f33c5d3adb20d73cc3c8d84dbc352cfe
  
  public abstract class CraftEntity implements org.bukkit.entity.Entity {
      private static PermissibleBase perm;
-@@ -513,7 +514,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -515,7 +516,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          Preconditions.checkArgument(location != null, "location");
          location.checkFinite();
  
@@ -158,7 +173,7 @@ index 407c03408a312d54ab16a80ccdee5308af43c62f..f33c5d3adb20d73cc3c8d84dbc352cfe
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 715d2c5e888b4a5c955d2dee2429757a27b50b00..4d56936963930c0c58a372268becd4390e3d6299 100644
+index 018afcd420035672a5a29f0aeb4c314ff13ba7ee..98d99af9d8f16bf4ded7b01e5e38b495f971f06f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -127,6 +127,7 @@ import org.bukkit.plugin.messaging.StandardMessenger;
@@ -169,7 +184,7 @@ index 715d2c5e888b4a5c955d2dee2429757a27b50b00..4d56936963930c0c58a372268becd439
  
  @DelegateDeserialization(CraftOfflinePlayer.class)
  public class CraftPlayer extends CraftHumanEntity implements Player {
-@@ -768,6 +769,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -791,6 +792,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          }
  
          if (entity.isVehicle()) {

@@ -8,7 +8,7 @@ Subject: [PATCH] Disable teleport logging for EXP orbs
  1 file changed, 9 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/EntityExperienceOrb.java b/src/main/java/net/minecraft/server/EntityExperienceOrb.java
-index e33a42dcd52ab1d027df542e044d84d42970559c..3140c77ff7a1b98aa2f0e31ca14d91d3f844d1ab 100644
+index c2be0c2bc315876f120cff207e5516dda2bd55d7..5f91a971be7860bfb79478825abcf5a24e17be7d 100644
 --- a/src/main/java/net/minecraft/server/EntityExperienceOrb.java
 +++ b/src/main/java/net/minecraft/server/EntityExperienceOrb.java
 @@ -2,6 +2,7 @@ package net.minecraft.server;

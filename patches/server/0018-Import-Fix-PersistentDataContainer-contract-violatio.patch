@@ -11,7 +11,7 @@ https://github.com/PaperMC/Paper/pull/3990
  2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/src/main/java/net/minecraft/server/TileEntity.java b/src/main/java/net/minecraft/server/TileEntity.java
-index d32540c88bb902e9c191142a2b75a05b63218e52..d7ea9bccb22c7cdd5204da5cff9ed19ec5ca557b 100644
+index 58d958a88ac5af5b889d719d9f1ea90ce45cf184..65044a2f69d2e96fa98dcae386a451e66a6d8342 100644
 --- a/src/main/java/net/minecraft/server/TileEntity.java
 +++ b/src/main/java/net/minecraft/server/TileEntity.java
 @@ -16,7 +16,7 @@ public abstract class TileEntity implements KeyedObject { // Paper

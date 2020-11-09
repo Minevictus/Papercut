@@ -10,7 +10,7 @@ Subject: [PATCH] Ignore discounts API
  3 files changed, 33 insertions(+), 2 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/EntityVillager.java b/src/main/java/net/minecraft/server/EntityVillager.java
-index c10ff09dd005c0c8b3cd374d9de82e77efcd9097..6f0dc9ecde03e7f2fd0ac6f14a47b5230b74bd1f 100644
+index 039d5cc20a6de46b0812b428e2f6526905ece2bf..98559cfb29e502b69f69904aca95e677612f9913 100644
 --- a/src/main/java/net/minecraft/server/EntityVillager.java
 +++ b/src/main/java/net/minecraft/server/EntityVillager.java
 @@ -391,6 +391,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
