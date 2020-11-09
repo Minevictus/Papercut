@@ -1,0 +1,70 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mariell Hoversholm <proximyst@proximyst.com>
+Date: Mon, 9 Nov 2020 17:35:46 +0100
+Subject: [PATCH] Nerf armour stands
+
+---
+ .../net/minecraft/server/EntityArmorStand.java   | 16 ++++++++++++++++
+ .../us/minevict/papercut/PapercutConfig.java     |  7 +++++++
+ 2 files changed, 23 insertions(+)
+
+diff --git a/src/main/java/net/minecraft/server/EntityArmorStand.java b/src/main/java/net/minecraft/server/EntityArmorStand.java
+index 571ab5516a4f68d5c149e1319822b5bf889838ea..bc22f0279a7f7696cc356ca1007281fb1ba1c504 100644
+--- a/src/main/java/net/minecraft/server/EntityArmorStand.java
++++ b/src/main/java/net/minecraft/server/EntityArmorStand.java
+@@ -52,10 +52,12 @@ public class EntityArmorStand extends EntityLiving {
+     private boolean noTickPoseDirty = false;
+     private boolean noTickEquipmentDirty = false;
+     // Paper end
++    public boolean canMovementTick = true; // Papercut
+ 
+     public EntityArmorStand(EntityTypes<? extends EntityArmorStand> entitytypes, World world) {
+         super(entitytypes, world);
+         if (world != null) this.canTick = world.paperConfig.armorStandTick; // Paper - armour stand ticking
++        if (world != null) this.canMovementTick = world.papercutConfig.armorStandMovement; // Papercut
+         this.handItems = NonNullList.a(2, ItemStack.b);
+         this.armorItems = NonNullList.a(4, ItemStack.b);
+         this.headPose = EntityArmorStand.bj;
+@@ -630,6 +632,7 @@ public class EntityArmorStand extends EntityLiving {
+                 this.updateEntityEquipment();
+             }
+ 
++            this.movementTick(); // Papercut
+             return;
+         }
+         // Paper end
+@@ -883,4 +886,17 @@ public class EntityArmorStand extends EntityLiving {
+         return true;
+     }
+     // Paper end
++
++    // Papercut start
++    // Mojang mapping: void updateInWaterStateAndDoWaterCurrentPushing() -> aL
++    @Override
++    void aL() {
++        if (this.world.papercutConfig.armorStandWater) super.aL();
++    }
++
++    @Override
++    public void movementTick() {
++        if (this.canMovementTick && this.canMove) super.movementTick();
++    }
++    // Papercut end
+ }
+diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
+index 8e64b48663babd8cc335c2b0eebd4153486099c1..cad3e3d67cbc6b360cefc3aa7a49d8320ae7dd82 100644
+--- a/src/main/java/us/minevict/papercut/PapercutConfig.java
++++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
+@@ -237,5 +237,12 @@ public final class PapercutConfig {
+       enableZombieVillageAi = getBoolean("enable-ai.zombie-village", enableZombieVillageAi);
+       enableZombieDestroyAi = getBoolean("enable-ai.zombie-destroy", enableZombieDestroyAi);
+     }
++
++    public boolean armorStandMovement = true;
++    public boolean armorStandWater = true;
++    private void armourStandMovement() {
++      armorStandMovement = getBoolean("armor-stand.movement", armorStandMovement);
++      armorStandWater = getBoolean("armor-stand.move-in-water", armorStandWater);
++    }
+   }
+ }
