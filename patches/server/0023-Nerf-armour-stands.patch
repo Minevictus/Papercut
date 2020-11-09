@@ -4,12 +4,37 @@ Date: Mon, 9 Nov 2020 17:35:46 +0100
 Subject: [PATCH] Nerf armour stands
 
 ---
- .../net/minecraft/server/EntityArmorStand.java   | 16 ++++++++++++++++
- .../us/minevict/papercut/PapercutConfig.java     |  7 +++++++
- 2 files changed, 23 insertions(+)
+ src/main/java/net/minecraft/server/Block.java   | 13 +++++++++++++
+ .../net/minecraft/server/EntityArmorStand.java  | 17 +++++++++++++++++
+ .../us/minevict/papercut/PapercutConfig.java    |  9 +++++++++
+ 3 files changed, 39 insertions(+)
 
+diff --git a/src/main/java/net/minecraft/server/Block.java b/src/main/java/net/minecraft/server/Block.java
+index 4b4f14711d483089a5d5478b57539911a9c7a2fc..6d73f04b2215469a10e6d9982df7e05b3dad3093 100644
+--- a/src/main/java/net/minecraft/server/Block.java
++++ b/src/main/java/net/minecraft/server/Block.java
+@@ -22,6 +22,19 @@ public class Block extends BlockBase implements IMaterial {
+     });
+     protected final BlockStateList<Block, IBlockData> blockStateList;
+     private IBlockData blockData;
++    // Papercut start
++    public final boolean isFence() {
++        return this == Blocks.ACACIA_FENCE ||
++                this == Blocks.BIRCH_FENCE ||
++                this == Blocks.CRIMSON_FENCE ||
++                this == Blocks.DARK_OAK_FENCE ||
++                this == Blocks.JUNGLE_FENCE ||
++                this == Blocks.NETHER_BRICK_FENCE ||
++                this == Blocks.OAK_FENCE ||
++                this == Blocks.SPRUCE_FENCE ||
++                this == Blocks.WARPED_FENCE;
++    }
++    // Papercut end
+     // Paper start
+     public final boolean isDestroyable() {
+         return com.destroystokyo.paper.PaperConfig.allowBlockPermanentBreakingExploits ||
 diff --git a/src/main/java/net/minecraft/server/EntityArmorStand.java b/src/main/java/net/minecraft/server/EntityArmorStand.java
-index 571ab5516a4f68d5c149e1319822b5bf889838ea..bc22f0279a7f7696cc356ca1007281fb1ba1c504 100644
+index 571ab5516a4f68d5c149e1319822b5bf889838ea..fba7553d7de375b383a6f0c0c026e99497178165 100644
 --- a/src/main/java/net/minecraft/server/EntityArmorStand.java
 +++ b/src/main/java/net/minecraft/server/EntityArmorStand.java
 @@ -52,10 +52,12 @@ public class EntityArmorStand extends EntityLiving {
@@ -33,7 +58,7 @@ index 571ab5516a4f68d5c149e1319822b5bf889838ea..bc22f0279a7f7696cc356ca1007281fb
              return;
          }
          // Paper end
-@@ -883,4 +886,17 @@ public class EntityArmorStand extends EntityLiving {
+@@ -883,4 +886,18 @@ public class EntityArmorStand extends EntityLiving {
          return true;
      }
      // Paper end
@@ -42,7 +67,8 @@ index 571ab5516a4f68d5c149e1319822b5bf889838ea..bc22f0279a7f7696cc356ca1007281fb
 +    // Mojang mapping: void updateInWaterStateAndDoWaterCurrentPushing() -> aL
 +    @Override
 +    void aL() {
-+        if (this.world.papercutConfig.armorStandWater) super.aL();
++        if (this.world.papercutConfig.armorStandWater && (!this.world.papercutConfig.armorStandWaterFence || !world.getType(getChunkCoordinates().down()).getBlock().isFence()))
++            super.aL();
 +    }
 +
 +    @Override
@@ -52,19 +78,21 @@ index 571ab5516a4f68d5c149e1319822b5bf889838ea..bc22f0279a7f7696cc356ca1007281fb
 +    // Papercut end
  }
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
-index 8e64b48663babd8cc335c2b0eebd4153486099c1..cad3e3d67cbc6b360cefc3aa7a49d8320ae7dd82 100644
+index 8e64b48663babd8cc335c2b0eebd4153486099c1..bb218d90234bb74da2ee885de91d6481079465ae 100644
 --- a/src/main/java/us/minevict/papercut/PapercutConfig.java
 +++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
-@@ -237,5 +237,12 @@ public final class PapercutConfig {
+@@ -237,5 +237,14 @@ public final class PapercutConfig {
        enableZombieVillageAi = getBoolean("enable-ai.zombie-village", enableZombieVillageAi);
        enableZombieDestroyAi = getBoolean("enable-ai.zombie-destroy", enableZombieDestroyAi);
      }
 +
 +    public boolean armorStandMovement = true;
 +    public boolean armorStandWater = true;
++    public boolean armorStandWaterFence = false;
 +    private void armourStandMovement() {
 +      armorStandMovement = getBoolean("armor-stand.movement", armorStandMovement);
 +      armorStandWater = getBoolean("armor-stand.move-in-water", armorStandWater);
++      armorStandWaterFence = getBoolean("armor-stand.move-unless-fence", armorStandWaterFence);
 +    }
    }
  }
