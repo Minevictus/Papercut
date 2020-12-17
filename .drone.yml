@@ -10,4 +10,4 @@ steps:
     commands:
       - apt-get update
       - apt-get install -qy patch
-      - ./papercut build
+      - ./papercut jar
