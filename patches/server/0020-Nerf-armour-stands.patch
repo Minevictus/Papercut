@@ -10,7 +10,7 @@ Subject: [PATCH] Nerf armour stands
  3 files changed, 41 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/Block.java b/src/main/java/net/minecraft/server/Block.java
-index 4b4f14711d483089a5d5478b57539911a9c7a2fc..6d73f04b2215469a10e6d9982df7e05b3dad3093 100644
+index 1fc98698b81c079ebe4a524200232db1fe143bdf..3ba956d2a760073637ff44561beefc9d279f6aad 100644
 --- a/src/main/java/net/minecraft/server/Block.java
 +++ b/src/main/java/net/minecraft/server/Block.java
 @@ -22,6 +22,19 @@ public class Block extends BlockBase implements IMaterial {
@@ -34,7 +34,7 @@ index 4b4f14711d483089a5d5478b57539911a9c7a2fc..6d73f04b2215469a10e6d9982df7e05b
      public final boolean isDestroyable() {
          return com.destroystokyo.paper.PaperConfig.allowBlockPermanentBreakingExploits ||
 diff --git a/src/main/java/net/minecraft/server/EntityArmorStand.java b/src/main/java/net/minecraft/server/EntityArmorStand.java
-index 571ab5516a4f68d5c149e1319822b5bf889838ea..d3485346bdd8bd551daf5a45c82d2ba448008d3f 100644
+index d6de166babe2e25a88f9e6dae462907e26b6fb6f..592c3140928d60a2374bd95b2c2a3ca4baa07d2d 100644
 --- a/src/main/java/net/minecraft/server/EntityArmorStand.java
 +++ b/src/main/java/net/minecraft/server/EntityArmorStand.java
 @@ -52,10 +52,12 @@ public class EntityArmorStand extends EntityLiving {
@@ -50,7 +50,7 @@ index 571ab5516a4f68d5c149e1319822b5bf889838ea..d3485346bdd8bd551daf5a45c82d2ba4
          this.handItems = NonNullList.a(2, ItemStack.b);
          this.armorItems = NonNullList.a(4, ItemStack.b);
          this.headPose = EntityArmorStand.bj;
-@@ -630,6 +632,8 @@ public class EntityArmorStand extends EntityLiving {
+@@ -637,6 +639,8 @@ public class EntityArmorStand extends EntityLiving {
                  this.updateEntityEquipment();
              }
  
@@ -59,7 +59,7 @@ index 571ab5516a4f68d5c149e1319822b5bf889838ea..d3485346bdd8bd551daf5a45c82d2ba4
              return;
          }
          // Paper end
-@@ -883,4 +887,19 @@ public class EntityArmorStand extends EntityLiving {
+@@ -890,4 +894,19 @@ public class EntityArmorStand extends EntityLiving {
          return true;
      }
      // Paper end
@@ -80,10 +80,10 @@ index 571ab5516a4f68d5c149e1319822b5bf889838ea..d3485346bdd8bd551daf5a45c82d2ba4
 +    // Papercut end
  }
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
-index 8e64b48663babd8cc335c2b0eebd4153486099c1..bb218d90234bb74da2ee885de91d6481079465ae 100644
+index 233c88e4f91d42b5228aa2786ab24dc8b0751711..b25168ea9f67a92360db14786dae116abe2d5590 100644
 --- a/src/main/java/us/minevict/papercut/PapercutConfig.java
 +++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
-@@ -237,5 +237,14 @@ public final class PapercutConfig {
+@@ -232,5 +232,14 @@ public final class PapercutConfig {
        enableZombieVillageAi = getBoolean("enable-ai.zombie-village", enableZombieVillageAi);
        enableZombieDestroyAi = getBoolean("enable-ai.zombie-destroy", enableZombieDestroyAi);
      }

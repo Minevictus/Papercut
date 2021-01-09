@@ -25,7 +25,7 @@ index fc3b3f2390e9f92f4ecbbf1cf6a5e83214aa2241..c2e1bbdf99dd5c63454d0c2ed2d74898
                  return chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.COPY_TO_CLIPBOARD, String.valueOf(i))).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.copy.click"))).setInsertion(String.valueOf(i));
              }));
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
-index 28adee3258eb7d72fd53c6bdf5d86167aa840fab..db2a624e49a535520cec3bf07e8b21a6ac919711 100644
+index 878d1b6c7d3382203e200bb152c290df40e6725d..977643eb1d7a1307a0e0f7dc65874b6e75a93f4c 100644
 --- a/src/main/java/us/minevict/papercut/PapercutConfig.java
 +++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
 @@ -102,6 +102,11 @@ public final class PapercutConfig {

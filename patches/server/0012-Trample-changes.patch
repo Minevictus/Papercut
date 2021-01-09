@@ -28,7 +28,7 @@ index a315e2628c35ee713b68741c6e52c4b140c05f27..6f30eb19c107ba3f8ea93d3b52bedf4f
              org.bukkit.event.Cancellable cancellable;
              if (entity instanceof EntityHuman) {
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
-index db2a624e49a535520cec3bf07e8b21a6ac919711..dcc76b475a3a8fbfbcfdef1bd596dd77abc29ca2 100644
+index 977643eb1d7a1307a0e0f7dc65874b6e75a93f4c..48cdb16fa80f79f2de334e0a2975966aa82c68ee 100644
 --- a/src/main/java/us/minevict/papercut/PapercutConfig.java
 +++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
 @@ -107,6 +107,11 @@ public final class PapercutConfig {

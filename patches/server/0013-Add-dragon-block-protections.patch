@@ -41,7 +41,7 @@ index de53af8c01f8fa9636386737b6bc071b32f87cd1..75bb8c58a1fcc6f2cc1727f9ca5aa308
          if (this.bG.a().getControllerPhase() == DragonControllerPhase.DYING) {
              return false;
 diff --git a/src/main/java/us/minevict/papercut/PapercutConfig.java b/src/main/java/us/minevict/papercut/PapercutConfig.java
-index dcc76b475a3a8fbfbcfdef1bd596dd77abc29ca2..023e8dd896d473dbe7b37a2e105c34bf0eb86fe5 100644
+index 48cdb16fa80f79f2de334e0a2975966aa82c68ee..156a0c8add5f18247675753d6dd1436552ba49a4 100644
 --- a/src/main/java/us/minevict/papercut/PapercutConfig.java
 +++ b/src/main/java/us/minevict/papercut/PapercutConfig.java
 @@ -112,6 +112,11 @@ public final class PapercutConfig {

@@ -32,10 +32,10 @@ index 931ffa38faab86445a5d63364a47cb653ca3d4ed..b76f2086f6330c0b9d3c35642c404b20
 +    // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 20103dd5871d69e4a923f80c4f6e8ca1069b0b98..24a623360d92ad898029b24878a5386b19275f1c 100644
+index 1c69b762cf9ebc55a22003a2a9aa1a7a0472dc5a..51a669bbbf3a621d18d0ed8bd6b801ed58b0581b 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -739,5 +739,24 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -741,5 +741,24 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       * @param invulnerability Their new state of invulnerability.
       */
      void setRawInvulnerable(boolean invulnerability);

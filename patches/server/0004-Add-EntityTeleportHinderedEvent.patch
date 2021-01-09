@@ -143,7 +143,7 @@ index e0118a971e1ea3c52a1380f519146b8f46a425ea..f19edc0cc658e6739d57dc729669a16f
              this.c = 100;
              if (this.exitPortal == null && this.world.getTypeKey() == DimensionManager.THE_END) { // CraftBukkit - work in alternate worlds
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 1fe253bc7261a6077747addf8d9023ca94525999..1a72ab6d2424df9e25f98646712f4468bc70bc88 100644
+index a6d849facba1526ae2a2b7f3fb9a140d0b50289c..6add8af1e80b28e602d424070d5fac38876841f9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -172,6 +172,7 @@ import org.bukkit.plugin.Plugin;
@@ -154,7 +154,7 @@ index 1fe253bc7261a6077747addf8d9023ca94525999..1a72ab6d2424df9e25f98646712f4468
  
  public abstract class CraftEntity implements org.bukkit.entity.Entity {
      private static PermissibleBase perm;
-@@ -515,7 +516,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -520,7 +521,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          Preconditions.checkArgument(location != null, "location");
          location.checkFinite();
  
@@ -173,7 +173,7 @@ index 1fe253bc7261a6077747addf8d9023ca94525999..1a72ab6d2424df9e25f98646712f4468
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 018afcd420035672a5a29f0aeb4c314ff13ba7ee..98d99af9d8f16bf4ded7b01e5e38b495f971f06f 100644
+index 58caa3240b90cdc661e1e32e3f5c312ed62c3c21..25ea00c4dcc097d3c91d37a30b7ab342ea6202b2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -127,6 +127,7 @@ import org.bukkit.plugin.messaging.StandardMessenger;

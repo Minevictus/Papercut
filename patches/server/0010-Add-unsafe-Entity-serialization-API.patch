@@ -11,10 +11,10 @@ Subject: [PATCH] Add unsafe Entity serialization API
  4 files changed, 43 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index cef4a42a928193fc902a091c3c22a9a4bd93aa2e..826ab7a86f135931fcbd02db0c87c771c951cb53 100644
+index 4eda7e81ce4f600082e118e2401b37a362b31597..34144b0e16875a87791695e9446d49c50188efc4 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
-@@ -1758,6 +1758,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -1770,6 +1770,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
          }
      }
  
@@ -31,10 +31,10 @@ index cef4a42a928193fc902a091c3c22a9a4bd93aa2e..826ab7a86f135931fcbd02db0c87c771
          return this.isPassenger() ? false : this.a_(nbttagcompound);
      }
 diff --git a/src/main/java/net/minecraft/server/EntityTypes.java b/src/main/java/net/minecraft/server/EntityTypes.java
-index ac1ccd066ab80ff6f95c5bc9798f9e05e8db91cf..c062256be0249e5f2708ee1bb3210fd47d492bd4 100644
+index bf914dc5ee7f2d4a324b6711ea273f5581ec84ad..a5c7bd9edac35579f365a033b61f64e470560aed 100644
 --- a/src/main/java/net/minecraft/server/EntityTypes.java
 +++ b/src/main/java/net/minecraft/server/EntityTypes.java
-@@ -330,6 +330,7 @@ public class EntityTypes<T extends Entity> {
+@@ -331,6 +331,7 @@ public class EntityTypes<T extends Entity> {
          return this.bf.create(this, world);
      }
  
@@ -43,7 +43,7 @@ index ac1ccd066ab80ff6f95c5bc9798f9e05e8db91cf..c062256be0249e5f2708ee1bb3210fd4
          return SystemUtils.a(a(nbttagcompound).map((entitytypes) -> {
              return entitytypes.a(world);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 804cf5e84051617ddacb7dc44ff961fdec4e32ab..119dd139ec73e266fee16d9f96d30e416a0892c5 100644
+index 19cb95514bf7abdca1ad3b672c4be489a20f3f3d..7529cb6ce6fe6d9985acebd31ebeaa3b2de18f69 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -160,6 +160,7 @@ import org.bukkit.craftbukkit.persistence.CraftPersistentDataTypeRegistry;
@@ -54,7 +54,7 @@ index 804cf5e84051617ddacb7dc44ff961fdec4e32ab..119dd139ec73e266fee16d9f96d30e41
  import org.bukkit.event.entity.EntityDamageEvent;
  import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
  import org.bukkit.metadata.MetadataValue;
-@@ -1186,5 +1187,12 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1187,5 +1188,12 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public void setRawInvulnerable(boolean invulnerability) {
          getHandle().setInvulnerable(invulnerability);
      }
@@ -68,7 +68,7 @@ index 804cf5e84051617ddacb7dc44ff961fdec4e32ab..119dd139ec73e266fee16d9f96d30e41
      // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index e010e74fb1feb3e458d7a1d88738511a2e608081..be4a5488ef199a65955c42998b1cdf685f836558 100644
+index 70e40e5d929dfe64c03c19b4a2f04ef1a7eb681b..8da811a4471ac8b8872d6696c80050b99170779f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 @@ -37,18 +37,23 @@ import net.minecraft.server.NBTTagCompound;
@@ -95,7 +95,7 @@ index e010e74fb1feb3e458d7a1d88738511a2e608081..be4a5488ef199a65955c42998b1cdf68
  import org.bukkit.inventory.ItemStack;
  import org.bukkit.material.MaterialData;
  import org.bukkit.plugin.InvalidPluginException;
-@@ -435,6 +440,26 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -441,6 +446,26 @@ public final class CraftMagicNumbers implements UnsafeValues {
  
      // Paper end
  

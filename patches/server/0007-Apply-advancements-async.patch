@@ -10,7 +10,7 @@ Subject: [PATCH] Apply advancements async
  3 files changed, 45 insertions(+), 4 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
-index 17789407b9e86896a963a305a13357286aa5f319..cf539c98073b475eb5b769c8cc11d48a7e6d58f1 100644
+index c680319e4040be2b60795b22a5e65d6444cc67ed..6aec83239b3813aa71fbb54d0d1ea213450fca08 100644
 --- a/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 +++ b/src/main/java/net/minecraft/server/AdvancementDataPlayer.java
 @@ -63,6 +63,7 @@ public class AdvancementDataPlayer {
@@ -22,7 +22,7 @@ index 17789407b9e86896a963a305a13357286aa5f319..cf539c98073b475eb5b769c8cc11d48a
          this.player = entityplayer;
      }
 diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
-index 56677b8bf45af217c0a4a50fc7aea76ca012cbd7..51f842bca55eddc918a77e7747f228a0c1a5da13 100644
+index 7240b885d96eb2df187b6229449af1a893a4524e..ef9b57c05b6537e47b3cddb751f5dc02ff9900e5 100644
 --- a/src/main/java/net/minecraft/server/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/EntityPlayer.java
 @@ -15,6 +15,7 @@ import java.util.Optional;
@@ -31,9 +31,9 @@ index 56677b8bf45af217c0a4a50fc7aea76ca012cbd7..51f842bca55eddc918a77e7747f228a0
  import java.util.UUID;
 +import java.util.concurrent.CompletableFuture;
  import javax.annotation.Nullable;
- import org.apache.logging.log4j.LogManager;
- import org.apache.logging.log4j.Logger;
-@@ -49,7 +50,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+ import io.papermc.paper.event.packet.PlayerChunkLoadEvent; // Paper
+ import io.papermc.paper.event.packet.PlayerChunkUnloadEvent; // Paper
+@@ -51,7 +52,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
      public final MinecraftServer server;
      public final PlayerInteractManager playerInteractManager;
      public final Deque<Integer> removeQueue = new ArrayDeque<>(); // Paper
@@ -43,7 +43,7 @@ index 56677b8bf45af217c0a4a50fc7aea76ca012cbd7..51f842bca55eddc918a77e7747f228a0
      private final ServerStatisticManager serverStatisticManager;
      private float lastHealthScored = Float.MIN_VALUE;
      private int lastFoodScored = Integer.MIN_VALUE;
-@@ -135,7 +137,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -138,7 +140,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
          this.playerInteractManager = playerinteractmanager;
          this.server = minecraftserver;
          this.serverStatisticManager = minecraftserver.getPlayerList().getStatisticManager(this);
@@ -52,7 +52,7 @@ index 56677b8bf45af217c0a4a50fc7aea76ca012cbd7..51f842bca55eddc918a77e7747f228a0
          this.G = 1.0F;
          //this.c(worldserver); // Paper - don't move to spawn on login, only first join
          this.co = minecraftserver.a(this);
-@@ -502,6 +504,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -505,6 +507,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
              CriterionTriggers.u.a(this, this.cf, this.ticksLived - this.cg);
          }
  
@@ -60,7 +60,7 @@ index 56677b8bf45af217c0a4a50fc7aea76ca012cbd7..51f842bca55eddc918a77e7747f228a0
          this.advancementDataPlayer.b(this);
      }
  
-@@ -1856,7 +1859,25 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -1859,7 +1862,25 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
          this.worldChangeInvuln = false;
      }
  
@@ -87,7 +87,7 @@ index 56677b8bf45af217c0a4a50fc7aea76ca012cbd7..51f842bca55eddc918a77e7747f228a0
      }
  
 diff --git a/src/main/java/net/minecraft/server/PlayerList.java b/src/main/java/net/minecraft/server/PlayerList.java
-index 38f26e25cb7d022c0bec5a5928db70611a0d347a..7ca0961b6d7315dcdca706379a9e26e97bb12ee7 100644
+index 70f702680f8221cb262023814a7bae21b0074da6..439f82da4913856c3a6623add09aac9c9a2ca0b3 100644
 --- a/src/main/java/net/minecraft/server/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/PlayerList.java
 @@ -18,6 +18,7 @@ import java.util.Map;

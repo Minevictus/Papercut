@@ -9,10 +9,10 @@ Subject: [PATCH] Raw methods
  2 files changed, 58 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 4d1970bec04c5a3cf01d214f583efb0e1d08380d..20103dd5871d69e4a923f80c4f6e8ca1069b0b98 100644
+index 76e857c364fe79e20cf9bde54b65e5b7108174fd..1c69b762cf9ebc55a22003a2a9aa1a7a0472dc5a 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -696,4 +696,48 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -698,4 +698,48 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      public boolean isTicking();
      // Paper end
@@ -62,10 +62,10 @@ index 4d1970bec04c5a3cf01d214f583efb0e1d08380d..20103dd5871d69e4a923f80c4f6e8ca1
 +    // Papercut end
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index a23c08c48ec627147d94ab4bf4fdf4dae1edeaca..83a1a2e430d4f7dcbb95c2bbab4a905dfadbc9b8 100644
+index ea5257cc94d084fe4e0b9d9685e51d8f70cb84cb..ca198fc30d8ec223b38af95f625256c43403eeb1 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -1925,4 +1925,18 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -1927,4 +1927,18 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      @Override
      Spigot spigot();
      // Spigot end

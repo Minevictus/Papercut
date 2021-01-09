@@ -61,10 +61,10 @@ index 8e3c0c3783b767c2ba603b3b50200ac76a7fc33e..3245eddd7544e6e84bb290994ef3a3e7
  
      public StructureFeature(F f0, FC fc) {
 diff --git a/src/main/java/net/minecraft/server/StructureGenerator.java b/src/main/java/net/minecraft/server/StructureGenerator.java
-index c3bd58069d8dbdf36f70f1dafd7c24000f31708b..50cc13abc56293434443ba0c883ffcefaf4f19a1 100644
+index a62c87bceab2c9700a7b3925f208b0ffa2b9b393..f0ec9be3254a900053ae7fb6830c06897ea2bccd 100644
 --- a/src/main/java/net/minecraft/server/StructureGenerator.java
 +++ b/src/main/java/net/minecraft/server/StructureGenerator.java
-@@ -227,6 +227,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
+@@ -235,6 +235,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
  
      public abstract StructureGenerator.a<C> a();
  

@@ -14,7 +14,7 @@ Subject: [PATCH] Papercut brand change
  7 files changed, 31 insertions(+), 20 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 78c2a8bbcc0132f891c8aa545529d20aa0d9eb57..68769d1685a2aa0b347868e8dba3fbe6527174f1 100644
+index 174c0b67c1c5b41d80613128ebf2d78ee27f3cee..9b5464d45b5f35a88fd29c67a6e6cf57c4e77a6c 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,11 +1,11 @@
@@ -141,10 +141,10 @@ index 229c3b0f0c650b501f31147adaa17194af57fedd..d7716cbc90f96673a35fcaa825bf0c1d
                      throwable = throwable1;
                      throw throwable1;
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index b48c3a1c049cd9e6b40a4af32dd2323ca6fc9e71..aa86bd4b833c0c9f4ec1eb654eec28ea4f1281ac 100644
+index 7977767248f2f118c9cd450f1202b260746dbedf..da977232b790bba8e873903fad3b31152d8addb3 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1513,7 +1513,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
+@@ -1507,7 +1507,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
      }
  
      public String getServerModName() {
@@ -154,7 +154,7 @@ index b48c3a1c049cd9e6b40a4af32dd2323ca6fc9e71..aa86bd4b833c0c9f4ec1eb654eec28ea
  
      public CrashReport b(CrashReport crashreport) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 9bf854b5a231f424796d491262a2ee8b3c18fdb0..85bf2ebbc507b56261febcd7a985b6fd793bc0e4 100644
+index a383ba5e897101a3da1544c877148b43be7a6319..67ea3682fb24441da49d0f430b629c7d94cd5d18 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -232,7 +232,7 @@ import javax.annotation.Nullable; // Paper
@@ -167,7 +167,7 @@ index 9bf854b5a231f424796d491262a2ee8b3c18fdb0..85bf2ebbc507b56261febcd7a985b6fd
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index a9c96d45c69996df33bb6fa09558304735262bdd..aa1870d168b4955c1a61479b9b58277b480384d0 100644
+index d2ec9f7f105a36a1077ac0df56b1abb4786a565b..36fce20eb5c385fafaf41c630910976c68373a83 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -259,7 +259,7 @@ public class Main {
