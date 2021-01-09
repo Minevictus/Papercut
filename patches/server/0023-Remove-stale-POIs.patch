@@ -1,0 +1,53 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Shane Freeder <theboyetronic@gmail.com>
+Date: Sat, 9 Jan 2021 14:26:23 +0100
+Subject: [PATCH] Remove stale POIs
+
+---
+ src/main/java/net/minecraft/server/VillagePlace.java | 2 ++
+ src/main/java/net/minecraft/server/WorldServer.java  | 5 +++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/src/main/java/net/minecraft/server/VillagePlace.java b/src/main/java/net/minecraft/server/VillagePlace.java
+index 3c9668c9c30ea57c1608e32ece27ec56d580fc62..0094babbd59cc81554b9480088464d632824ae8e 100644
+--- a/src/main/java/net/minecraft/server/VillagePlace.java
++++ b/src/main/java/net/minecraft/server/VillagePlace.java
+@@ -41,6 +41,7 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
+         ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).s())).a(blockposition, villageplacetype);
+     }
+ 
++    public void remove(BlockPosition blockposition) { this.a(blockposition); } // Paper - OBFHELPER
+     public void a(BlockPosition blockposition) {
+         ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).s())).a(blockposition);
+     }
+@@ -125,6 +126,7 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
+         return ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).s())).c(blockposition);
+     }
+ 
++    public final boolean test(BlockPosition blockposition, Predicate<VillagePlaceType> predicate) { return this.a(blockposition, predicate); } // Paper - OBFHELPER
+     public boolean a(BlockPosition blockposition, Predicate<VillagePlaceType> predicate) {
+         return (Boolean) this.d(SectionPosition.a(blockposition).s()).map((villageplacesection) -> {
+             return villageplacesection.a(blockposition, predicate);
+diff --git a/src/main/java/net/minecraft/server/WorldServer.java b/src/main/java/net/minecraft/server/WorldServer.java
+index 676c817a4bbf1034554f8a100822bf483dc89b67..4d09ef7d92b41d096a7ea0b301e7ddb0552ffa84 100644
+--- a/src/main/java/net/minecraft/server/WorldServer.java
++++ b/src/main/java/net/minecraft/server/WorldServer.java
+@@ -2535,6 +2535,10 @@ public class WorldServer extends World implements GeneratorAccessSeed {
+         Optional<VillagePlaceType> optional = VillagePlaceType.b(iblockdata);
+         Optional<VillagePlaceType> optional1 = VillagePlaceType.b(iblockdata1);
+ 
++        // Paper start
++        if (!optional.isPresent() && this.getPoiStorage().test(blockposition, com.google.common.base.Predicates.alwaysTrue()))
++            this.getPoiStorage().remove(blockposition);
++        // Paper end
+         if (!Objects.equals(optional, optional1)) {
+             BlockPosition blockposition1 = blockposition.immutableCopy();
+ 
+@@ -2553,6 +2557,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
+         }
+     }
+ 
++    public final VillagePlace getPoiStorage() { return this.y(); } // Paper - OBFHELPER
+     public VillagePlace y() {
+         return this.getChunkProvider().j();
+     }
